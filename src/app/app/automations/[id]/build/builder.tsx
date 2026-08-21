@@ -48,10 +48,14 @@ export function Builder({
   automationId,
   initialNodes,
   credentials,
+  agents,
+  knowledgeSources,
 }: {
   automationId: string;
   initialNodes: WorkflowNodeRecord[];
   credentials: { id: string; name: string; providerKey: string }[];
+  agents: { id: string; name: string }[];
+  knowledgeSources: { id: string; name: string }[];
 }) {
   const [steps, setSteps] = useState<DraftStep[]>(
     initialNodes.map((n) => ({ key: n.key, type: n.type, config: { ...n.config } })),
@@ -140,7 +144,7 @@ export function Builder({
               </div>
             </div>
               <div className="px-4 py-4">
-              <StepConfig step={step} credentials={credentials} onChange={(patch) => updateConfig(i, patch)} />
+              <StepConfig step={step} credentials={credentials} agents={agents} knowledgeSources={knowledgeSources} onChange={(patch) => updateConfig(i, patch)} />
             </div>
           </div>
         ))}
@@ -235,10 +239,14 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
 function StepConfig({
   step,
   credentials,
+  agents,
+  knowledgeSources,
   onChange,
 }: {
   step: DraftStep;
   credentials: { id: string; name: string; providerKey: string }[];
+  agents: { id: string; name: string }[];
+  knowledgeSources: { id: string; name: string }[];
   onChange: (patch: Record<string, unknown>) => void;
 }) {
   const c = step.config;
@@ -473,17 +481,98 @@ function StepConfig({
 
     case "ai":
       return (
-        <Field
-          label="Prompt"
-          hint="AI steps are recorded transparently: in this environment no model call is made until a provider is configured."
-        >
-          <textarea
-            rows={3}
-            value={String(c.prompt ?? "")}
-            onChange={(e) => onChange({ prompt: e.target.value })}
-            className={inputCls}
-          />
-        </Field>
+        <>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_1fr]">
+            <Field
+              label="Agent (optional)"
+              hint="Uses the agent's current model + instructions. Without one, the provider's default model runs this prompt bare."
+            >
+              <select
+                value={String(c.agentId ?? "")}
+                onChange={(e) => onChange({ agentId: e.target.value || undefined })}
+                className={inputCls}
+              >
+                <option value="">No agent — bare prompt</option>
+                {agents.map((agent) => (
+                  <option key={agent.id} value={agent.id}>
+                    {agent.name}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field
+              label="Knowledge retrieval"
+              hint="Top chunks are prepended as context; the run records which method served (semantic or lexical)."
+            >
+              <label className="flex h-9 items-center gap-2 text-sm text-ink">
+                <input
+                  type="checkbox"
+                  checked={c.useKnowledge === true}
+                  onChange={(e) =>
+                    onChange(
+                      e.target.checked
+                        ? { useKnowledge: true, topK: Number(c.topK ?? 3) }
+                        : { useKnowledge: undefined, knowledgeSourceId: undefined, topK: undefined },
+                    )
+                  }
+                  className="h-4 w-4 accent-ink"
+                />
+                Retrieve context from knowledge
+              </label>
+            </Field>
+          </div>
+          {c.useKnowledge === true ? (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_8rem]">
+              <Field label="Source (optional)" hint="Empty = search across all of this organization's knowledge.">
+                <select
+                  value={String(c.knowledgeSourceId ?? "")}
+                  onChange={(e) => onChange({ knowledgeSourceId: e.target.value || undefined })}
+                  className={inputCls}
+                >
+                  <option value="">All knowledge</option>
+                  {knowledgeSources.map((source) => (
+                    <option key={source.id} value={source.id}>
+                      {source.name}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field label="Chunks (top K)">
+                <input
+                  type="number"
+                  min={1}
+                  max={10}
+                  value={Number(c.topK ?? 3)}
+                  onChange={(e) =>
+                    onChange({ topK: Math.min(10, Math.max(1, Math.floor(Number(e.target.value) || 3))) })
+                  }
+                  className={inputCls}
+                />
+              </Field>
+            </div>
+          ) : null}
+          <Field
+            label="Prompt"
+            hint="Supports {{input.*}} and {{vars.*}} placeholders. Without a configured AI provider the step records an explicit skip — no fabricated output."
+          >
+            <textarea
+              rows={3}
+              value={String(c.prompt ?? "")}
+              onChange={(e) => onChange({ prompt: e.target.value })}
+              className={inputCls}
+            />
+          </Field>
+          {c.agentId && !agents.some((a) => a.id === c.agentId) ? (
+            <p className="text-[11px] text-warn">
+              This step references an agent that no longer exists — runs will fail at this step.
+            </p>
+          ) : null}
+          {c.knowledgeSourceId && !knowledgeSources.some((s) => s.id === c.knowledgeSourceId) ? (
+            <p className="text-[11px] text-warn">
+              This step references a knowledge source that no longer exists — retrieval returns nothing.
+            </p>
+          ) : null}
+        </>
       );
 
     default:

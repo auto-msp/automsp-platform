@@ -45,6 +45,9 @@ model Organization {
   usageRecords  UsageRecord[]
   auditLogs     AuditLog[]
   apiKeys       ApiKey[]
+  aiRuns        AiRun[]
+  evalSuites    EvalSuite[]
+  evalRuns      EvalRun[]
 
   @@map("organizations")
 }
@@ -365,6 +368,8 @@ model Agent {
   organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   system       System?       @relation(fields: [systemId], references: [id])
   versions     AgentVersion[]
+  aiRuns       AiRun[]
+  evalSuites   EvalSuite[]
 
   @@index([organizationId, status])
   @@map("agents")
@@ -722,6 +727,115 @@ model UsageRecord {
 
   @@index([organizationId, meter, recordedAt])
   @@map("usage_records")
+}
+
+// ───────────────────────── AI runs, evaluations ─────────────────────────
+
+model AiRun {
+  id               String   @id @default(uuid())
+  organizationId   String   @map("organization_id")
+  agentId          String?  @map("agent_id")
+  executionId      String?  @map("execution_id")
+  evalRunId        String?  @map("eval_run_id")
+  // playground | workflow | evaluation
+  source           String
+  provider         String
+  model            String
+  // completed | failed
+  status           String   @default("completed")
+  inputPreview     String?  @map("input_preview")
+  outputPreview    String?  @map("output_preview")
+  promptTokens     Int      @default(0) @map("prompt_tokens")
+  completionTokens Int      @default(0) @map("completion_tokens")
+  // list-price estimate; null when the model has no catalog price
+  costEstimatedUsd Decimal? @db.Decimal(10, 6) @map("cost_estimated_usd")
+  latencyMs        Int      @default(0) @map("latency_ms")
+  // semantic | lexical — which retrieval method actually served
+  retrievalMethod  String?  @map("retrieval_method")
+  retrievalChunks  Int?     @map("retrieval_chunks")
+  error            String?
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  agent        Agent?       @relation(fields: [agentId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@map("ai_runs")
+}
+
+model EvalSuite {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  agentId        String?  @map("agent_id")
+  name           String
+  description    String   @default("")
+  // exact | contains | llm_judge
+  scorer         String   @default("exact")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  createdBy      String?  @map("created_by")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  agent        Agent?       @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  cases        EvalCase[]
+  runs         EvalRun[]
+
+  @@index([organizationId])
+  @@map("eval_suites")
+}
+
+model EvalCase {
+  id        String   @id @default(uuid())
+  suiteId   String   @map("suite_id")
+  input     String
+  expected  String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  suite EvalSuite @relation(fields: [suiteId], references: [id], onDelete: Cascade)
+
+  @@index([suiteId])
+  @@map("eval_cases")
+}
+
+model EvalRun {
+  id             String    @id @default(uuid())
+  organizationId String    @map("organization_id")
+  suiteId        String    @map("suite_id")
+  agentId        String?   @map("agent_id")
+  model          String?
+  scorerUsed     String?   @map("scorer_used")
+  // completed | failed | blocked
+  status         String    @default("completed")
+  total          Int       @default(0)
+  passed         Int       @default(0)
+  failed         Int       @default(0)
+  blockedReason  String?   @map("blocked_reason")
+  startedAt      DateTime  @map("started_at")
+  completedAt    DateTime? @map("completed_at")
+  createdBy      String?   @map("created_by")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  suite        EvalSuite    @relation(fields: [suiteId], references: [id], onDelete: Cascade)
+  results      EvalResult[]
+
+  @@index([organizationId, startedAt])
+  @@map("eval_runs")
+}
+
+model EvalResult {
+  id        String   @id @default(uuid())
+  runId     String   @map("run_id")
+  caseId    String   @map("case_id")
+  output    String?
+  passed    Boolean?
+  reason    String?
+  latencyMs Int?     @map("latency_ms")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  run EvalRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId])
+  @@map("eval_results")
 }
 
 // ───────────────────────────── Audit log & API platform ───────────────────────

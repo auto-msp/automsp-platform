@@ -22,6 +22,13 @@ const TONES: Record<string, { label: string; cls: string }> = {
   warning: { label: "Warning", cls: "border-warn/40 bg-warn/10 text-warn" },
   // integration statuses
   revoked: { label: "Revoked", cls: "border-risk/40 bg-risk/10 text-risk" },
+  // agent statuses (draft/paused/archived/approved reuse the tones above)
+  testing: { label: "Testing", cls: "border-accent/40 bg-accent/10 text-accent" },
+  production: { label: "Production", cls: "border-ok/40 bg-ok/10 text-ok" },
+  // document statuses
+  indexed: { label: "Indexed", cls: "border-ok/40 bg-ok/10 text-ok" },
+  // eval run statuses
+  blocked: { label: "Blocked", cls: "border-warn/40 bg-warn/10 text-warn" },
 };
 
 export function StatusPill({ status }: { status: string }) {

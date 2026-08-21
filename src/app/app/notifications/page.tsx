@@ -17,6 +17,7 @@ const KIND_LABELS: Record<string, string> = {
   integration: "Integration",
   membership: "Membership",
   schedule: "Schedule",
+  eval: "Evaluation",
 };
 
 export default async function NotificationsPage() {

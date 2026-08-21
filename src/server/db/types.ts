@@ -257,3 +257,180 @@ export interface AuditRequestRecord {
   status: "received" | "in_review" | "scheduled" | "completed" | "declined";
   createdAt: string;
 }
+
+// ── AI agents ───────────────────────────────────────────────────────────────
+
+export type AgentStatus = "draft" | "testing" | "approved" | "production" | "paused" | "archived";
+
+export interface AgentRecord {
+  id: string;
+  organizationId: string;
+  systemId: string | null;
+  name: string;
+  purpose: string | null;
+  description: string;
+  status: AgentStatus;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string | null;
+}
+
+export interface AgentApprovalPolicy {
+  /** consequential agent actions pause for human approval — always on */
+  consequentialActions: "require_approval";
+}
+
+export interface AgentLimits {
+  maxOutputTokens: number;
+  timeoutMs: number;
+}
+
+export interface AgentVersionRecord {
+  id: string;
+  agentId: string;
+  version: number;
+  model: string;
+  systemInstructions: string;
+  /** tool scopes granted to this version; tools ship in a later slice */
+  permissionScopes: string[];
+  approvalPolicy: AgentApprovalPolicy;
+  limits: AgentLimits;
+  createdAt: string;
+  createdBy: string | null;
+}
+
+// ── Knowledge / RAG ─────────────────────────────────────────────────────────
+
+export interface KnowledgeSourceRecord {
+  id: string;
+  organizationId: string;
+  name: string;
+  /** "upload" now; web/integration ingestion is a later slice */
+  kind: "upload" | "web" | "integration";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type DocumentStatus = "indexed" | "failed";
+
+export interface DocumentRecord {
+  id: string;
+  sourceId: string;
+  filename: string;
+  mimeType: string;
+  /** inline:pasted — object storage (S3) is a later slice */
+  storageKey: string;
+  version: number;
+  status: DocumentStatus;
+  chunkCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DocumentChunkRecord {
+  id: string;
+  documentId: string;
+  ordinal: number;
+  content: string;
+  /**
+   * Embedding vector, when an embeddings-capable provider was configured at
+   * indexing time. JSON adapter stores it inline; the Postgres adapter keeps
+   * embeddings out of this table until the pgvector migration lands, so the
+   * field reads null there and retrieval re-embeds on the fly.
+   */
+  embedding: number[] | null;
+  createdAt: string;
+}
+
+// ── AI usage & cost ─────────────────────────────────────────────────────────
+
+export type AiRunSource = "playground" | "workflow" | "evaluation";
+
+export interface AiRunRecord {
+  id: string;
+  organizationId: string;
+  agentId: string | null;
+  executionId: string | null;
+  evalRunId: string | null;
+  source: AiRunSource;
+  provider: string;
+  model: string;
+  status: "completed" | "failed";
+  /** truncated (≤400 chars) previews for debugging; org-internal only */
+  inputPreview: string | null;
+  outputPreview: string | null;
+  promptTokens: number;
+  completionTokens: number;
+  /** list-price estimate in USD; null when the model has no catalog price */
+  costEstimatedUsd: number | null;
+  latencyMs: number;
+  retrievalMethod: "semantic" | "lexical" | null;
+  retrievalChunks: number | null;
+  error: string | null;
+  createdAt: string;
+}
+
+export type UsageMeter = "tokens" | "agent_runs" | "executions";
+
+export interface UsageRecordRecord {
+  id: string;
+  organizationId: string;
+  meter: UsageMeter;
+  quantity: number;
+  unitCostCents: number | null;
+  recordedAt: string;
+}
+
+// ── Evaluations ─────────────────────────────────────────────────────────────
+
+export type EvalScorer = "exact" | "contains" | "llm_judge";
+
+export interface EvalSuiteRecord {
+  id: string;
+  organizationId: string;
+  agentId: string | null;
+  name: string;
+  description: string;
+  scorer: EvalScorer;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string | null;
+}
+
+export interface EvalCaseRecord {
+  id: string;
+  suiteId: string;
+  input: string;
+  expected: string;
+  createdAt: string;
+}
+
+export type EvalRunStatus = "completed" | "failed" | "blocked";
+
+export interface EvalRunRecord {
+  id: string;
+  organizationId: string;
+  suiteId: string;
+  agentId: string | null;
+  model: string | null;
+  scorerUsed: string | null;
+  status: EvalRunStatus;
+  total: number;
+  passed: number;
+  failed: number;
+  blockedReason: string | null;
+  startedAt: string;
+  completedAt: string | null;
+  createdBy: string | null;
+}
+
+export interface EvalResultRecord {
+  id: string;
+  runId: string;
+  caseId: string;
+  output: string | null;
+  passed: boolean | null;
+  reason: string | null;
+  latencyMs: number | null;
+  createdAt: string;
+}

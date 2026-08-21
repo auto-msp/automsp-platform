@@ -8,8 +8,25 @@ execution engine, analytics, and billing.
 authenticated workspace (`/app`) with local credential auth + org RBAC, systems,
 versioned automations with a builder, execution engine v1 (idempotency keys,
 approval gates, interpolation), approvals center, notifications, a sealed
-credentials vault for HTTP steps, and an in-process scheduler for interval
-triggers. Everything unbuilt is labeled, never simulated.
+credentials vault for HTTP steps, an in-process scheduler for interval
+triggers, versioned agents with a playground, knowledge bases with retrieval
+(semantic when an embeddings provider is configured, lexical otherwise), and
+evaluation suites with recorded pass rates. Everything unbuilt is labeled,
+never simulated.
+
+### AI provider abstraction
+
+All model calls route through `src/server/ai/provider.ts` (Anthropic, OpenAI,
+or Google, picked from whichever `*_API_KEY` env var is set; pin with
+`AUTOMSP_AI_PROVIDER`). Keys are server-side only. When no key is configured,
+every AI surface — the agent playground, workflow AI steps, evaluation runs —
+reports "provider not configured" instead of simulating output. Token counts
+are provider-reported (actual); USD figures are list-price estimates and say so.
+
+Agents are versioned (`agents` + `agent_versions`): every save adds a version.
+Workflow AI steps reference an agent and can retrieve knowledge chunks for
+context; each run records model, tokens, estimated cost, and which retrieval
+method (semantic/lexical) served it (`ai_runs` + `usage_records`).
 
 ### Persistence: one interface, two adapters
 
@@ -107,7 +124,7 @@ docs/                  architecture, security, database notes
 
 1. **Foundation** — repo, design system, marketing site, audit funnel, auth, orgs, RBAC ✅
 2. **Core platform** — systems, automations, execution engine v1, builder, vault credentials, scheduler, notifications ✅
-3. **AI** — provider abstraction, agents, knowledge/RAG, evaluations, cost tracking
+3. **AI** — provider abstraction, agents, knowledge/RAG, evaluations, cost tracking ✅
 4. **Operations** — monitoring, incidents, audit logs ✅, analytics, ROI, reports
 5. **Commercial** — billing, subscriptions, opportunity & audit management
 6. **Hardening** — security review (headers ✅, RLS policies next), performance, a11y, tests, deployment

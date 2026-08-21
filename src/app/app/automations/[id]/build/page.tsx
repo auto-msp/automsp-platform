@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppPageHeader } from "@/components/app/page-header";
+import { listAgents } from "@/server/ai/agents";
+import { listSources } from "@/server/ai/knowledge";
 import { can, getSessionContext } from "@/server/auth/session";
 import { getAutomation, getCurrentDefinition } from "@/server/automations";
 import { listUsableCredentials } from "@/server/integrations";
@@ -32,6 +34,10 @@ export default async function AutomationBuildPage({
   ];
   // Only metadata (id/name/provider) crosses to the client — never secrets.
   const credentials = await listUsableCredentials(orgId);
+  const [agents, knowledgeSources] = await Promise.all([
+    listAgents(orgId),
+    listSources(orgId),
+  ]);
 
   return (
     <div>
@@ -45,7 +51,13 @@ export default async function AutomationBuildPage({
         </Link>
       </AppPageHeader>
 
-      <Builder automationId={automation.id} initialNodes={nodes} credentials={credentials} />
+      <Builder
+        automationId={automation.id}
+        initialNodes={nodes}
+        credentials={credentials}
+        agents={agents.map((a) => ({ id: a.id, name: a.name }))}
+        knowledgeSources={knowledgeSources.map((s) => ({ id: s.id, name: s.name }))}
+      />
     </div>
   );
 }

@@ -2,21 +2,32 @@ import "server-only";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type {
+  AgentRecord,
+  AgentVersionRecord,
+  AiRunRecord,
   ApprovalRecord,
   AuditLogRecord,
   AuditRequestRecord,
   AuthAttemptRecord,
   AutomationRecord,
   AutomationVersionRecord,
+  DocumentChunkRecord,
+  DocumentRecord,
+  EvalCaseRecord,
+  EvalResultRecord,
+  EvalRunRecord,
+  EvalSuiteRecord,
   ExecutionLogRecord,
   ExecutionRecord,
   ExecutionStepRecord,
   IntegrationRecord,
+  KnowledgeSourceRecord,
   MembershipRecord,
   NotificationRecord,
   OrganizationRecord,
   SessionRecord,
   SystemRecord,
+  UsageRecordRecord,
   UserRecord,
 } from "./types";
 
@@ -48,6 +59,17 @@ export interface Collections {
   auth_attempts: AuthAttemptRecord;
   audit_requests: AuditRequestRecord;
   integrations: IntegrationRecord;
+  agents: AgentRecord;
+  agent_versions: AgentVersionRecord;
+  knowledge_sources: KnowledgeSourceRecord;
+  documents: DocumentRecord;
+  document_chunks: DocumentChunkRecord;
+  usage_records: UsageRecordRecord;
+  ai_runs: AiRunRecord;
+  eval_suites: EvalSuiteRecord;
+  eval_cases: EvalCaseRecord;
+  eval_runs: EvalRunRecord;
+  eval_results: EvalResultRecord;
 }
 
 export type CollectionName = keyof Collections;

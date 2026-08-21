@@ -5,6 +5,8 @@ export interface RunContext {
   vars: Record<string, unknown>;
   /** Tenant boundary — set from the execution record, never from user input. */
   organizationId: string;
+  /** present while walking a real run; AI steps record it onto ai_runs */
+  executionId?: string;
 }
 
 export function getPath(obj: unknown, path: string): unknown {

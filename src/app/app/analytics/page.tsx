@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AppPageHeader } from "@/components/app/page-header";
+import { usageSummary, listAiRuns } from "@/server/ai/usage";
 import { getSessionContext } from "@/server/auth/session";
 import { store } from "@/server/db/store";
 
@@ -13,10 +14,12 @@ export default async function AnalyticsPage() {
   if (!ctx) return null;
   const orgId = ctx.organization.id;
 
-  const [automations, executions, approvals] = await Promise.all([
+  const [automations, executions, approvals, aiUsage, recentRuns] = await Promise.all([
     store.find("automations", (a) => a.organizationId === orgId),
     store.find("executions", (e) => e.organizationId === orgId),
     store.find("approvals", (a) => a.organizationId === orgId),
+    usageSummary(orgId),
+    listAiRuns(orgId, { limit: 10 }),
   ]);
 
   // Runs per day — last 14 days (Actual: counted from execution records)
@@ -137,6 +140,86 @@ export default async function AnalyticsPage() {
         <p className="mt-1 text-[13px] text-slate">
           {approvals.filter((a) => a.status === "pending").length} currently pending.
         </p>
+      </div>
+
+      <div className="mt-6 border border-fog bg-surface p-5">
+        <div className="flex items-baseline justify-between">
+          <h2 className="text-sm font-semibold text-ink">AI usage & cost</h2>
+          <p className="text-[11px] text-mute">
+            Calls/tokens <span className="font-medium text-ok">Actual</span> (provider-reported) · USD{" "}
+            <span className="font-medium text-warn">Estimated</span> (list price × tokens; invoice is the actual)
+          </p>
+        </div>
+        {aiUsage.callsCompleted + aiUsage.callsFailed === 0 ? (
+          <p className="mt-2 text-[13px] text-slate">
+            No model calls recorded yet — workflow AI steps, agent playground runs, and evaluation runs all
+            record here.
+          </p>
+        ) : (
+          <>
+            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <div>
+                <p className="tnum text-2xl font-semibold text-ink">
+                  {aiUsage.callsCompleted}
+                  <span className="text-sm font-normal text-mute"> / {aiUsage.callsFailed} failed</span>
+                </p>
+                <p className="mt-0.5 text-[12px] text-slate">Model calls</p>
+              </div>
+              <div>
+                <p className="tnum text-2xl font-semibold text-ink">{aiUsage.tokensIn.toLocaleString()}</p>
+                <p className="mt-0.5 text-[12px] text-slate">Input tokens</p>
+              </div>
+              <div>
+                <p className="tnum text-2xl font-semibold text-ink">{aiUsage.tokensOut.toLocaleString()}</p>
+                <p className="mt-0.5 text-[12px] text-slate">Output tokens</p>
+              </div>
+              <div>
+                <p className="tnum text-2xl font-semibold text-ink">
+                  {aiUsage.costEstimatedUsd !== null ? `$${aiUsage.costEstimatedUsd.toFixed(4)}` : "n/a"}
+                </p>
+                <p className="mt-0.5 text-[12px] text-slate">
+                  Estimated cost{aiUsage.costEstimatedUsd === null ? " (unknown model pricing)" : ""}
+                </p>
+              </div>
+            </div>
+            {aiUsage.byModel.length > 0 ? (
+              <p className="tnum mt-4 border-t border-fog pt-3 text-[12px] text-slate">
+                {aiUsage.byModel.map((m) => `${m.model}: ${m.calls} calls, ${m.tokens.toLocaleString()} tokens`).join(" · ")}
+              </p>
+            ) : null}
+          </>
+        )}
+        {recentRuns.length > 0 ? (
+          <div className="mt-4 overflow-hidden border border-fog">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
+                  <th className="px-4 py-2.5">When</th>
+                  <th className="px-4 py-2.5">Source</th>
+                  <th className="px-4 py-2.5">Model</th>
+                  <th className="px-4 py-2.5">Tokens</th>
+                  <th className="px-4 py-2.5">Est. cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentRuns.map((run) => (
+                  <tr key={run.id} className="border-b border-fog last:border-0">
+                    <td className="tnum px-4 py-2 text-slate">{run.createdAt.slice(0, 16).replace("T", " ")}</td>
+                    <td className="px-4 py-2 text-slate">
+                      {run.source}
+                      {run.status === "failed" ? <span className="ml-1 text-risk">(failed)</span> : null}
+                    </td>
+                    <td className="px-4 py-2 text-slate">{run.model}</td>
+                    <td className="tnum px-4 py-2 text-slate">{run.promptTokens + run.completionTokens}</td>
+                    <td className="tnum px-4 py-2 text-slate">
+                      {run.costEstimatedUsd !== null ? `$${run.costEstimatedUsd.toFixed(5)}` : "—"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : null}
       </div>
     </div>
   );

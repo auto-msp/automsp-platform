@@ -92,9 +92,20 @@ function validateNodeConfig(node: WorkflowNodeRecord): string[] {
     case "log":
       if (typeof c.message !== "string" || !c.message) errs.push(`${label}: a message is required.`);
       break;
-    case "ai":
+    case "ai": {
       if (typeof c.prompt !== "string" || !c.prompt) errs.push(`${label}: a prompt is required.`);
+      if (c.agentId !== undefined && c.agentId !== "" && typeof c.agentId !== "string")
+        errs.push(`${label}: agent reference must be an id string.`);
+      if (c.useKnowledge === true) {
+        if (c.knowledgeSourceId !== undefined && c.knowledgeSourceId !== "" && typeof c.knowledgeSourceId !== "string")
+          errs.push(`${label}: knowledge source reference must be an id string.`);
+        if (c.topK !== undefined) {
+          const k = Number(c.topK);
+          if (!Number.isInteger(k) || k < 1 || k > 10) errs.push(`${label}: topK must be a whole number between 1 and 10.`);
+        }
+      }
       break;
+    }
     case "http": {
       if (c.url !== undefined && c.url !== "") {
         try {

@@ -1,4 +1,5 @@
 import "server-only";
+import { runAgentCompletion } from "@/server/ai/agents";
 import { newId } from "@/server/db/id";
 import { store } from "@/server/db/store";
 import { notify } from "@/server/notifications";
@@ -187,17 +188,59 @@ async function executeNode(
       return { finished: { output }, output };
     }
 
-    case "ai":
-      // Honest placeholder: no model provider is configured in this
-      // environment, so no AI call is made. Recorded transparently.
+    case "ai": {
+      const prompt = interpolate(String(node.config.prompt ?? ""), context);
+      const agentId =
+        typeof node.config.agentId === "string" && node.config.agentId ? node.config.agentId : null;
+      const useKnowledge = node.config.useKnowledge === true;
+      const topKRaw = Number(node.config.topK);
+      const topK = Number.isFinite(topKRaw) ? Math.min(10, Math.max(1, Math.floor(topKRaw))) : 3;
+      const knowledgeSourceId =
+        typeof node.config.knowledgeSourceId === "string" && node.config.knowledgeSourceId
+          ? node.config.knowledgeSourceId
+          : undefined;
+
+      // runAgentCompletion resolves the org-guarded agent, runs retrieval,
+      // calls the configured provider, and records tokens/cost to ai_runs.
+      // When no provider key exists it returns notConfigured — the step then
+      // records an explicit skip, never a fabricated answer.
+      const result = await runAgentCompletion({
+        organizationId: context.organizationId,
+        agentId,
+        prompt,
+        source: "workflow",
+        executionId: context.executionId ?? null,
+        knowledge: useKnowledge ? { sourceId: knowledgeSourceId, topK } : undefined,
+      });
+
+      if (!result.ok) {
+        if (result.notConfigured) {
+          return {
+            proceed: true,
+            output: { skipped: true, reason: result.error, prompt },
+          };
+        }
+        return { failed: { error: `AI step failed: ${result.error}` } };
+      }
+
       return {
         proceed: true,
         output: {
-          skipped: true,
-          reason: "AI provider not configured — no model call was made",
-          prompt: interpolate(String(node.config.prompt), context),
+          text: result.text,
+          model: result.model,
+          agent: result.agentName,
+          usage: {
+            promptTokens: result.promptTokens,
+            completionTokens: result.completionTokens,
+            costEstimatedUsd: result.costEstimatedUsd,
+            costMethod: "Estimated — provider list price × tokens; the invoice is the actual.",
+          },
+          retrieval: result.retrieval
+            ? { method: result.retrieval.method, chunks: result.retrieval.chunks }
+            : null,
         },
       };
+    }
 
     case "http": {
       const url = interpolate(String(node.config.url ?? ""), context);
@@ -271,8 +314,9 @@ async function runWalk(executionId: string, startKey: string): Promise<void> {
         input: execution.resume.context.input as Record<string, unknown>,
         vars: (execution.resume.context.vars as Record<string, unknown>) ?? {},
         organizationId: execution.organizationId,
+        executionId,
       }
-    : { input: execution.input, vars: {}, organizationId: execution.organizationId };
+    : { input: execution.input, vars: {}, organizationId: execution.organizationId, executionId };
 
   let key: string | null = startKey;
 
@@ -347,6 +391,14 @@ async function runWalk(executionId: string, startKey: string): Promise<void> {
     if (node.type === "log") await log(executionId, "info", (result.output as { message?: string })?.message ?? "");
     if (node.type === "ai" && (result.output as { skipped?: boolean })?.skipped) {
       await log(executionId, "warn", "AI step skipped — provider not configured");
+    }
+    if (node.type === "ai" && !(result.output as { skipped?: boolean })?.skipped) {
+      const o = result.output as { model?: string; usage?: { promptTokens?: number; completionTokens?: number } };
+      await log(
+        executionId,
+        "info",
+        `AI step completed (${o.model ?? "model?"}, ${o.usage?.promptTokens ?? 0}+${o.usage?.completionTokens ?? 0} tokens)`,
+      );
     }
     if (node.type === "condition") {
       await log(executionId, "info", `Condition evaluated ${(result.output as { result?: boolean })?.result}`);

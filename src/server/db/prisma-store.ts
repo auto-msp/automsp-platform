@@ -63,6 +63,17 @@ function delegate(name: CollectionName): Delegate {
     auth_attempts: "authAttempt",
     audit_requests: "auditRequest",
     integrations: "integrationConnection",
+    agents: "agent",
+    agent_versions: "agentVersion",
+    knowledge_sources: "knowledgeSource",
+    documents: "document",
+    document_chunks: "documentChunk",
+    usage_records: "usageRecord",
+    ai_runs: "aiRun",
+    eval_suites: "evalSuite",
+    eval_cases: "evalCase",
+    eval_runs: "evalRun",
+    eval_results: "evalResult",
   };
   const pk: Partial<Record<CollectionName, string>> = { auth_attempts: "email" };
   const clientRow = client() as unknown as Record<string, Delegate>;
@@ -110,6 +121,14 @@ function opt(row: Row, fields: readonly string[]): Row {
 function strip(row: Row, fields: readonly string[]): Row {
   const out = { ...row };
   for (const f of fields) delete out[f];
+  return out;
+}
+
+/** Prisma Decimal objects → numbers for the app's records; null stays null. */
+function nums(row: Row, fields: readonly string[]): Row {
+  const out = { ...row };
+  for (const f of fields)
+    out[f] = out[f] === null || out[f] === undefined ? null : Number(String(out[f]));
   return out;
 }
 
@@ -173,6 +192,36 @@ const FROM: { [K in CollectionName]: (row: Row) => Collections[K] } = {
     base.status = base.status === "revoked" ? "revoked" : "active";
     return strip(base, ["scopes", "credentialRef", "lastSyncAt", "integrationId"]) as unknown as Collections["integrations"];
   },
+  agents: (r) =>
+    fill(dates(r, ["createdAt", "updatedAt"]), ["description"]) as unknown as Collections["agents"],
+  agent_versions: (r) => {
+    const base = dates(r, ["createdAt"]);
+    if (!Array.isArray(base.permissionScopes)) base.permissionScopes = [];
+    if (!base.approvalPolicy || typeof base.approvalPolicy !== "object")
+      base.approvalPolicy = { consequentialActions: "require_approval" };
+    if (!base.limits || typeof base.limits !== "object")
+      base.limits = { maxOutputTokens: 1024, timeoutMs: 30000 };
+    return base as unknown as Collections["agent_versions"];
+  },
+  knowledge_sources: (r) =>
+    strip(dates(r, ["createdAt", "updatedAt"]), ["permissions"]) as unknown as Collections["knowledge_sources"],
+  documents: (r) => dates(r, ["createdAt", "updatedAt"]) as unknown as Collections["documents"],
+  document_chunks: (r) => {
+    // No embedding column until the pgvector migration — reads report null,
+    // writes strip the field (see knowledge.ts for the re-embed-on-read path).
+    const base = dates(r, ["createdAt"]);
+    base.embedding = null;
+    return base as unknown as Collections["document_chunks"];
+  },
+  usage_records: (r) =>
+    nums(dates(r, ["recordedAt"]), ["quantity"]) as unknown as Collections["usage_records"],
+  ai_runs: (r) =>
+    nums(dates(r, ["createdAt"]), ["costEstimatedUsd"]) as unknown as Collections["ai_runs"],
+  eval_suites: (r) =>
+    fill(dates(r, ["createdAt", "updatedAt"]), ["description"]) as unknown as Collections["eval_suites"],
+  eval_cases: (r) => dates(r, ["createdAt"]) as unknown as Collections["eval_cases"],
+  eval_runs: (r) => dates(r, ["startedAt", "completedAt"]) as unknown as Collections["eval_runs"],
+  eval_results: (r) => dates(r, ["createdAt"]) as unknown as Collections["eval_results"],
 };
 
 /** undefined patch values mean "clear the column" in the JSON store → null. */
@@ -185,6 +234,7 @@ function toData(data: Row): Row {
 function toCreate<K extends CollectionName>(name: K, row: Collections[K]): Row {
   const data = toData(row as unknown as Row);
   if (name === "integrations") data.scopes = []; // required column, unused at v1
+  if (name === "document_chunks") delete data.embedding; // no column until pgvector migration
   return data;
 }
 
