@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+/*
+  AutoMSP — Enterprise Swiss Editorial design tokens
+  Light-first, high-clarity, monochrome foundation with one restrained accent.
+  Dark tech internationalism is reserved for infrastructure/security sections.
+*/
+@theme {
+  /* Foundation */
+  --color-paper: #fafaf7;        /* off-white page background */
+  --color-surface: #ffffff;      /* cards, panels */
+  --color-ink: #0b0c0e;          /* near-black text */
+  --color-graphite: #1e2126;     /* strong secondary */
+  --color-slate: #5b6068;        /* body secondary */
+  --color-mute: #8a8f97;         /* captions, metadata */
+  --color-fog: #e7e7e2;          /* hairlines */
+  --color-haze: #f1f1ec;         /* subtle panels, trust band */
+
+  /* Accent — electric indigo, used sparingly */
+  --color-accent: #4338ca;
+  --color-accent-soft: #eef0ff;
+
+  /* Dark tech internationalism (selective use) */
+  --color-night: #0b0d12;
+  --color-night-2: #11141b;
+  --color-nline: #232833;        /* hairlines on dark */
+  --color-trail: #6d7cff;        /* light-trail stroke */
+  --color-trail-warm: #ffb454;   /* warm trail accent */
+
+  /* Status */
+  --color-ok: #1a7f4b;
+  --color-warn: #b45309;
+  --color-risk: #b3261e;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-instrument), Georgia, "Times New Roman", serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Editorial helpers */
+.hairline-t { border-top: 1px solid var(--color-fog); }
+.hairline-b { border-bottom: 1px solid var(--color-fog); }
+.hairline-dark-t { border-top: 1px solid var(--color-nline); }
+
+/* Oversized display headline (Instrument Serif) */
+.font-display {
+  font-family: var(--font-serif);
+  letter-spacing: -0.015em;
+}
+
+/* Numeric tabular lining for KPI work */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
