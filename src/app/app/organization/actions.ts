@@ -7,6 +7,8 @@ import { writeAuditLog } from "@/server/audit";
 import { getSessionContext, requirePermission } from "@/server/auth/session";
 import { newId } from "@/server/db/id";
 import { store } from "@/server/db/store";
+import { notify } from "@/server/notifications";
+import { formatRole } from "@/server/roles";
 import type { Role } from "@/server/db/types";
 
 export interface OrgFormState {
@@ -73,6 +75,14 @@ export async function inviteMemberAction(
     resourceId: user.id,
     metadata: { role },
   });
+  await notify({
+    organizationId: ctx.organization.id,
+    userId: user.id,
+    kind: "membership",
+    title: `You were added to ${ctx.organization.name}`,
+    body: `${ctx.user.name} added you as ${formatRole(role)}.`,
+    href: "/app/dashboard",
+  });
 
   revalidatePath("/app/organization");
   return { success: `${user.name} added as ${role.replace("customer_", "")}.` };
@@ -118,6 +128,14 @@ export async function changeMemberRoleAction(
     resourceId: membershipId,
     metadata: { role },
   });
+  await notify({
+    organizationId: ctx.organization.id,
+    userId: membership.userId,
+    kind: "membership",
+    title: "Your role changed",
+    body: `${ctx.user.name} set your role in ${ctx.organization.name} to ${formatRole(role)}.`,
+    href: "/app/organization",
+  });
 
   revalidatePath("/app/organization");
   return { success: "Role updated." };
@@ -155,6 +173,7 @@ export async function removeMemberAction(
     if (owners.length <= 1) return { error: "The organization needs at least one owner." };
   }
 
+  const removedUser = await store.get("users", membership.userId);
   await store.remove("memberships", membershipId);
   await writeAuditLog({
     organizationId: ctx.organization.id,
@@ -162,6 +181,13 @@ export async function removeMemberAction(
     action: "member.removed",
     resource: "membership",
     resourceId: membershipId,
+  });
+  await notify({
+    organizationId: ctx.organization.id,
+    kind: "membership",
+    title: `${removedUser?.name ?? "A member"} was removed`,
+    body: `${ctx.user.name} removed them from ${ctx.organization.name}.`,
+    href: "/app/organization",
   });
 
   revalidatePath("/app/organization");

@@ -53,12 +53,60 @@ model User {
   id        String   @id @default(uuid())
   email     String   @unique
   name      String?
+  // local credential auth (scrypt hash); absent on SSO-fed accounts later
+  passwordHash String? @map("password_hash")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   memberships OrganizationMember[]
+  sessions    Session[]
 
   @@map("users")
+}
+
+// Opaque session tokens — only the sha256 hash is ever stored.
+model Session {
+  id        String   @id
+  tokenHash String   @unique @map("token_hash")
+  userId    String   @map("user_id")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+// Brute-force throttle state, keyed by sign-in email.
+model AuthAttempt {
+  email       String    @id
+  failures    Int       @default(0)
+  lockedUntil DateTime? @map("locked_until")
+
+  @@map("auth_attempts")
+}
+
+// Marketing-site audit funnel inbox (pre-auth submissions; no organization yet).
+model AuditRequest {
+  id             String   @id
+  company        String
+  name           String
+  email          String
+  phone          String?
+  role           String?
+  companySize    String?  @map("company_size")
+  industry       String?
+  currentSystems String?  @map("current_systems")
+  bottlenecks    String?
+  aiUsage        String?  @map("ai_usage")
+  processVolume  String?  @map("process_volume")
+  outcomes       String?
+  // received | in_review | scheduled | completed | declined
+  status         String   @default("received")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("audit_requests")
 }
 
 model OrganizationMember {
@@ -209,6 +257,8 @@ model System {
   status         String   @default("draft")
   businessOutcome String? @map("business_outcome")
   ownerId        String?  @map("owner_id")
+  // denormalized display name used by the current app surface
+  ownerName      String?  @map("owner_name")
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
   createdBy      String?  @map("created_by")
@@ -228,11 +278,16 @@ model Automation {
   name           String
   description    String?
   // draft | active | paused | archived
-  status         String   @default("draft")
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
-  createdBy      String?  @map("created_by")
-  updatedBy      String?  @map("updated_by")
+  status         String    @default("draft")
+  // user-supplied estimate of human minutes avoided per completed run
+  estMinutesPerRun Int     @default(0) @map("est_minutes_per_run")
+  // scheduler cursor: next due time when the trigger is a schedule
+  nextRunAt      DateTime? @map("next_run_at")
+  lastScheduledAt DateTime? @map("last_scheduled_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  createdBy      String?   @map("created_by")
+  updatedBy      String?   @map("updated_by")
 
   organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   system       System?       @relation(fields: [systemId], references: [id])
@@ -247,7 +302,9 @@ model AutomationVersion {
   id           String   @id @default(uuid())
   automationId String   @map("automation_id")
   version      Int
-  // workflow graph: nodes via WorkflowNode, edges via WorkflowEdge
+  // v1 stores the whole validated graph here ({nodes, edges}); the
+  // WorkflowNode/WorkflowEdge tables remain the future normalized form.
+  definition   Json?
   createdAt    DateTime @default(now()) @map("created_at")
   createdBy    String?  @map("created_by")
 
@@ -416,22 +473,34 @@ model Integration {
 }
 
 model IntegrationConnection {
-  id             String    @id @default(uuid())
-  organizationId String    @map("organization_id")
-  integrationId  String    @map("integration_id")
-  // connected | expired | error | disconnected
-  status         String    @default("disconnected")
+  id             String     @id @default(uuid())
+  organizationId String     @map("organization_id")
+  // optional: set when the row is linked to a catalog Integration entry
+  integrationId  String?    @map("integration_id")
+  // catalog key (slack | hubspot | ... | generic-http), denormalized so vault
+  // records do not require seeded catalog rows
+  providerKey    String?    @map("provider_key")
+  name           String     @default("")
+  // api_token | header_secret | oauth2 (oauth2 = later slice)
+  authType       String?    @map("auth_type")
+  // active | revoked | expired | error | disconnected
+  status         String     @default("active")
   scopes         String[]
   // reference to secret in the vault — secrets never in this table, never to client
-  credentialRef  String?   @map("credential_ref")
-  lastSyncAt     DateTime? @map("last_sync_at")
-  createdAt      DateTime  @default(now()) @map("created_at")
-  updatedAt      DateTime  @updatedAt @map("updated_at")
+  credentialRef  String?    @map("credential_ref")
+  // AES-256-GCM sealed secret (base64 iv|tag|ciphertext) — see src/server/vault.ts
+  sealedSecret   String?    @map("sealed_secret")
+  // last 4 chars of the secret, for operator recognition only
+  secretPreview  String?    @map("secret_preview")
+  lastUsedAt     DateTime?  @map("last_used_at")
+  createdBy      String?    @map("created_by")
+  lastSyncAt     DateTime?  @map("last_sync_at")
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  integration  Integration  @relation(fields: [integrationId], references: [id])
+  integration  Integration? @relation(fields: [integrationId], references: [id])
 
-  @@unique([organizationId, integrationId])
   @@index([organizationId, status])
   @@map("integration_connections")
 }
@@ -445,10 +514,17 @@ model Execution {
   workflowKey    String?   @map("workflow_key")
   // queued | running | waiting | completed | failed | cancelled | timed_out
   status         String    @default("queued")
+  // denormalized label for list views (automation may later be renamed)
+  automationName String?   @map("automation_name")
+  // automation version this run executed
+  version        Int?
+  // trigger kind: "manual" | "schedule" (JSON for forward compatibility)
   trigger        Json?
   input          Json?
   output         Json?
   error          Json?
+  // engine cursor when paused at an approval node
+  resume         Json?
   // idempotency: same key + same org → same result, no duplicate processing
   idempotencyKey String?   @map("idempotency_key")
   costCents      Int?      @map("cost_cents")
@@ -475,6 +551,7 @@ model ExecutionStep {
   status      String    @default("pending")
   input       Json?
   output      Json?
+  error       String?
   startedAt   DateTime? @map("started_at")
   finishedAt  DateTime? @map("finished_at")
 
@@ -656,6 +733,8 @@ model AuditLog {
   action         String   // login | permission_change | workflow_change | approval | ...
   resource       String?
   resourceId     String?  @map("resource_id")
+  // free-form context bag used by the app (never contains secrets)
+  metadata       Json?
   before         Json?
   after          Json?
   ip             String?

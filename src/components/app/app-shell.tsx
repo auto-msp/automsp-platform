@@ -2,6 +2,7 @@ import Link from "next/link";
 import { signOut } from "@/server/auth/actions";
 import { can, type SessionContext } from "@/server/auth/session";
 import { store } from "@/server/db/store";
+import { unreadCount } from "@/server/notifications";
 import { formatRole } from "@/server/roles";
 import { NavLink } from "./nav-link";
 
@@ -22,6 +23,7 @@ async function buildNav(ctx: SessionContext): Promise<NavSection[]> {
   const work: NavItem[] = [{ href: "/app/dashboard", label: "Dashboard" }];
   if (can(ctx, "systems.view")) work.push({ href: "/app/systems", label: "Systems" });
   if (can(ctx, "automations.view")) work.push({ href: "/app/automations", label: "Automations" });
+  if (can(ctx, "integrations.view")) work.push({ href: "/app/integrations", label: "Integrations" });
   sections.push({ title: "Work", items: work });
 
   const run: NavItem[] = [];
@@ -36,6 +38,8 @@ async function buildNav(ctx: SessionContext): Promise<NavSection[]> {
   if (run.length > 0) sections.push({ title: "Run", items: run });
 
   const account: NavItem[] = [];
+  const unread = await unreadCount(ctx.organization.id, ctx.user.id);
+  account.push({ href: "/app/notifications", label: "Notifications", badge: unread });
   if (can(ctx, "analytics.view")) account.push({ href: "/app/analytics", label: "Analytics" });
   if (can(ctx, "org.view")) account.push({ href: "/app/organization", label: "Organization" });
   if (can(ctx, "billing.view")) account.push({ href: "/app/billing", label: "Billing" });
@@ -52,6 +56,10 @@ export async function AppShell({
   children: React.ReactNode;
 }) {
   const sections = await buildNav(ctx);
+  const unread =
+    sections
+      .flatMap((s) => s.items)
+      .find((i) => i.href === "/app/notifications")?.badge ?? 0;
 
   return (
     <div className="flex min-h-svh bg-paper">
@@ -102,6 +110,31 @@ export async function AppShell({
             </span>
           </div>
           <div className="flex items-center gap-4">
+            <Link
+              href="/app/notifications"
+              aria-label={unread > 0 ? `${unread} unread notifications` : "Notifications"}
+              className="relative flex h-8 w-8 items-center justify-center border border-fog text-slate transition-colors hover:border-ink hover:text-ink"
+            >
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+              </svg>
+              {unread > 0 ? (
+                <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center bg-accent px-1 text-[10px] font-semibold text-paper">
+                  {unread > 9 ? "9+" : unread}
+                </span>
+              ) : null}
+            </Link>
             <div className="text-right">
               <p className="text-[13px] font-medium text-ink">{ctx.user.name}</p>
               <p className="text-[11px] text-mute">{formatRole(ctx.membership.role)}</p>

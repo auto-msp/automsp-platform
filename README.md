@@ -4,10 +4,45 @@ The control plane for a company's AI automation: marketing site, customer portal
 internal operations platform, AI workflow & agent management, integrations,
 execution engine, analytics, and billing.
 
-**Status — Phase 1 complete:** marketing website (all routes), design system,
-audit-request funnel with working form → API → validated persistence (file store
-until the database is configured). Next: authentication, organizations, DB wiring
-(Phase 2+ per roadmap below).
+**Status — the platform app is live for development.** Marketing website,
+authenticated workspace (`/app`) with local credential auth + org RBAC, systems,
+versioned automations with a builder, execution engine v1 (idempotency keys,
+approval gates, interpolation), approvals center, notifications, a sealed
+credentials vault for HTTP steps, and an in-process scheduler for interval
+triggers. Everything unbuilt is labeled, never simulated.
+
+### Persistence: one interface, two adapters
+
+Every data access goes through `src/server/db/store.ts`, which picks an adapter
+at boot:
+
+| `DATABASE_URL` | Adapter | Where data lives |
+| -------------- | ------- | ---------------- |
+| unset          | `json-store.ts` | `.data/store/*.json` (gitignored), atomic writes |
+| set            | `prisma-store.ts` | PostgreSQL via the schema in `prisma/` |
+
+`/api/health` reports which adapter is live. Prisma predicates currently filter
+in application memory after `findMany()` — SQL pushdown is the performance
+follow-up, not a correctness gap (tenant guards live in the service layer and
+apply to both adapters).
+
+Apply the schema to a fresh database with `pnpm prisma migrate deploy`
+(initial migration is generated, in `prisma/migrations/`).
+
+### Credentials vault
+
+Workflow HTTP steps can reference a stored credential instead of embedding
+tokens in step config. Secrets are sealed with AES-256-GCM (`src/server/vault.ts`)
+under `AUTOMSP_VAULT_KEY`; without it a development key is generated into the
+gitignored `.data/vault.key`. The plaintext secret is never returned to the
+client, never logged, and is destroyed on revoke.
+
+### Scheduler
+
+`src/instrumentation.ts` starts a single-process interval poller (30s ticks).
+It fires active automations whose schedule is due; cursor advancement is
+idempotency-keyed (`sched:{id}:{dueAt}`). Multi-instance deployments need a
+dedicated worker — this scheduler is honest about being single-process.
 
 ## Visual direction
 
@@ -27,9 +62,9 @@ motion. Nothing that reads as a generic AI wrapper.
 | Styling  | Tailwind CSS 4, design tokens in `app/globals.css` |
 | Icons    | lucide-react                                        |
 | Motion   | motion (Framer Motion) — restrained reveals only    |
-| Database | PostgreSQL via Prisma (schema in `prisma/`)         |
+| Database | PostgreSQL via Prisma (JSON file adapter when unset) |
 | Validation | Zod — every external input, client + server      |
-| Auth     | Planned: Clerk or Supabase Auth (Phase 1 remainder)|
+| Auth     | Built-in credential auth (scrypt + hashed session tokens); SSO later |
 | Payments | Planned: Stripe (Phase 5)                           |
 | Email    | Planned: Resend (Phase 5)                           |
 
@@ -70,12 +105,12 @@ docs/                  architecture, security, database notes
 
 ## Roadmap (vertical slices)
 
-1. **Foundation** — repo, design system, marketing site, audit funnel ✅ · auth, orgs, RBAC next
-2. **Core platform** — systems, automations, execution model, workflow builder, integrations architecture
+1. **Foundation** — repo, design system, marketing site, audit funnel, auth, orgs, RBAC ✅
+2. **Core platform** — systems, automations, execution engine v1, builder, vault credentials, scheduler, notifications ✅
 3. **AI** — provider abstraction, agents, knowledge/RAG, evaluations, cost tracking
-4. **Operations** — monitoring, incidents, approvals, audit logs, analytics, ROI, reports
+4. **Operations** — monitoring, incidents, audit logs ✅, analytics, ROI, reports
 5. **Commercial** — billing, subscriptions, opportunity & audit management
-6. **Hardening** — security review, performance, a11y, tests, deployment
+6. **Hardening** — security review (headers ✅, RLS policies next), performance, a11y, tests, deployment
 
 Rules that don't change: nothing fake presented as real · tenant isolation at the
 database layer · human approval for consequential AI actions · every reported

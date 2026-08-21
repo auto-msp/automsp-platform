@@ -57,7 +57,18 @@ function validateNodeConfig(node: WorkflowNodeRecord): string[] {
 
   switch (node.type) {
     case "trigger":
-      if (c.triggerType !== "manual") errs.push(`${label}: only manual triggers are supported in this release.`);
+      if (c.triggerType === "manual") break;
+      if (c.triggerType === "schedule") {
+        const every = Number(c.every);
+        if (!Number.isInteger(every) || every < 1 || every > 10000) {
+          errs.push(`${label}: schedule interval must be a whole number between 1 and 10000.`);
+        }
+        if (!["minutes", "hours", "days"].includes(String(c.unit))) {
+          errs.push(`${label}: schedule unit must be minutes, hours, or days.`);
+        }
+        break;
+      }
+      errs.push(`${label}: trigger type must be manual or schedule.`);
       break;
     case "condition": {
       if (typeof c.field !== "string" || !c.field) errs.push(`${label}: a field is required.`);

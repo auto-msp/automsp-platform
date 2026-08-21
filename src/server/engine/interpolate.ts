@@ -3,6 +3,8 @@ import "server-only";
 export interface RunContext {
   input: Record<string, unknown>;
   vars: Record<string, unknown>;
+  /** Tenant boundary — set from the execution record, never from user input. */
+  organizationId: string;
 }
 
 export function getPath(obj: unknown, path: string): unknown {

@@ -1,156 +1,56 @@
 import "server-only";
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
-import path from "node:path";
-import type {
-  ApprovalRecord,
-  AuditLogRecord,
-  AuditRequestRecord,
-  AuthAttemptRecord,
-  AutomationRecord,
-  AutomationVersionRecord,
-  ExecutionLogRecord,
-  ExecutionRecord,
-  ExecutionStepRecord,
-  MembershipRecord,
-  NotificationRecord,
-  OrganizationRecord,
-  SessionRecord,
-  SystemRecord,
-  UserRecord,
-} from "./types";
+import type { CollectionName, Store } from "./json-store";
 
 /**
- * Dev data store: one JSON file per collection in `.data/store/`, written
- * atomically (tmp + rename). This is the local/dev adapter — every access goes
- * through typed collection helpers in src/server/* services, so swapping the
- * body of those helpers for Prisma queries leaves call sites unchanged.
+ * Store selector. One interface, two adapters:
  *
- * Production target: PostgreSQL via Prisma (schema is already in prisma/).
+ *  - DATABASE_URL set   → PostgreSQL via Prisma (src/server/db/prisma-store.ts)
+ *  - DATABASE_URL unset → local JSON files in .data/store/ (src/server/db/json-store.ts)
+ *
+ * The Prisma adapter is imported lazily so a cold dev environment never pays
+ * for it — and the build never requires the generated client when the JSON
+ * store is in use. Which adapter is active is reported by /api/health.
  */
 
-const dir = path.join(process.cwd(), ".data", "store");
+export type { CollectionName, Collections, Store } from "./json-store";
 
-interface Collections {
-  users: UserRecord;
-  organizations: OrganizationRecord;
-  memberships: MembershipRecord;
-  sessions: SessionRecord;
-  systems: SystemRecord;
-  automations: AutomationRecord;
-  automation_versions: AutomationVersionRecord;
-  executions: ExecutionRecord;
-  execution_steps: ExecutionStepRecord;
-  execution_logs: ExecutionLogRecord;
-  approvals: ApprovalRecord;
-  audit_logs: AuditLogRecord;
-  notifications: NotificationRecord;
-  auth_attempts: AuthAttemptRecord;
-  audit_requests: AuditRequestRecord;
-}
+const usePostgres = Boolean(process.env.DATABASE_URL?.trim());
 
-export type CollectionName = keyof Collections;
+let resolved: Store | null = null;
 
-function fileFor(name: CollectionName): string {
-  return path.join(dir, `${name}.json`);
-}
-
-async function readCollection<T>(name: CollectionName): Promise<T[]> {
-  try {
-    const raw = await readFile(fileFor(name), "utf8");
-    const parsed: unknown = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as T[]) : [];
-  } catch {
-    return [];
+async function impl(): Promise<Store> {
+  if (resolved) return resolved;
+  if (usePostgres) {
+    const { prismaStore } = await import("./prisma-store");
+    resolved = prismaStore;
+  } else {
+    const { jsonStore } = await import("./json-store");
+    resolved = jsonStore;
   }
+  return resolved;
 }
 
-async function writeCollection<T>(name: CollectionName, rows: T[]): Promise<void> {
-  await mkdir(dir, { recursive: true });
-  const tmp = fileFor(name) + `.tmp-${process.pid}-${Date.now()}`;
-  await writeFile(tmp, JSON.stringify(rows, null, 2) + "\n", "utf8");
-  await rename(tmp, fileFor(name));
+function forward<K extends keyof Store>(method: K): Store[K] {
+  return ((...args: unknown[]) =>
+    impl().then((s) => (s[method] as (...a: unknown[]) => unknown)(...args))) as Store[K];
 }
 
-export const store = {
-  async all<K extends CollectionName>(name: K): Promise<Collections[K][]> {
-    return readCollection<Collections[K]>(name);
-  },
-
-  async find<K extends CollectionName>(
-    name: K,
-    predicate: (row: Collections[K]) => boolean,
-  ): Promise<Collections[K][]> {
-    const rows = await readCollection<Collections[K]>(name);
-    return rows.filter(predicate);
-  },
-
-  async first<K extends CollectionName>(
-    name: K,
-    predicate: (row: Collections[K]) => boolean,
-  ): Promise<Collections[K] | null> {
-    const rows = await readCollection<Collections[K]>(name);
-    return rows.find(predicate) ?? null;
-  },
-
-  async get<K extends CollectionName>(name: K, id: string): Promise<Collections[K] | null> {
-    const rows = (await readCollection<{ id: string }>(name)) as unknown as Collections[K][];
-    return rows.find((r) => (r as { id: string }).id === id) ?? null;
-  },
-
-  async insert<K extends CollectionName>(name: K, row: Collections[K]): Promise<Collections[K]> {
-    const rows = await readCollection<Collections[K]>(name);
-    rows.push(row);
-    await writeCollection(name, rows);
-    return row;
-  },
-
-  async update<K extends CollectionName>(
-    name: K,
-    id: string,
-    patch: Partial<Collections[K]>,
-  ): Promise<Collections[K] | null> {
-    const rows = (await readCollection<{ id: string }>(name)) as unknown as Collections[K][];
-    const idx = rows.findIndex((r) => (r as { id: string }).id === id);
-    if (idx === -1) return null;
-    rows[idx] = { ...rows[idx], ...patch };
-    await writeCollection(name, rows);
-    return rows[idx];
-  },
-
-  /** Update matching rows via a mutator that receives a draft row. */
-  async mutate<K extends CollectionName>(
-    name: K,
-    id: string,
-    mutator: (row: Collections[K]) => void,
-  ): Promise<Collections[K] | null> {
-    const rows = (await readCollection<{ id: string }>(name)) as unknown as Collections[K][];
-    const idx = rows.findIndex((r) => (r as { id: string }).id === id);
-    if (idx === -1) return null;
-    mutator(rows[idx]);
-    await writeCollection(name, rows);
-    return rows[idx];
-  },
-
-  /** Delete a row by id. Returns true when a row was removed. */
-  async remove(name: CollectionName, id: string): Promise<boolean> {
-    const rows = (await readCollection<{ id: string }>(name)) as unknown as { id: string }[];
-    const next = rows.filter((r) => r.id !== id);
-    if (next.length === rows.length) return false;
-    await writeCollection(name, next);
-    return true;
-  },
-
-  /** Replace the row matching `predicate`, or append `row` if none matches. */
-  async upsert<K extends CollectionName>(
-    name: K,
-    predicate: (row: Collections[K]) => boolean,
-    row: Collections[K],
-  ): Promise<Collections[K]> {
-    const rows = await readCollection<Collections[K]>(name);
-    const idx = rows.findIndex(predicate);
-    if (idx === -1) rows.push(row);
-    else rows[idx] = row;
-    await writeCollection(name, rows);
-    return row;
-  },
+export const store: Store = {
+  all: forward("all"),
+  find: forward("find"),
+  first: forward("first"),
+  get: forward("get"),
+  insert: forward("insert"),
+  update: forward("update"),
+  mutate: forward("mutate"),
+  remove: forward("remove"),
+  upsert: forward("upsert"),
 };
+
+/** Which persistence adapter is live — surfaced by /api/health. */
+export function activeStoreKind(): "postgres" | "json-file" {
+  return usePostgres ? "postgres" : "json-file";
+}
+
+/** Convenience re-export so new code can import names from one place. */
+export type { CollectionName as Collection };

@@ -51,6 +51,36 @@ const DEFAULT_DEFINITION: WorkflowDefinition = {
   edges: [],
 };
 
+/** Interval in ms for a schedule trigger config, or null when not scheduled. */
+export function scheduleIntervalMs(config: Record<string, unknown>): number | null {
+  if (config.triggerType !== "schedule") return null;
+  const every = Number(config.every);
+  if (!Number.isInteger(every) || every < 1) return null;
+  const unit = String(config.unit);
+  const base = unit === "minutes" ? 60_000 : unit === "hours" ? 3_600_000 : unit === "days" ? 86_400_000 : 0;
+  return base > 0 ? every * base : null;
+}
+
+/**
+ * Keep the automation's scheduler-facing fields in sync with its current
+ * definition + status. nextRunAt is the scheduler's only cursor.
+ */
+export async function refreshSchedule(organizationId: string, automationId: string): Promise<void> {
+  const automation = await getAutomation(organizationId, automationId);
+  if (!automation) return;
+
+  const current = await getCurrentDefinition(automationId);
+  const trigger = current?.definition.nodes.find((n) => n.type === "trigger");
+  const interval = trigger ? scheduleIntervalMs(trigger.config) : null;
+
+  const nextRunAt =
+    automation.status === "active" && interval !== null
+      ? new Date(Date.now() + interval).toISOString()
+      : null;
+
+  await store.update("automations", automationId, { nextRunAt });
+}
+
 export async function createAutomation(
   organizationId: string,
   input: AutomationInput,
@@ -65,6 +95,8 @@ export async function createAutomation(
     description: input.description,
     status: "draft",
     estMinutesPerRun: Math.max(0, Math.round(input.estMinutesPerRun)),
+    nextRunAt: null,
+    lastScheduledAt: null,
     createdAt: now,
     updatedAt: now,
   };
@@ -123,6 +155,7 @@ export async function saveDefinition(
   };
   await store.insert("automation_versions", record);
   await store.update("automations", automationId, { updatedAt: record.createdAt });
+  await refreshSchedule(organizationId, automationId);
   return { ok: true, version: record };
 }
 
@@ -140,7 +173,9 @@ export async function updateAutomation(
   if (patch.estMinutesPerRun !== undefined) {
     patch.estMinutesPerRun = Math.max(0, Math.round(patch.estMinutesPerRun));
   }
-  return store.update("automations", id, { ...patch, updatedAt: new Date().toISOString() });
+  const updated = await store.update("automations", id, { ...patch, updatedAt: new Date().toISOString() });
+  if (updated && patch.status !== undefined) await refreshSchedule(organizationId, id);
+  return updated;
 }
 
 /** Runs already recorded against an automation keep it from hard deletion. */

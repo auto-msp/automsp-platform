@@ -75,6 +75,10 @@ export interface AutomationRecord {
   status: AutomationStatus;
   /** estimated minutes of human work avoided per completed run (user-supplied) */
   estMinutesPerRun: number;
+  /** next due time when the trigger is a schedule; null for manual/disabled */
+  nextRunAt: string | null;
+  /** last time the scheduler started a run for this automation */
+  lastScheduledAt: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -153,7 +157,7 @@ export interface ExecutionRecord {
   automationName: string;
   version: number;
   status: ExecutionStatus;
-  trigger: "manual";
+  trigger: "manual" | "schedule";
   input: Record<string, unknown>;
   output?: Record<string, unknown>;
   error?: string;
@@ -209,6 +213,31 @@ export interface AuthAttemptRecord {
   email: string;
   failures: number;
   lockedUntil: string | null;
+}
+
+export type IntegrationStatus = "active" | "revoked";
+
+/**
+ * A connected integration. The secret is sealed with AES-256-GCM under the
+ * vault key (AUTOMSP_VAULT_KEY, or the gitignored dev key file); the plaintext
+ * never lives in this record and never reaches the frontend.
+ */
+export interface IntegrationRecord {
+  id: string;
+  organizationId: string;
+  /** catalog key, e.g. "slack", "hubspot", "generic-http" */
+  providerKey: string;
+  name: string;
+  authType: "api_token" | "header_secret";
+  status: IntegrationStatus;
+  /** base64(iv | authTag | ciphertext) — see server/vault.ts */
+  sealedSecret: string;
+  /** last 4 characters of the secret, for operator recognition only */
+  secretPreview: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  lastUsedAt: string | null;
 }
 
 export interface AuditRequestRecord {

@@ -20,6 +20,8 @@ const TONES: Record<string, { label: string; cls: string }> = {
   rejected: { label: "Rejected", cls: "border-risk/40 bg-risk/10 text-risk" },
   // system status extra
   warning: { label: "Warning", cls: "border-warn/40 bg-warn/10 text-warn" },
+  // integration statuses
+  revoked: { label: "Revoked", cls: "border-risk/40 bg-risk/10 text-risk" },
 };
 
 export function StatusPill({ status }: { status: string }) {

@@ -21,6 +21,8 @@ export const ALL_PERMISSIONS = [
   "analytics.view",
   "billing.view",
   "billing.manage",
+  "integrations.view",
+  "integrations.manage",
   "platform.admin",
 ] as const;
 
@@ -40,6 +42,7 @@ const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
     "approvals.view",
     "approvals.decide",
     "analytics.view",
+    "integrations.view",
   ],
   automsp_analyst: ["org.view", "systems.view", "automations.view", "executions.view", "analytics.view"],
   customer_owner: [
@@ -58,6 +61,8 @@ const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
     "analytics.view",
     "billing.view",
     "billing.manage",
+    "integrations.view",
+    "integrations.manage",
   ],
   customer_admin: [
     "org.view",
@@ -74,6 +79,8 @@ const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
     "approvals.decide",
     "analytics.view",
     "billing.view",
+    "integrations.view",
+    "integrations.manage",
   ],
   customer_member: [
     "org.view",
@@ -85,6 +92,7 @@ const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
     "approvals.view",
     "approvals.decide",
     "analytics.view",
+    "integrations.view",
   ],
   customer_viewer: ["org.view", "systems.view", "automations.view", "executions.view", "analytics.view"],
 };

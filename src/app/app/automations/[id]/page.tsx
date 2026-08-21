@@ -88,6 +88,20 @@ export default async function AutomationDetailPage({
           <dt className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">Created</dt>
           <dd className="tnum mt-1.5 text-sm text-ink">{formatDate(automation.createdAt)}</dd>
         </div>
+        <div>
+          <dt className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">Trigger</dt>
+          <dd className="mt-1.5 text-sm text-ink">
+            {current?.definition.nodes.find((n) => n.type === "trigger")?.config.triggerType === "schedule"
+              ? "Schedule"
+              : "Manual"}
+          </dd>
+        </div>
+        <div>
+          <dt className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">Next run</dt>
+          <dd className="tnum mt-1.5 text-sm text-ink">
+            {automation.nextRunAt ? formatDateTime(automation.nextRunAt) : "—"}
+          </dd>
+        </div>
       </dl>
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">

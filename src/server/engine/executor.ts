@@ -1,6 +1,8 @@
 import "server-only";
 import { newId } from "@/server/db/id";
 import { store } from "@/server/db/store";
+import { notify } from "@/server/notifications";
+import { openSecret } from "@/server/vault";
 import type {
   ApprovalRecord,
   AutomationVersionRecord,
@@ -32,6 +34,56 @@ async function log(
   });
 }
 
+export type ExecutionTrigger = "manual" | "schedule";
+
+async function notifyRunFailed(execution: ExecutionRecord, error: string): Promise<void> {
+  await notify({
+    organizationId: execution.organizationId,
+    kind: "workflow_failure",
+    title: `Run failed — ${execution.automationName}`,
+    body: error,
+    href: `/app/operations/${execution.id}`,
+  });
+}
+
+async function notifyRunCompleted(execution: ExecutionRecord): Promise<void> {
+  await notify({
+    organizationId: execution.organizationId,
+    kind: "execution",
+    title:
+      execution.trigger === "schedule"
+        ? `Scheduled run completed — ${execution.automationName}`
+        : `Run completed — ${execution.automationName}`,
+    body: `Version ${execution.version} finished successfully.`,
+    href: `/app/operations/${execution.id}`,
+  });
+}
+
+/** Resolve a vault credential for an http step. Secret never leaves this process. */
+async function loadCredentialHeader(
+  organizationId: string,
+  config: Record<string, unknown>,
+): Promise<{ header: string; value: string } | { error: string }> {
+  const credentialId = String(config.credentialId ?? "");
+  if (!credentialId) return { error: "No credential selected" };
+
+  const integration = await store.get("integrations", credentialId);
+  if (!integration || integration.organizationId !== organizationId) {
+    return { error: "Credential not found" };
+  }
+  if (integration.status === "revoked") {
+    return { error: `Credential "${integration.name}" was revoked` };
+  }
+
+  const secret = await openSecret(integration.sealedSecret);
+  if (secret === null) return { error: `Credential "${integration.name}" could not be unsealed` };
+  await store.update("integrations", integration.id, { lastUsedAt: new Date().toISOString() });
+
+  const header = String(config.headerName ?? "").trim() || "Authorization";
+  const scheme = String(config.scheme ?? "").trim();
+  return { header, value: scheme ? `${scheme} ${secret}` : secret };
+}
+
 interface NodeResult {
   /** Continue to the successor node */
   proceed?: boolean;
@@ -53,7 +105,7 @@ async function executeNode(
 ): Promise<NodeResult> {
   switch (node.type) {
     case "trigger":
-      return { proceed: true, output: { trigger: "manual" } };
+      return { proceed: true, output: { trigger: node.config.triggerType ?? "manual" } };
 
     case "log": {
       const message = interpolate(String(node.config.message), context);
@@ -160,9 +212,19 @@ async function executeNode(
         if (!["http:", "https:"].includes(parsed.protocol)) {
           return { failed: { error: "HTTP step requires an http or https URL" } };
         }
+        const headers: Record<string, string> = { "content-type": "application/json" };
+        let credentialNote: string | undefined;
+        if (node.config.credentialId) {
+          const resolved = await loadCredentialHeader(context.organizationId, node.config);
+          if ("error" in resolved) return { failed: { error: `Vault: ${resolved.error}` } };
+          // The secret goes straight into the request headers. It is never
+          // placed in step output, run logs, or anywhere client-visible.
+          headers[resolved.header] = resolved.value;
+          credentialNote = `header "${resolved.header}" injected from vault`;
+        }
         const res = await fetch(url, {
           method: node.config.method === "POST" ? "POST" : "GET",
-          headers: { "content-type": "application/json" },
+          headers,
           signal: AbortSignal.timeout(10_000),
         });
         const text = (await res.text()).slice(0, 2048);
@@ -172,7 +234,7 @@ async function executeNode(
             : text;
         return {
           proceed: true,
-          output: { status: res.status, ok: res.ok, preview: body },
+          output: { status: res.status, ok: res.ok, preview: body, ...(credentialNote ? { credential: credentialNote } : {}) },
         };
       } catch (err) {
         return {
@@ -208,8 +270,9 @@ async function runWalk(executionId: string, startKey: string): Promise<void> {
     ? {
         input: execution.resume.context.input as Record<string, unknown>,
         vars: (execution.resume.context.vars as Record<string, unknown>) ?? {},
+        organizationId: execution.organizationId,
       }
-    : { input: execution.input, vars: {} };
+    : { input: execution.input, vars: {}, organizationId: execution.organizationId };
 
   let key: string | null = startKey;
 
@@ -249,6 +312,13 @@ async function runWalk(executionId: string, startKey: string): Promise<void> {
         approvalId: approval.id,
         riskLevel: approval.riskLevel,
       });
+      await notify({
+        organizationId: execution.organizationId,
+        kind: "approval",
+        title: `Approval requested — ${approval.action}`,
+        body: `${execution.automationName} paused for review (${approval.riskLevel} risk).`,
+        href: "/app/approvals",
+      });
       return;
     }
 
@@ -264,6 +334,7 @@ async function runWalk(executionId: string, startKey: string): Promise<void> {
         finishedAt: new Date().toISOString(),
       });
       await log(executionId, "error", `Step ${stepKey} failed: ${result.failed.error}`);
+      await notifyRunFailed(execution, `Step "${stepKey}" failed: ${result.failed.error}`);
       return;
     }
 
@@ -289,6 +360,7 @@ async function runWalk(executionId: string, startKey: string): Promise<void> {
         finishedAt: new Date().toISOString(),
       });
       await log(executionId, "info", "Run completed", result.finished.output);
+      await notifyRunCompleted(execution);
       return;
     }
 
@@ -302,6 +374,7 @@ async function runWalk(executionId: string, startKey: string): Promise<void> {
     finishedAt: new Date().toISOString(),
   });
   await log(executionId, "info", "Run completed (end of steps)");
+  await notifyRunCompleted(execution);
 }
 
 export async function startExecution(params: {
@@ -310,8 +383,10 @@ export async function startExecution(params: {
   input: Record<string, unknown>;
   idempotencyKey?: string;
   startedBy: string;
+  trigger?: ExecutionTrigger;
 }): Promise<{ ok: true; execution: ExecutionRecord } | { ok: false; error: string }> {
   const { organizationId, automationId, input, idempotencyKey } = params;
+  const triggerKind: ExecutionTrigger = params.trigger ?? "manual";
 
   if (idempotencyKey) {
     const existing = await store.first(
@@ -324,6 +399,18 @@ export async function startExecution(params: {
   const automation = await store.get("automations", automationId);
   if (!automation || automation.organizationId !== organizationId) {
     return { ok: false, error: "Automation not found." };
+  }
+
+  if (triggerKind === "schedule") {
+    // Scheduled runs only fire on active automations, and only when due —
+    // the scheduler asserts this too, but the engine is the last line of
+    // defence so nobody can fake a "schedule" run onto a paused automation.
+    if (automation.status !== "active") {
+      return { ok: false, error: "Scheduled runs require an active automation." };
+    }
+    if (!automation.nextRunAt || Date.parse(automation.nextRunAt) > Date.now()) {
+      return { ok: false, error: "This automation is not scheduled to run yet." };
+    }
   }
 
   const versions = await store.find("automation_versions", (v) => v.automationId === automationId);
@@ -344,7 +431,7 @@ export async function startExecution(params: {
     automationName: automation.name,
     version: latest.version,
     status: "queued",
-    trigger: "manual",
+    trigger: triggerKind,
     input,
     idempotencyKey,
     startedAt: now,
@@ -402,6 +489,10 @@ export async function resumeExecution(
       finishedAt: new Date().toISOString(),
     });
     await log(executionId, "warn", `Approval rejected by ${reviewerName}`);
+    await notifyRunFailed(
+      execution,
+      `Approval rejected by ${reviewerName}${decisionNote ? `: ${decisionNote}` : ""}`,
+    );
     return { ok: true };
   }
 

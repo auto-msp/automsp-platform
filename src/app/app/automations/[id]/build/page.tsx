@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { AppPageHeader } from "@/components/app/page-header";
 import { can, getSessionContext } from "@/server/auth/session";
 import { getAutomation, getCurrentDefinition } from "@/server/automations";
+import { listUsableCredentials } from "@/server/integrations";
 import type { WorkflowNodeRecord } from "@/server/db/types";
 import { Builder } from "./builder";
 
@@ -29,6 +30,8 @@ export default async function AutomationBuildPage({
   const nodes: WorkflowNodeRecord[] = current?.definition.nodes ?? [
     { key: "trigger", type: "trigger", config: { triggerType: "manual" } },
   ];
+  // Only metadata (id/name/provider) crosses to the client — never secrets.
+  const credentials = await listUsableCredentials(orgId);
 
   return (
     <div>
@@ -42,7 +45,7 @@ export default async function AutomationBuildPage({
         </Link>
       </AppPageHeader>
 
-      <Builder automationId={automation.id} initialNodes={nodes} />
+      <Builder automationId={automation.id} initialNodes={nodes} credentials={credentials} />
     </div>
   );
 }

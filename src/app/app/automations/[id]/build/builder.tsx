@@ -47,9 +47,11 @@ const inputCls =
 export function Builder({
   automationId,
   initialNodes,
+  credentials,
 }: {
   automationId: string;
   initialNodes: WorkflowNodeRecord[];
+  credentials: { id: string; name: string; providerKey: string }[];
 }) {
   const [steps, setSteps] = useState<DraftStep[]>(
     initialNodes.map((n) => ({ key: n.key, type: n.type, config: { ...n.config } })),
@@ -108,7 +110,11 @@ export function Builder({
                 {step.type}
               </span>
               {step.type === "trigger" ? (
-                <span className="text-[13px] text-mute">Manual trigger — runs start from the automation page</span>
+                <span className="text-[13px] text-mute">
+                  {step.config.triggerType === "schedule"
+                    ? "Scheduled trigger — runs fire on the interval below"
+                    : "Manual trigger — runs start from the automation page"}
+                </span>
               ) : (
                 <input
                   aria-label="Step key"
@@ -133,8 +139,8 @@ export function Builder({
                 ) : null}
               </div>
             </div>
-            <div className="px-4 py-4">
-              <StepConfig step={step} onChange={(patch) => updateConfig(i, patch)} />
+              <div className="px-4 py-4">
+              <StepConfig step={step} credentials={credentials} onChange={(patch) => updateConfig(i, patch)} />
             </div>
           </div>
         ))}
@@ -228,9 +234,11 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
 
 function StepConfig({
   step,
+  credentials,
   onChange,
 }: {
   step: DraftStep;
+  credentials: { id: string; name: string; providerKey: string }[];
   onChange: (patch: Record<string, unknown>) => void;
 }) {
   const c = step.config;
@@ -238,10 +246,57 @@ function StepConfig({
   switch (step.type) {
     case "trigger":
       return (
-        <p className="text-[13px] text-slate">
-          Trigger type: <span className="font-medium text-ink">manual</span>. Scheduled and webhook
-          triggers are not configured in this environment.
-        </p>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <Field label="Trigger type">
+            <select
+              value={String(c.triggerType ?? "manual")}
+              onChange={(e) => {
+                const triggerType = e.target.value;
+                onChange(
+                  triggerType === "schedule"
+                    ? { triggerType, every: 1, unit: "hours" }
+                    : { triggerType, every: undefined, unit: undefined },
+                );
+              }}
+              className={inputCls}
+            >
+              <option value="manual">manual — started by a person</option>
+              <option value="schedule">schedule — runs on an interval</option>
+            </select>
+          </Field>
+          {c.triggerType === "schedule" ? (
+            <>
+              <Field label="Every">
+                <input
+                  type="number"
+                  min={1}
+                  max={10000}
+                  value={Number(c.every ?? 1)}
+                  onChange={(e) => onChange({ every: Math.max(1, Math.floor(Number(e.target.value) || 1)) })}
+                  className={inputCls}
+                />
+              </Field>
+              <Field label="Unit">
+                <select
+                  value={String(c.unit ?? "hours")}
+                  onChange={(e) => onChange({ unit: e.target.value })}
+                  className={inputCls}
+                >
+                  <option value="minutes">minutes</option>
+                  <option value="hours">hours</option>
+                  <option value="days">days</option>
+                </select>
+              </Field>
+            </>
+          ) : null}
+          {c.triggerType === "schedule" ? (
+            <p className="text-[11px] text-mute sm:col-span-3">
+              Scheduled runs only fire while the automation is <span className="text-ink">active</span> and
+              this server process is running. A persistent production worker is part of the deployment
+              slice.
+            </p>
+          ) : null}
+        </div>
       );
 
     case "log":
@@ -348,26 +403,72 @@ function StepConfig({
 
     case "http":
       return (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_8rem]">
-          <Field label="Endpoint URL" hint="Called for real when the run executes. Leave empty to skip.">
-            <input
-              value={String(c.url ?? "")}
-              onChange={(e) => onChange({ url: e.target.value })}
-              placeholder="https://…"
-              className={inputCls}
-            />
-          </Field>
-          <Field label="Method">
-            <select
-              value={String(c.method ?? "GET")}
-              onChange={(e) => onChange({ method: e.target.value })}
-              className={inputCls}
+        <>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_8rem]">
+            <Field label="Endpoint URL" hint="Called for real when the run executes. Leave empty to skip.">
+              <input
+                value={String(c.url ?? "")}
+                onChange={(e) => onChange({ url: e.target.value })}
+                placeholder="https://…"
+                className={inputCls}
+              />
+            </Field>
+            <Field label="Method">
+              <select
+                value={String(c.method ?? "GET")}
+                onChange={(e) => onChange({ method: e.target.value })}
+                className={inputCls}
+              >
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+              </select>
+            </Field>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_10rem_10rem]">
+            <Field
+              label="Vault credential (optional)"
+              hint="Injected into the request at run time. The secret never appears in the step config, logs, or output."
             >
-              <option value="GET">GET</option>
-              <option value="POST">POST</option>
-            </select>
-          </Field>
-        </div>
+              <select
+                value={String(c.credentialId ?? "")}
+                onChange={(e) => onChange({ credentialId: e.target.value || undefined })}
+                className={inputCls}
+              >
+                <option value="">No credential</option>
+                {credentials.map((cred) => (
+                  <option key={cred.id} value={cred.id}>
+                    {cred.name} ({cred.providerKey})
+                  </option>
+                ))}
+              </select>
+            </Field>
+            {c.credentialId ? (
+              <>
+                <Field label="Header name">
+                  <input
+                    value={String(c.headerName ?? "Authorization")}
+                    onChange={(e) => onChange({ headerName: e.target.value })}
+                    placeholder="Authorization"
+                    className={inputCls}
+                  />
+                </Field>
+                <Field label="Scheme" hint='e.g. "Bearer"; empty = raw secret as the header value.'>
+                  <input
+                    value={String(c.scheme ?? "Bearer")}
+                    onChange={(e) => onChange({ scheme: e.target.value })}
+                    placeholder="Bearer"
+                    className={inputCls}
+                  />
+                </Field>
+              </>
+            ) : null}
+          </div>
+          {c.credentialId && !credentials.some((cred) => cred.id === c.credentialId) ? (
+            <p className="text-[11px] text-warn">
+              This step references a credential that no longer exists — runs will fail at this step.
+            </p>
+          ) : null}
+        </>
       );
 
     case "ai":

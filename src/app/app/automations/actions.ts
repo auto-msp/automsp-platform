@@ -202,8 +202,11 @@ export async function saveDefinitionAction(
   if (cleaned[0].type !== "trigger") {
     cleaned.unshift({ key: "trigger", type: "trigger", config: { triggerType: "manual" } });
   }
-  // Ensure trigger config is set
-  cleaned[0].config = { ...cleaned[0].config, triggerType: "manual" };
+  // Default trigger config; respect a schedule the builder submitted.
+  cleaned[0].config = {
+    ...cleaned[0].config,
+    triggerType: cleaned[0].config.triggerType === "schedule" ? "schedule" : "manual",
+  };
 
   const definition = stepsToDefinition(cleaned);
   const result = await saveDefinition(ctx.organization.id, automationId, definition, ctx.user.id);
