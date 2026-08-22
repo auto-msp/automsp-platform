@@ -2,14 +2,20 @@ import { NextResponse } from "next/server";
 import { auditRequestSchema } from "@/lib/validation";
 import { createAuditRequest } from "@/server/audit-requests";
 import { createAuditFromFunnel } from "@/server/commercial";
-import { checkRateLimit, clientIp, rateLimitHeaders } from "@/server/rate-limit";
+import { checkRateLimitAuto, clientIp, rateLimitHeaders } from "@/server/rate-limit";
 
-// Public, unauthenticated endpoint — bounded per client address.
+// Public, unauthenticated endpoint — bounded per client address. The limiter
+// is DB-backed when Postgres is live (shared across instances), in-memory
+// otherwise.
 const FUNNEL_LIMIT = 10;
 const FUNNEL_WINDOW_MS = 10 * 60 * 1000;
 
 export async function POST(req: Request) {
-  const limit = checkRateLimit(`audit-requests:${clientIp(req)}`, FUNNEL_LIMIT, FUNNEL_WINDOW_MS);
+  const limit = await checkRateLimitAuto(
+    `audit-requests:${clientIp(req)}`,
+    FUNNEL_LIMIT,
+    FUNNEL_WINDOW_MS,
+  );
   if (!limit.allowed) {
     return NextResponse.json(
       { error: "Too many requests from this address. Please try again shortly." },

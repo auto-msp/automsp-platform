@@ -19,8 +19,8 @@ export default async function AutomationsPage() {
 
   const [automations, systems, executions] = await Promise.all([
     listAutomations(orgId),
-    store.find("systems", (s) => s.organizationId === orgId),
-    store.find("executions", (e) => e.organizationId === orgId),
+    store.query("systems", { organizationId: orgId }),
+    store.query("executions", { organizationId: orgId }),
   ]);
   const systemNames = new Map(systems.map((s) => [s.id, s.name]));
   const runsByAutomation = new Map<string, number>();

@@ -198,10 +198,14 @@ docs/                  architecture, security, database notes
 6. **Commercial** — billing, subscriptions, opportunity & audit management ✅
 7. **Hardening** — CSP ✅ (route-aware nonce policy via `src/proxy.ts`),
    security headers ✅, public-endpoint rate limiting ✅, automated tests ✅
-   (`pnpm test`), RLS policies designed (`docs/rls-policies.sql`, DRAFT — not
-   yet applied/verified against a live database), deployment runbook ✅
-   (`docs/DEPLOYMENT.md`); remaining: SQL pushdown for store predicates,
-   multi-instance scheduler switch, shared rate-limit store
+   (`pnpm test`), RLS policies ✅ (`docs/rls-policies.sql`, verified on
+   embedded Postgres 16 via `pnpm verify:rls` — staging pass still required),
+   deployment runbook ✅ (`docs/DEPLOYMENT.md`)
+8. **Scale readiness (post-roadmap)** — SQL pushdown for store predicates ✅
+   (`store.query` equality filters pushed into Prisma `findMany`), multi-instance
+   scheduler switch ✅ (`AUTOMSP_SCHEDULER`, surfaced by `/api/health`), shared
+   DB-backed rate-limit store ✅ (`rate_limit_buckets`, auto-selected when
+   `DATABASE_URL` is set)
 
 Rules that don't change: nothing fake presented as real · tenant isolation at the
 database layer · human approval for consequential AI actions · every reported

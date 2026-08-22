@@ -18,7 +18,7 @@ export const DEFAULT_APPROVAL_POLICY = { consequentialActions: "require_approval
 export const DEFAULT_LIMITS = { maxOutputTokens: 1024, timeoutMs: 30_000 } as const;
 
 export async function listAgents(organizationId: string): Promise<(AgentRecord & { currentModel: string | null })[]> {
-  const agents = await store.find("agents", (a) => a.organizationId === organizationId);
+  const agents = await store.query("agents", { organizationId });
   const versions = await store.all("agent_versions");
   return agents
     .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
@@ -35,12 +35,12 @@ export async function getAgent(organizationId: string, id: string): Promise<Agen
 }
 
 export async function getCurrentVersion(agentId: string): Promise<AgentVersionRecord | null> {
-  const versions = await store.find("agent_versions", (v) => v.agentId === agentId);
+  const versions = await store.query("agent_versions", { agentId });
   return versions.sort((a, b) => b.version - a.version)[0] ?? null;
 }
 
 export async function listVersions(agentId: string): Promise<AgentVersionRecord[]> {
-  const versions = await store.find("agent_versions", (v) => v.agentId === agentId);
+  const versions = await store.query("agent_versions", { agentId });
   return versions.sort((a, b) => b.version - a.version);
 }
 

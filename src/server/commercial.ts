@@ -109,7 +109,7 @@ export async function createAuditFromFunnel(input: AuditRequestInput): Promise<A
 }
 
 export async function listAudits(organizationId: string): Promise<AuditRecord[]> {
-  const rows = await store.find("audits", (a) => a.organizationId === organizationId);
+  const rows = await store.query("audits", { organizationId });
   return rows.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 
@@ -183,8 +183,8 @@ export async function createOpportunity(
 }
 
 export async function listOpportunities(organizationId: string): Promise<OpportunityRecord[]> {
-  const rows = await store.find("opportunities", (o) => o.organizationId === organizationId);
-  return rows.sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt));
+  const rows = await store.query("opportunities", { organizationId });
+  return rows.sort((a, b) => Date.parse(a.updatedAt) - Date.parse(b.updatedAt));
 }
 
 export async function getOpportunity(
@@ -252,7 +252,7 @@ export function summarizePipeline(opportunities: OpportunityRecord[]): PipelineS
 // ── Clients & projects ──────────────────────────────────────────────────────
 
 export async function listClients(organizationId: string): Promise<ClientRecord[]> {
-  const rows = await store.find("clients", (c) => c.organizationId === organizationId);
+  const rows = await store.query("clients", { organizationId });
   return rows.sort((a, b) => a.name.localeCompare(b.name));
 }
 
@@ -277,7 +277,7 @@ export async function createClient(
 }
 
 export async function listProjects(organizationId: string): Promise<ProjectRecord[]> {
-  const rows = await store.find("projects", (p) => p.organizationId === organizationId);
+  const rows = await store.query("projects", { organizationId });
   return rows.sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt));
 }
 

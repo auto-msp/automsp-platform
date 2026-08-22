@@ -29,8 +29,8 @@ export default async function OperationsPage({
 
   const { status, automation } = await searchParams;
   const [executions, automations] = await Promise.all([
-    store.find("executions", (e) => e.organizationId === orgId),
-    store.find("automations", (a) => a.organizationId === orgId),
+    store.query("executions", { organizationId: orgId }),
+    store.query("automations", { organizationId: orgId }),
   ]);
 
   let rows = executions.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));

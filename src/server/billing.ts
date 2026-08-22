@@ -103,13 +103,10 @@ export async function usageTotals(
   organizationId: string,
   period = currentPeriod(),
 ): Promise<UsageTotals[]> {
-  const rows = await store.find(
-    "usage_records",
-    (r) =>
-      r.organizationId === organizationId &&
-      r.recordedAt >= period.start &&
-      r.recordedAt < period.end,
-  );
+  // Org filter pushed into the store; the period range stays in memory
+  // (equality-only pushdown).
+  const orgRows = await store.query("usage_records", { organizationId });
+  const rows = orgRows.filter((r) => r.recordedAt >= period.start && r.recordedAt < period.end);
 
   return METERS.map((meter) => {
     const inPeriod = rows.filter((r) => r.meter === meter);
@@ -135,11 +132,9 @@ export async function usageTotals(
 }
 
 export async function billingOverview(organizationId: string): Promise<BillingOverview> {
-  const subscription = await store.first(
-    "subscriptions",
-    (s) => s.organizationId === organizationId && s.status !== "cancelled",
-  );
-  const invoices = await store.find("invoices", (i) => i.organizationId === organizationId);
+  const orgSubs = await store.query("subscriptions", { organizationId });
+  const subscription = orgSubs.find((s) => s.status !== "cancelled") ?? null;
+  const invoices = await store.query("invoices", { organizationId });
   const period = currentPeriod();
   const usage = await usageTotals(organizationId, period);
 

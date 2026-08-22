@@ -112,10 +112,10 @@ export async function changeMemberRoleAction(
   const role = roleRaw as Role;
 
   if (membership.role === "customer_owner" && role !== "customer_owner") {
-    const owners = await store.find(
-      "memberships",
-      (m) => m.organizationId === ctx.organization.id && m.role === "customer_owner",
-    );
+    const owners = await store.query("memberships", {
+      organizationId: ctx.organization.id,
+      role: "customer_owner",
+    });
     if (owners.length <= 1) return { error: "The organization needs at least one owner." };
   }
 
@@ -166,10 +166,10 @@ export async function removeMemberAction(
     return { error: "You cannot remove yourself." };
   }
   if (membership.role === "customer_owner") {
-    const owners = await store.find(
-      "memberships",
-      (m) => m.organizationId === ctx.organization.id && m.role === "customer_owner",
-    );
+    const owners = await store.query("memberships", {
+      organizationId: ctx.organization.id,
+      role: "customer_owner",
+    });
     if (owners.length <= 1) return { error: "The organization needs at least one owner." };
   }
 

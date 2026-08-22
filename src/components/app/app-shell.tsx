@@ -32,10 +32,10 @@ async function buildNav(ctx: SessionContext): Promise<NavSection[]> {
   const run: NavItem[] = [];
   if (can(ctx, "executions.view")) run.push({ href: "/app/operations", label: "Operations" });
   if (can(ctx, "approvals.view")) {
-    const pending = await store.find(
-      "approvals",
-      (a) => a.organizationId === ctx.organization.id && a.status === "pending",
-    );
+    const pending = await store.query("approvals", {
+      organizationId: ctx.organization.id,
+      status: "pending",
+    });
     run.push({ href: "/app/approvals", label: "Approvals", badge: pending.length });
   }
   if (run.length > 0) sections.push({ title: "Run", items: run });

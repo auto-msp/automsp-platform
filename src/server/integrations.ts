@@ -35,7 +35,7 @@ export function providerByKey(key: string): ProviderSpec | undefined {
 
 /** List credentials for an org — metadata only, records never carry plaintext. */
 export async function listIntegrations(organizationId: string): Promise<IntegrationRecord[]> {
-  const rows = await store.find("integrations", (i) => i.organizationId === organizationId);
+  const rows = await store.query("integrations", { organizationId });
   return rows.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 
@@ -53,10 +53,7 @@ export async function getIntegration(
 export async function listUsableCredentials(
   organizationId: string,
 ): Promise<Pick<IntegrationRecord, "id" | "name" | "providerKey">[]> {
-  const rows = await store.find(
-    "integrations",
-    (i) => i.organizationId === organizationId && i.status === "active",
-  );
+  const rows = await store.query("integrations", { organizationId, status: "active" });
   return rows
     .map((r) => ({ id: r.id, name: r.name, providerKey: r.providerKey }))
     .sort((a, b) => a.name.localeCompare(b.name));

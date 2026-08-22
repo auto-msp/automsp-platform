@@ -21,9 +21,9 @@ import { getProvider } from "./provider";
 export async function listSuites(
   organizationId: string,
 ): Promise<(EvalSuiteRecord & { caseCount: number; lastRun: EvalRunRecord | null })[]> {
-  const suites = await store.find("eval_suites", (s) => s.organizationId === organizationId);
+  const suites = await store.query("eval_suites", { organizationId });
   const cases = await store.all("eval_cases");
-  const runs = await store.find("eval_runs", (r) => r.organizationId === organizationId);
+  const runs = await store.query("eval_runs", { organizationId });
   return suites
     .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
     .map((suite) => ({
@@ -64,7 +64,7 @@ export async function createSuite(
 }
 
 export async function listCases(suiteId: string): Promise<EvalCaseRecord[]> {
-  const cases = await store.find("eval_cases", (c) => c.suiteId === suiteId);
+  const cases = await store.query("eval_cases", { suiteId });
   return cases.sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt));
 }
 
@@ -97,10 +97,7 @@ export async function deleteCase(organizationId: string, suiteId: string, caseId
 }
 
 export async function listRuns(organizationId: string, suiteId: string): Promise<EvalRunRecord[]> {
-  const runs = await store.find(
-    "eval_runs",
-    (r) => r.organizationId === organizationId && r.suiteId === suiteId,
-  );
+  const runs = await store.query("eval_runs", { organizationId, suiteId });
   return runs.sort((a, b) => Date.parse(b.startedAt) - Date.parse(a.startedAt));
 }
 
@@ -111,7 +108,7 @@ export async function getRun(organizationId: string, runId: string): Promise<Eva
 }
 
 export async function listResults(runId: string): Promise<EvalResultRecord[]> {
-  const results = await store.find("eval_results", (r) => r.runId === runId);
+  const results = await store.query("eval_results", { runId });
   return results.sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt));
 }
 

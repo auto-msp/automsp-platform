@@ -9,10 +9,15 @@ import { startExecution } from "./engine/executor";
  *
  * Scope, honestly: this is a single-process poller. It runs inside the
  * Next.js Node process (started from instrumentation.ts) and fires automations
- * whose trigger is a schedule and whose nextRunAt has passed. There is no
- * multi-instance coordination here — a horizontally scaled deployment needs a
- * shared lock or a dedicated worker. That limitation is stated wherever the
- * UI describes scheduling.
+ * whose trigger is a schedule and whose nextRunAt has passed.
+ *
+ * Multi-instance deployments: the scheduler must run in exactly one process.
+ * Set AUTOMSP_SCHEDULER=off on every instance except one (or run a dedicated
+ * instance whose only job is scheduling). The gate is checked at startup and
+ * surfaced by /api/health so an operator can verify which instance holds it.
+ * With no shared lock, two schedulers would double-fire — the engine's
+ * idempotency key dedupes the execution, but notifications would still
+ * duplicate. That is why the switch exists instead of "just run it everywhere".
  *
  * Idempotency: the cursor is advanced after firing, so the engine's
  * "active and due" guard still passes. A crash between the two is safe —
@@ -23,16 +28,27 @@ import { startExecution } from "./engine/executor";
 const TICK_MS = 30_000;
 const GLOBAL_KEY = "__automsp_scheduler__";
 
+/**
+ * Multi-instance switch. Default: enabled, so a single-instance deployment
+ * works with zero configuration. Set AUTOMSP_SCHEDULER to off/0/false/no to
+ * disable it on this instance.
+ */
+export function schedulerEnabled(): boolean {
+  const raw = process.env.AUTOMSP_SCHEDULER;
+  if (raw === undefined || raw.trim() === "") return true;
+  return !["off", "0", "false", "no", "disabled"].includes(raw.trim().toLowerCase());
+}
+
 function scheduleCursorKey(automationId: string, nextRunAt: string): string {
   return `sched:${automationId}:${nextRunAt}`;
 }
 
 async function tick(): Promise<void> {
   const now = Date.now();
-  const due = await store.find(
-    "automations",
-    (a) => a.status === "active" && a.nextRunAt !== null && Date.parse(a.nextRunAt) <= now,
-  );
+  // Status equality is pushed into the store (SQL where on Postgres); the
+  // due-time compare stays in memory.
+  const active = await store.query("automations", { status: "active" });
+  const due = active.filter((a) => a.nextRunAt !== null && Date.parse(a.nextRunAt) <= now);
 
   for (const automation of due) {
     const dueAt = automation.nextRunAt as string;
@@ -80,6 +96,8 @@ async function tick(): Promise<void> {
 
 /** Start the poller exactly once per Node process. Safe to call repeatedly. */
 export function startScheduler(): void {
+  if (!schedulerEnabled()) return;
+
   const g = globalThis as Record<string, unknown>;
   if (g[GLOBAL_KEY]) return;
 

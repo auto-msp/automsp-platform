@@ -499,6 +499,15 @@ export interface UsageRecordRecord {
   recordedAt: string;
 }
 
+// ── Shared rate limiting ────────────────────────────────────────────────────
+// Global (not tenant-scoped): key = endpoint + client address.
+
+export interface RateLimitBucketRecord {
+  key: string;
+  count: number;
+  resetAt: string;
+}
+
 // ── Commercial: billing, opportunities, audits, clients, projects ──────────
 
 export type SubscriptionStatus = "trialing" | "active" | "past_due" | "cancelled";

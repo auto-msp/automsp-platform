@@ -18,7 +18,7 @@ export interface AutomationInput {
 }
 
 export async function listAutomations(organizationId: string): Promise<AutomationRecord[]> {
-  const rows = await store.find("automations", (a) => a.organizationId === organizationId);
+  const rows = await store.query("automations", { organizationId });
   return rows.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 
@@ -35,14 +35,14 @@ export async function getAutomation(
 export async function getCurrentDefinition(
   automationId: string,
 ): Promise<{ version: AutomationVersionRecord; definition: WorkflowDefinition } | null> {
-  const versions = await store.find("automation_versions", (v) => v.automationId === automationId);
+  const versions = await store.query("automation_versions", { automationId });
   const latest = versions.sort((a, b) => b.version - a.version)[0];
   if (!latest) return null;
   return { version: latest, definition: latest.definition };
 }
 
 export async function listVersions(automationId: string): Promise<AutomationVersionRecord[]> {
-  const versions = await store.find("automation_versions", (v) => v.automationId === automationId);
+  const versions = await store.query("automation_versions", { automationId });
   return versions.sort((a, b) => b.version - a.version);
 }
 
@@ -186,13 +186,10 @@ export async function deleteAutomation(
   const existing = await getAutomation(organizationId, id);
   if (!existing) return { ok: false, reason: "not_found" };
 
-  const executions = await store.find(
-    "executions",
-    (e) => e.organizationId === organizationId && e.automationId === id,
-  );
+  const executions = await store.query("executions", { organizationId, automationId: id });
   if (executions.length > 0) return { ok: false, reason: "has_executions", count: executions.length };
 
-  const versions = await store.find("automation_versions", (v) => v.automationId === id);
+  const versions = await store.query("automation_versions", { automationId: id });
   for (const v of versions) await store.remove("automation_versions", v.id);
   await store.remove("automations", id);
   return { ok: true };

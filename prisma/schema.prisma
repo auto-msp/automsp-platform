@@ -917,3 +917,17 @@ model ApiKey {
   @@index([organizationId])
   @@map("api_keys")
 }
+
+// ───────────────────────────── Shared rate limiting ──────────────────────────
+// Global (not tenant-scoped): keys are endpoint + client address. Exists so
+// the limiter survives multiple instances; the in-memory limiter remains the
+// fallback when DATABASE_URL is unset.
+
+model RateLimitBucket {
+  key     String   @id
+  count   Int
+  resetAt DateTime @map("reset_at")
+
+  @@index([resetAt])
+  @@map("rate_limit_buckets")
+}

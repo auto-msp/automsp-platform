@@ -101,10 +101,7 @@ const LABOR_RATE_METRIC_KEY = "assumption_labor_rate_usd_per_hour";
  * self-describing, and auditable like every other number. Most recent wins.
  */
 export async function laborRateForOrg(organizationId: string): Promise<number> {
-  const rows = await store.find(
-    "metrics",
-    (m) => m.organizationId === organizationId && m.key === LABOR_RATE_METRIC_KEY,
-  );
+  const rows = await store.query("metrics", { organizationId, key: LABOR_RATE_METRIC_KEY });
   if (rows.length === 0) return DEFAULT_LABOR_RATE_USD;
   const latest = rows.sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
   return latest.value > 0 ? latest.value : DEFAULT_LABOR_RATE_USD;

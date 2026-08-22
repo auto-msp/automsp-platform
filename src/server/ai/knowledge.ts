@@ -47,7 +47,7 @@ export function chunkText(text: string): string[] {
 export async function listSources(organizationId: string): Promise<
   (KnowledgeSourceRecord & { documentCount: number; chunkCount: number })[]
 > {
-  const sources = await store.find("knowledge_sources", (s) => s.organizationId === organizationId);
+  const sources = await store.query("knowledge_sources", { organizationId });
   const documents = await store.all("documents");
   const bySource = new Map<string, { docs: number; chunks: number }>();
   for (const doc of documents) {
@@ -88,9 +88,9 @@ export async function createSource(organizationId: string, name: string): Promis
 export async function deleteSource(organizationId: string, id: string): Promise<boolean> {
   const source = await getSource(organizationId, id);
   if (!source) return false;
-  const docs = await store.find("documents", (d) => d.sourceId === id);
+  const docs = await store.query("documents", { sourceId: id });
   for (const doc of docs) {
-    const chunks = await store.find("document_chunks", (c) => c.documentId === doc.id);
+    const chunks = await store.query("document_chunks", { documentId: doc.id });
     for (const chunk of chunks) await store.remove("document_chunks", chunk.id);
     await store.remove("documents", doc.id);
   }
@@ -99,7 +99,7 @@ export async function deleteSource(organizationId: string, id: string): Promise<
 }
 
 export async function listDocuments(sourceId: string): Promise<DocumentRecord[]> {
-  const documents = await store.find("documents", (d) => d.sourceId === sourceId);
+  const documents = await store.query("documents", { sourceId });
   return documents.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 
@@ -162,7 +162,7 @@ export async function deleteDocument(organizationId: string, sourceId: string, d
   if (!source) return false;
   const doc = await store.get("documents", documentId);
   if (!doc || doc.sourceId !== sourceId) return false;
-  const chunks = await store.find("document_chunks", (c) => c.documentId === documentId);
+  const chunks = await store.query("document_chunks", { documentId: documentId });
   for (const chunk of chunks) await store.remove("document_chunks", chunk.id);
   await store.remove("documents", documentId);
   return true;
@@ -227,7 +227,7 @@ export async function retrieve(
   organizationId: string,
   { query, sourceId, topK }: { query: string; sourceId?: string; topK: number },
 ): Promise<RetrievalResult> {
-  const sources = await store.find("knowledge_sources", (s) => s.organizationId === organizationId);
+  const sources = await store.query("knowledge_sources", { organizationId });
   const sourceIds = new Set(sources.map((s) => s.id));
   if (sourceId) {
     if (!sourceIds.has(sourceId)) return { method: "lexical", chunks: [], capped: false };

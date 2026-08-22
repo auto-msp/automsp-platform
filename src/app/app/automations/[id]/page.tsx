@@ -29,7 +29,7 @@ export default async function AutomationDetailPage({
   const [current, versions, executions, system] = await Promise.all([
     getCurrentDefinition(id),
     listVersions(id),
-    store.find("executions", (e) => e.organizationId === orgId && e.automationId === id),
+    store.query("executions", { organizationId: orgId, automationId: id }),
     automation.systemId ? store.get("systems", automation.systemId) : Promise.resolve(null),
   ]);
 

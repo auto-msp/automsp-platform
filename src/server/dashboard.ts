@@ -19,10 +19,10 @@ export interface DashboardMetrics {
 
 export async function getDashboardMetrics(organizationId: string): Promise<DashboardMetrics> {
   const [systems, automations, executions, approvals] = await Promise.all([
-    store.find("systems", (s) => s.organizationId === organizationId),
-    store.find("automations", (a) => a.organizationId === organizationId),
-    store.find("executions", (e) => e.organizationId === organizationId),
-    store.find("approvals", (a) => a.organizationId === organizationId && a.status === "pending"),
+    store.query("systems", { organizationId }),
+    store.query("automations", { organizationId }),
+    store.query("executions", { organizationId }),
+    store.query("approvals", { organizationId, status: "pending" }),
   ]);
 
   const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;

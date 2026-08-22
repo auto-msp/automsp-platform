@@ -81,7 +81,7 @@ export async function getSessionContext(): Promise<SessionContext | null> {
   const user = await store.get("users", session.userId);
   if (!user) return null;
 
-  const memberships = await store.find("memberships", (m) => m.userId === user.id);
+  const memberships = await store.query("memberships", { userId: user.id });
   if (memberships.length === 0) return null;
 
   // Active organization selection: first membership for now; org switching

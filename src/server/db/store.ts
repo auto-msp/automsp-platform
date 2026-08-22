@@ -39,6 +39,7 @@ export const store: Store = {
   all: forward("all"),
   find: forward("find"),
   first: forward("first"),
+  query: forward("query"),
   get: forward("get"),
   insert: forward("insert"),
   update: forward("update"),

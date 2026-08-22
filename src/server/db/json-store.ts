@@ -33,6 +33,7 @@ import type {
   OpportunityRecord,
   OrganizationRecord,
   ProjectRecord,
+  RateLimitBucketRecord,
   ReportRecord,
   SessionRecord,
   SubscriptionRecord,
@@ -90,6 +91,7 @@ export interface Collections {
   audits: AuditRecord;
   clients: ClientRecord;
   projects: ProjectRecord;
+  rate_limit_buckets: RateLimitBucketRecord;
 }
 
 export type CollectionName = keyof Collections;
@@ -134,6 +136,23 @@ export const jsonStore = {
   ): Promise<Collections[K] | null> {
     const rows = await readCollection<Collections[K]>(name);
     return rows.find(predicate) ?? null;
+  },
+
+  /**
+   * Equality-filter lookup. Same result as `find` with an equality predicate,
+   * but declarative — the Postgres adapter pushes it into a SQL `where`
+   * clause instead of loading the whole table. Use this for the hot
+   * org-scoped paths; keep `find` for logic SQL can't express.
+   */
+  async query<K extends CollectionName>(
+    name: K,
+    where: Partial<Collections[K]>,
+  ): Promise<Collections[K][]> {
+    const rows = await readCollection<Collections[K]>(name);
+    const entries = Object.entries(where);
+    return rows.filter((row) =>
+      entries.every(([k, v]) => (row as unknown as Record<string, unknown>)[k] === v),
+    );
   },
 
   async get<K extends CollectionName>(name: K, id: string): Promise<Collections[K] | null> {

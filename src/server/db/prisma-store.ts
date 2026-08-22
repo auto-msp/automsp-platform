@@ -24,7 +24,7 @@ import type { WorkflowDefinition } from "./types";
 type Row = Record<string, unknown>;
 
 interface Delegate {
-  findMany(): Promise<Row[]>;
+  findMany(args?: { where?: Row }): Promise<Row[]>;
   findUnique(args: { where: Row }): Promise<Row | null>;
   create(args: { data: Row }): Promise<Row>;
   update(args: { where: Row; data: Row }): Promise<Row>;
@@ -84,8 +84,12 @@ function delegate(name: CollectionName): Delegate {
     audits: "audit",
     clients: "client",
     projects: "project",
+    rate_limit_buckets: "rateLimitBucket",
   };
-  const pk: Partial<Record<CollectionName, string>> = { auth_attempts: "email" };
+  const pk: Partial<Record<CollectionName, string>> = {
+    auth_attempts: "email",
+    rate_limit_buckets: "key",
+  };
   const clientRow = client() as unknown as Record<string, Delegate>;
   const d = clientRow[map[name]];
   return new Proxy({} as Delegate, {
@@ -259,6 +263,8 @@ const FROM: { [K in CollectionName]: (row: Row) => Collections[K] } = {
     nums(dates(r, ["createdAt", "updatedAt"]), ["priorityScore"]) as unknown as Collections["audits"],
   clients: (r) => dates(r, ["createdAt", "updatedAt"]) as unknown as Collections["clients"],
   projects: (r) => dates(r, ["createdAt", "updatedAt"]) as unknown as Collections["projects"],
+  rate_limit_buckets: (r) =>
+    dates(r, ["resetAt"]) as unknown as Collections["rate_limit_buckets"],
 };
 
 /** undefined patch values mean "clear the column" in the JSON store → null. */
@@ -297,6 +303,17 @@ export const prismaStore: Store = {
     const rows = await delegate(name).findMany();
     const mapped = rows.map((r) => FROM[name](r));
     return mapped.find(predicate) ?? null;
+  },
+
+  /**
+   * Equality-filter lookup pushed into SQL: `findMany({ where })` instead of
+   * loading the whole table and filtering in memory. This is the pushdown the
+   * adapter's header comment pointed at — hot org-scoped reads now hit an
+   * index instead of a full scan.
+   */
+  async query(name, where) {
+    const rows = await delegate(name).findMany({ where: where as Row });
+    return rows.map((r) => FROM[name](r));
   },
 
   async get(name, id) {
@@ -350,9 +367,10 @@ export const prismaStore: Store = {
       const created = await d.create({ data: toCreate(name, row) });
       return FROM[name](created);
     }
-    const existingId = (existing as { id?: string; email?: string }).id ?? (existing as { email: string }).email;
+    const pk = pkOf(name);
+    const existingId = (existing as unknown as Record<string, unknown>)[pk];
     const updated = await d.update({
-      where: { [pkOf(name)]: existingId },
+      where: { [pk]: existingId },
       data: toData(row as unknown as Row),
     });
     return FROM[name](updated);

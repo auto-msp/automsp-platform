@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { checkRateLimit, clientIp, rateLimitHeaders, resetRateLimits } from "@/server/rate-limit";
+import {
+  checkRateLimit,
+  checkRateLimitShared,
+  clientIp,
+  rateLimitHeaders,
+  resetRateLimits,
+} from "@/server/rate-limit";
 
 describe("checkRateLimit", () => {
   it("allows up to the limit per window, then blocks with a reset time", () => {
@@ -29,6 +35,34 @@ describe("checkRateLimit", () => {
     const now = 3_000_000;
     checkRateLimit("a", 1, 60_000, now);
     expect(checkRateLimit("b", 1, 60_000, now).allowed).toBe(true);
+  });
+});
+
+describe("checkRateLimitShared (store-backed)", () => {
+  it("allows up to the limit per window, then blocks", async () => {
+    const now = 10_000_000;
+    for (let i = 1; i <= 3; i++) {
+      const r = await checkRateLimitShared("shared:k", 3, 60_000, now + i);
+      expect(r.allowed).toBe(true);
+      expect(r.remaining).toBe(3 - i);
+    }
+    const blocked = await checkRateLimitShared("shared:k", 3, 60_000, now + 10);
+    expect(blocked.allowed).toBe(false);
+    expect(blocked.remaining).toBe(0);
+    expect(blocked.resetAt).toBeGreaterThan(now);
+  });
+
+  it("resets after the window expires, overwriting the bucket in place", async () => {
+    const now = 11_000_000;
+    await checkRateLimitShared("shared:k2", 1, 60_000, now);
+    expect((await checkRateLimitShared("shared:k2", 1, 60_000, now + 1)).allowed).toBe(false);
+    expect((await checkRateLimitShared("shared:k2", 1, 60_000, now + 60_001)).allowed).toBe(true);
+  });
+
+  it("keeps keys independent", async () => {
+    const now = 12_000_000;
+    await checkRateLimitShared("shared:a", 1, 60_000, now);
+    expect((await checkRateLimitShared("shared:b", 1, 60_000, now)).allowed).toBe(true);
   });
 });
 

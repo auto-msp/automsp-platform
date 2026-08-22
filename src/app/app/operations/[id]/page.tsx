@@ -25,9 +25,9 @@ export default async function ExecutionInspectorPage({
   if (!execution || execution.organizationId !== orgId) notFound();
 
   const [steps, logs, approvals, automation] = await Promise.all([
-    store.find("execution_steps", (s) => s.executionId === id),
-    store.find("execution_logs", (l) => l.executionId === id),
-    store.find("approvals", (a) => a.organizationId === orgId && a.executionId === id),
+    store.query("execution_steps", { executionId: id }),
+    store.query("execution_logs", { executionId: id }),
+    store.query("approvals", { organizationId: orgId, executionId: id }),
     store.get("automations", execution.automationId),
   ]);
 

@@ -16,7 +16,7 @@ export default async function OrganizationPage() {
   const orgId = ctx.organization.id;
 
   const [memberships, users] = await Promise.all([
-    store.find("memberships", (m) => m.organizationId === orgId),
+    store.query("memberships", { organizationId: orgId }),
     store.all("users"),
   ]);
   const userById = new Map(users.map((u) => [u.id, u]));

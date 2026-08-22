@@ -37,22 +37,16 @@ export async function listNotifications(
   organizationId: string,
   userId: string,
 ): Promise<NotificationRecord[]> {
-  const rows = await store.find(
-    "notifications",
-    (n) => n.organizationId === organizationId && (n.userId === null || n.userId === userId),
-  );
-  return rows.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
+  // Org filter pushed into the store (SQL where on Postgres); the recipient
+  // OR (org-wide vs personal) stays in memory.
+  const rows = await store.query("notifications", { organizationId });
+  const visible = rows.filter((n) => n.userId === null || n.userId === userId);
+  return visible.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 
 export async function unreadCount(organizationId: string, userId: string): Promise<number> {
-  const rows = await store.find(
-    "notifications",
-    (n) =>
-      n.organizationId === organizationId &&
-      n.readAt === null &&
-      (n.userId === null || n.userId === userId),
-  );
-  return rows.length;
+  const rows = await store.query("notifications", { organizationId, readAt: null });
+  return rows.filter((n) => n.userId === null || n.userId === userId).length;
 }
 
 /** Mark one notification read. Caller passes orgId — tenant guard. */
@@ -72,13 +66,8 @@ export async function markAllNotificationsRead(
   organizationId: string,
   userId: string,
 ): Promise<number> {
-  const rows = await store.find(
-    "notifications",
-    (n) =>
-      n.organizationId === organizationId &&
-      n.readAt === null &&
-      (n.userId === null || n.userId === userId),
-  );
+  const unread = await store.query("notifications", { organizationId, readAt: null });
+  const rows = unread.filter((n) => n.userId === null || n.userId === userId);
   const now = new Date().toISOString();
   for (const row of rows) await store.update("notifications", row.id, { readAt: now });
   return rows.length;

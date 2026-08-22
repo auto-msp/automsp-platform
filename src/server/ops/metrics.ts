@@ -107,11 +107,11 @@ export async function computeOpsMetrics(
   period: MetricsPeriod,
 ): Promise<OpsMetrics> {
   const [executions, automations, approvals, aiRuns, incidents] = await Promise.all([
-    store.find("executions", (e) => e.organizationId === organizationId),
-    store.find("automations", (a) => a.organizationId === organizationId),
-    store.find("approvals", (a) => a.organizationId === organizationId),
-    store.find("ai_runs", (r) => r.organizationId === organizationId),
-    store.find("incidents", (i) => i.organizationId === organizationId),
+    store.query("executions", { organizationId }),
+    store.query("automations", { organizationId }),
+    store.query("approvals", { organizationId }),
+    store.query("ai_runs", { organizationId }),
+    store.query("incidents", { organizationId }),
   ]);
 
   const runsInPeriod = executions.filter((e) => inPeriod(e.createdAt, period));
@@ -347,7 +347,7 @@ export async function recordMetrics(
 export async function latestMetricSnapshots(
   organizationId: string,
 ): Promise<MetricRecord[]> {
-  const rows = await store.find("metrics", (m) => m.organizationId === organizationId);
+  const rows = await store.query("metrics", { organizationId });
   const latest = new Map<string, MetricRecord>();
   for (const row of rows.sort((a, b) => a.createdAt.localeCompare(b.createdAt))) {
     latest.set(row.key, row);

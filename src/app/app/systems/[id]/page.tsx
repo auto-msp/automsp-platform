@@ -23,8 +23,8 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
   if (!system) notFound();
 
   const [automations, executions] = await Promise.all([
-    store.find("automations", (a) => a.organizationId === orgId && a.systemId === id),
-    store.find("executions", (e) => e.organizationId === orgId),
+    store.query("automations", { organizationId: orgId, systemId: id }),
+    store.query("executions", { organizationId: orgId }),
   ]);
 
   const automationIds = new Set(automations.map((a) => a.id));

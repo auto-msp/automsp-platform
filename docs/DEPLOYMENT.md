@@ -13,6 +13,7 @@ every unconfigured capability says so in the UI. Production means turning those
 | --- | --- | --- |
 | `DATABASE_URL` | **Yes** | PostgreSQL connection. Unset ⇒ the app silently uses the local JSON store, which is not acceptable in production. |
 | `AUTOMSP_VAULT_KEY` | **Yes** | Base64 32-byte key for the credentials vault. Without it the app falls back to a gitignored dev key file. |
+| `AUTOMSP_SCHEDULER` | Multi-instance only | `off` disables the in-process scheduler on that instance. Unset = enabled. Exactly one instance must hold it. |
 | `NEXT_PUBLIC_SITE_URL` | Yes | Canonical URL for SEO/sitemap. |
 | `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / `GOOGLE_GENERATIVE_AI_API_KEY` | Optional | Exactly one enables AI surfaces; none ⇒ honest "not configured". |
 | `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` | Optional | Enables subscriptions/invoices on the billing page. |
@@ -28,9 +29,15 @@ pnpm prisma migrate deploy        # apply committed migrations
 ```
 
 Then, in staging first, apply `docs/rls-policies.sql` (defense-in-depth tenant
-isolation) and run its verification queries. The file is marked DRAFT — it has
-not been executed in this repository's environment; treat staging verification
-as mandatory before production.
+isolation) and run its verification queries as the real `automsp_app` role.
+
+The policy script is verified on embedded Postgres: `pnpm verify:rls` runs the
+full migration set plus the policies against PGlite (WASM Postgres 16) and
+asserts org-scoped reads, cross-org INSERT rejection, FK-child scoping, and
+deny-all on unset context — all seven checks passed 2026-08-22. That proves
+the SQL is valid and the policies enforce isolation on a real Postgres engine;
+it does not prove your staging database's role/pooler behaviour, so the
+staging pass remains mandatory before production.
 
 Operational notes:
 
@@ -64,24 +71,43 @@ pnpm start
 ## 4. Scheduler
 
 The automation scheduler starts from Next's `instrumentation.ts` hook in the
-server process. On multi-instance deployments run exactly ONE instance with
-the scheduler enabled (or move scheduling to a dedicated worker) — the engine
-is idempotent per run key, but duplicate scheduling is wasted work and noisy
-logs. There is no env switch for this yet; that is a known gap for the first
-multi-instance deployment.
+server process. It is an in-process poller with no shared lock, so on
+multi-instance deployments it must run in exactly ONE instance.
+
+The switch is `AUTOMSP_SCHEDULER` (see `.env.example`): unset or any value
+other than `off/0/false/no/disabled` = enabled. Set `AUTOMSP_SCHEDULER=off`
+on every instance except one (or run a dedicated scheduling instance).
+`GET /api/health` reports `"scheduler": "enabled" | "disabled"` per instance,
+so you can verify exactly one instance holds it. The engine's idempotency key
+dedupes double-fired executions, but duplicate scheduler instances would still
+duplicate failure notifications — which is why the switch exists instead of
+"run it everywhere".
 
 ## 5. Rate limiting
 
-`src/server/rate-limit.ts` is an in-memory sliding window — correct for a
-single instance. Before scaling horizontally, move the buckets to a shared
-store (Redis or the database) or put a gateway limiter in front. The public
-funnel (`POST /api/audit-requests`) is the only endpoint using it today;
-authenticated endpoints rely on session auth plus the sign-in throttle.
+`src/server/rate-limit.ts` has two backends behind one interface:
+
+- **In-memory** sliding window — used when `DATABASE_URL` is unset (local
+  dev, single instance).
+- **Shared store** — when `DATABASE_URL` is set, buckets persist in the
+  `rate_limit_buckets` table, so every instance behind one database shares
+  the same windows. This is what makes the public funnel safe under
+  horizontal scale.
+
+The shared backend is read-modify-write, not an atomic increment: N truly
+concurrent requests can overshoot the limit by up to N-1. For a friction
+layer on a public funnel that is acceptable; if you need hard guarantees,
+put a gateway limiter (Cloudflare, nginx, an API gateway) in front. The
+public funnel (`POST /api/audit-requests`) is the only endpoint using it
+today; authenticated endpoints rely on session auth plus the sign-in
+throttle.
 
 ## 6. Pre-launch checklist
 
 - [ ] `DATABASE_URL` + `AUTOMSP_VAULT_KEY` set; `/api/health` reports `postgres`
 - [ ] Migrations applied; RLS script applied and verified in staging
+- [ ] Multi-instance: `AUTOMSP_SCHEDULER=off` on all but one instance;
+      `/api/health` shows exactly one `"scheduler": "enabled"`
 - [ ] CSP verified in a real browser (console shows no blocked inline script)
 - [ ] Sign-in throttle works; funnel rate limit returns 429 with `Retry-After`
 - [ ] Backups configured for Postgres; vault key stored in the secret manager

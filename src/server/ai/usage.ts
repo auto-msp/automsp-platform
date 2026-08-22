@@ -94,7 +94,7 @@ export interface UsageSummary {
 }
 
 export async function usageSummary(organizationId: string): Promise<UsageSummary> {
-  const runs = await store.find("ai_runs", (r) => r.organizationId === organizationId);
+  const runs = await store.query("ai_runs", { organizationId });
   const byModel = new Map<string, { calls: number; tokens: number }>();
   const bySource = new Map<string, number>();
   let tokensIn = 0;
@@ -135,9 +135,7 @@ export async function listAiRuns(
   organizationId: string,
   { agentId, limit }: { agentId?: string; limit?: number } = {},
 ): Promise<AiRunRecord[]> {
-  const runs = await store.find(
-    "ai_runs",
-    (r) => r.organizationId === organizationId && (!agentId || r.agentId === agentId),
-  );
+  const orgRuns = await store.query("ai_runs", { organizationId });
+  const runs = agentId ? orgRuns.filter((r) => r.agentId === agentId) : orgRuns;
   return runs.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, limit ?? 50);
 }

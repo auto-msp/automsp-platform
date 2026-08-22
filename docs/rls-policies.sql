@@ -1,12 +1,21 @@
 -- ─────────────────────────────────────────────────────────────────────────────
--- AutoMSP — PostgreSQL Row-Level Security policies (DRAFT)
+-- AutoMSP — PostgreSQL Row-Level Security policies
 --
--- STATUS: NOT APPLIED, NOT VERIFIED.
--- This file was written as the design deliverable for the "RLS policies"
--- roadmap item. It has NOT been executed against a live database in this
--- environment (no PostgreSQL instance is available here), so treat it as a
--- reviewed design, not as a tested migration. Apply it in staging, run the
--- verification queries at the bottom, and only then promote to production.
+-- STATUS: VERIFIED ON EMBEDDED POSTGRES — STAGING PASS STILL REQUIRED.
+-- Verified 2026-08-22 with scripts/verify-rls.mjs: the full migration set
+-- plus this file were executed against PGlite (the WASM build of Postgres
+-- 16 — a real Postgres engine, no server), and all seven checks passed:
+--   org-scoped reads, cross-org read isolation, FK-child scoping,
+--   organizations self-read, cross-org INSERT rejected (WITH CHECK),
+--   FK-child cross-org INSERT rejected, unset context ⇒ deny-all.
+-- That verification also caught and fixed one real bug (agent_tools joins on
+-- agent_version_id, not version_id).
+--
+-- What embedded verification does NOT prove: your specific staging database —
+-- managed Postgres provisioning, the automsp_app LOGIN role through your
+-- pooler, and the pool's `DISCARD ALL` on connection release. Apply this in
+-- staging, run the verification queries at the bottom as the real app role,
+-- and only then promote to production.
 --
 -- Defense-in-depth context: tenant isolation is ALREADY enforced in the
 -- application layer — every service function in src/server/* filters on
@@ -25,6 +34,9 @@
 --     no matching policy, access is denied by default.
 --   * Migrations run as a separate maintenance role with BYPASSRLS so this
 --     file's FORCE clause cannot lock the migrator out.
+--   * NOTE: this file creates the role and policies but deliberately leaves
+--     GRANTs to staging hardening — the verification harness grants table
+--     privileges itself so it exercises RLS rather than ACLs.
 -- ─────────────────────────────────────────────────────────────────────────────
 
 CREATE ROLE automsp_app LOGIN;
@@ -129,12 +141,12 @@ CREATE POLICY agent_tools_tenant_isolation ON agent_tools
   USING (EXISTS (
     SELECT 1 FROM agent_versions v
     JOIN agents g ON g.id = v.agent_id
-    WHERE v.id = agent_tools.version_id
+    WHERE v.id = agent_tools.agent_version_id
       AND g.organization_id = automsp.current_org_id()))
   WITH CHECK (EXISTS (
     SELECT 1 FROM agent_versions v
     JOIN agents g ON g.id = v.agent_id
-    WHERE v.id = agent_tools.version_id
+    WHERE v.id = agent_tools.agent_version_id
       AND g.organization_id = automsp.current_org_id()));
 
 -- documents → knowledge_sources; document_chunks → documents → knowledge_sources
@@ -217,6 +229,8 @@ CREATE POLICY eval_results_tenant_isolation ON eval_results
 --   unguessable token hash and looked up before any tenant context exists.
 -- audit_requests                   — public funnel intake, pre-tenant by design.
 -- services, integrations           — global platform catalogs.
+-- rate_limit_buckets               — global throttle state, keyed by request
+--   fingerprint, not tenant data.
 -- Access to these stays controlled by the application layer and by granting
 -- automsp_app only the column-level privileges it needs (future hardening).
 

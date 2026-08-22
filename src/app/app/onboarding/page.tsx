@@ -65,10 +65,10 @@ export default async function OnboardingPage() {
   const orgId = ctx.organization.id;
 
   const [systems, automations, executions, members] = await Promise.all([
-    store.find("systems", (s) => s.organizationId === orgId),
-    store.find("automations", (a) => a.organizationId === orgId),
-    store.find("executions", (e) => e.organizationId === orgId),
-    store.find("memberships", (m) => m.organizationId === orgId),
+    store.query("systems", { organizationId: orgId }),
+    store.query("automations", { organizationId: orgId }),
+    store.query("executions", { organizationId: orgId }),
+    store.query("memberships", { organizationId: orgId }),
   ]);
 
   const steps = [

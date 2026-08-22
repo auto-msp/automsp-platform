@@ -11,7 +11,7 @@ export interface SystemInput {
 }
 
 export async function listSystems(organizationId: string): Promise<SystemRecord[]> {
-  const systems = await store.find("systems", (s) => s.organizationId === organizationId);
+  const systems = await store.query("systems", { organizationId });
   return systems.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 
@@ -66,10 +66,7 @@ export async function deleteSystem(
   const existing = await getSystem(organizationId, id);
   if (!existing) return { ok: false, reason: "not_found" };
 
-  const linked = await store.find(
-    "automations",
-    (a) => a.organizationId === organizationId && a.systemId === id,
-  );
+  const linked = await store.query("automations", { organizationId, systemId: id });
   if (linked.length > 0) {
     return { ok: false, reason: "has_automations", automationCount: linked.length };
   }

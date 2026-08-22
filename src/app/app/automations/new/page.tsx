@@ -18,7 +18,7 @@ export default async function NewAutomationPage({
   if (!ctx) return null;
 
   const { system } = await searchParams;
-  const systems = await store.find("systems", (s) => s.organizationId === ctx.organization.id);
+  const systems = await store.query("systems", { organizationId: ctx.organization.id });
 
   return (
     <div>

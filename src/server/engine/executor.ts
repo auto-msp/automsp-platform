@@ -467,7 +467,7 @@ export async function startExecution(params: {
     }
   }
 
-  const versions = await store.find("automation_versions", (v) => v.automationId === automationId);
+  const versions = await store.query("automation_versions", { automationId });
   const latest = versions.sort((a, b) => b.version - a.version)[0];
   if (!latest) return { ok: false, error: "This automation has no workflow definition yet." };
 

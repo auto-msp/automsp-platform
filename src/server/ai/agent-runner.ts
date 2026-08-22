@@ -121,10 +121,8 @@ export async function listAgentRuns(
   organizationId: string,
   { agentId, limit }: { agentId?: string; limit?: number } = {},
 ): Promise<AgentRunRecord[]> {
-  const rows = await store.find(
-    "agent_runs",
-    (r) => r.organizationId === organizationId && (!agentId || r.agentId === agentId),
-  );
+  const orgRows = await store.query("agent_runs", { organizationId });
+  const rows = agentId ? orgRows.filter((r) => r.agentId === agentId) : orgRows;
   return rows.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, limit ?? 20);
 }
 

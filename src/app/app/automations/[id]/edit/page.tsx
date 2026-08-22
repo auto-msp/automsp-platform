@@ -27,7 +27,7 @@ export default async function AutomationEditPage({
   if (!automation) notFound();
   if (!can(ctx, "automations.manage")) notFound();
 
-  const systems = await store.find("systems", (s) => s.organizationId === orgId);
+  const systems = await store.query("systems", { organizationId: orgId });
   const boundUpdate = updateAutomationAction.bind(null, automation.id);
 
   return (

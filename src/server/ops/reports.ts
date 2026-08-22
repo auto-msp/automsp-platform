@@ -267,7 +267,7 @@ function sectionsFor(type: ReportType, ops: OpsMetrics, roi: RoiResult): ReportS
 }
 
 export async function listReports(organizationId: string): Promise<ReportRecord[]> {
-  const rows = await store.find("reports", (r) => r.organizationId === organizationId);
+  const rows = await store.query("reports", { organizationId });
   return rows.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 

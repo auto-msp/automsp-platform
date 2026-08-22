@@ -33,7 +33,7 @@ export default async function AnalyticsPage() {
     computeOpsMetrics(orgId, period),
     laborRateForOrg(orgId),
     listAiRuns(orgId, { limit: 10 }),
-    store.find("executions", (e) => e.organizationId === orgId),
+    store.query("executions", { organizationId: orgId }),
   ]);
   const estMinutesSaved = ops.automations.reduce((s, a) => s + a.estMinutesSaved, 0);
   const roi = computeRoi({ estMinutesSaved, aiCostEstimatedUsd: ops.ai.costEstimatedUsd }, laborRate);

@@ -19,7 +19,7 @@ export default async function SystemsPage() {
 
   const [systems, automations] = await Promise.all([
     listSystems(orgId),
-    store.find("automations", (a) => a.organizationId === orgId),
+    store.query("automations", { organizationId: orgId }),
   ]);
   const countBySystem = new Map<string, number>();
   for (const a of automations) {
