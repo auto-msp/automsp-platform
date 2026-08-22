@@ -63,6 +63,9 @@ function delegate(name: CollectionName): Delegate {
     auth_attempts: "authAttempt",
     audit_requests: "auditRequest",
     integrations: "integrationConnection",
+    metrics: "metricRecord",
+    reports: "report",
+    incidents: "incident",
     agents: "agent",
     agent_versions: "agentVersion",
     agent_runs: "agentRun",
@@ -194,6 +197,15 @@ const FROM: { [K in CollectionName]: (row: Row) => Collections[K] } = {
     base.status = base.status === "revoked" ? "revoked" : "active";
     return strip(base, ["scopes", "credentialRef", "lastSyncAt", "integrationId"]) as unknown as Collections["integrations"];
   },
+  metrics: (r) =>
+    nums(dates(r, ["createdAt", "periodStart", "periodEnd"]), ["value"]) as unknown as Collections["metrics"],
+  reports: (r) => {
+    const base = dates(r, ["createdAt", "periodStart", "periodEnd"]);
+    if (base.payload === null || base.payload === undefined) base.payload = {};
+    return base as unknown as Collections["reports"];
+  },
+  incidents: (r) =>
+    dates(r, ["createdAt", "startedAt", "resolvedAt"]) as unknown as Collections["incidents"],
   agents: (r) =>
     fill(dates(r, ["createdAt", "updatedAt"]), ["description"]) as unknown as Collections["agents"],
   agent_versions: (r) => {

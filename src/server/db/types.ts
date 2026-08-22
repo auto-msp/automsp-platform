@@ -193,6 +193,59 @@ export interface ApprovalRecord {
   createdAt: string;
 }
 
+// ── Operations: metrics, reports, incidents ──────────────────────────────────
+
+/** Never blur these three — every metric carries its basis. */
+export type MetricBasis = "actual" | "estimated" | "projected";
+
+export interface MetricRecord {
+  id: string;
+  organizationId: string;
+  /** e.g. executions_total | success_rate | hours_saved | ai_cost_usd | projected_monthly_savings_usd */
+  key: string;
+  value: number;
+  basis: MetricBasis;
+  periodStart: string;
+  periodEnd: string;
+  /** source + method, per ROI transparency rules (shown to the reader) */
+  calculation: { source: string; method: string } | null;
+  createdAt: string;
+}
+
+export type ReportType =
+  | "weekly_ops"
+  | "monthly_impact"
+  | "system_health"
+  | "automation_performance"
+  | "ai_cost"
+  | "incident";
+
+export interface ReportRecord {
+  id: string;
+  organizationId: string;
+  type: ReportType;
+  periodStart: string;
+  periodEnd: string;
+  /** structured sections — title, narrative, kpis, and a metric breakdown with basis labels */
+  payload: unknown;
+  storageKey: string | null;
+  createdAt: string;
+}
+
+export type IncidentStatus = "open" | "investigating" | "mitigated" | "resolved";
+
+export interface IncidentRecord {
+  id: string;
+  organizationId: string;
+  title: string;
+  severity: "low" | "medium" | "high" | "critical";
+  status: IncidentStatus;
+  rootCause: string | null;
+  startedAt: string;
+  resolvedAt: string | null;
+  createdAt: string;
+}
+
 export interface AuditLogRecord {
   id: string;
   organizationId: string | null;

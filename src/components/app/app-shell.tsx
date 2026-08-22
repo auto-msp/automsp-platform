@@ -44,6 +44,7 @@ async function buildNav(ctx: SessionContext): Promise<NavSection[]> {
   const unread = await unreadCount(ctx.organization.id, ctx.user.id);
   account.push({ href: "/app/notifications", label: "Notifications", badge: unread });
   if (can(ctx, "analytics.view")) account.push({ href: "/app/analytics", label: "Analytics" });
+  if (can(ctx, "reports.view")) account.push({ href: "/app/reports", label: "Reports" });
   if (can(ctx, "org.view")) account.push({ href: "/app/organization", label: "Organization" });
   if (can(ctx, "billing.view")) account.push({ href: "/app/billing", label: "Billing" });
   sections.push({ title: "Account", items: account });

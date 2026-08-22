@@ -21,11 +21,14 @@ import type {
   ExecutionLogRecord,
   ExecutionRecord,
   ExecutionStepRecord,
+  IncidentRecord,
   IntegrationRecord,
   KnowledgeSourceRecord,
   MembershipRecord,
+  MetricRecord,
   NotificationRecord,
   OrganizationRecord,
+  ReportRecord,
   SessionRecord,
   SystemRecord,
   UsageRecordRecord,
@@ -60,6 +63,9 @@ export interface Collections {
   auth_attempts: AuthAttemptRecord;
   audit_requests: AuditRequestRecord;
   integrations: IntegrationRecord;
+  metrics: MetricRecord;
+  reports: ReportRecord;
+  incidents: IncidentRecord;
   agents: AgentRecord;
   agent_versions: AgentVersionRecord;
   agent_runs: AgentRunRecord;
