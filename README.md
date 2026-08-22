@@ -84,6 +84,31 @@ It fires active automations whose schedule is due; cursor advancement is
 idempotency-keyed (`sched:{id}:{dueAt}`). Multi-instance deployments need a
 dedicated worker — this scheduler is honest about being single-process.
 
+### Operations & reporting
+
+`src/server/ops/` computes the operational picture for one organization from
+its own records and renders it as analytics and as shareable reports. One
+rule governs every number: it never blurs its basis. **Actual** means counted
+from records; **Estimated** means derived from user-set assumptions (per-run
+time estimates, a labor rate) or list pricing; **Projected** means a measured
+rate extended forward. Every derived figure carries `calculation { source,
+method }` text so a reader can reconstruct how it was produced — reproduced in
+full on each report's "basis & method" detail section.
+
+- `metrics.ts` — `computeOpsMetrics` (runs, success rate excluding
+  waiting-on-approval, per-automation performance, approvals SLA, incidents,
+  AI usage) and `recordMetrics` snapshots for later auditability.
+- `roi.ts` — labor value (time avoided × your labor-rate assumption) against
+  list-price AI cost; null-safe when model pricing is unknown (shown honestly
+  as "not computable", never invented). The labor rate is stored as an
+  auditable metric row, defaulting to $45/h.
+- `reports.ts` — `generateReport` bakes a point-in-time payload (KPIs,
+  narratives, tables, metric snapshots), notifies the org, and remains
+  org-scoped (one tenant's report is invisible to another).
+
+Six report types: weekly operations, monthly impact, system health,
+automation performance, AI cost, and incident review.
+
 ## Visual direction
 
 Enterprise Swiss Editorial — crisp, structured, light-first. Monochrome foundation
@@ -149,7 +174,7 @@ docs/                  architecture, security, database notes
 2. **Core platform** — systems, automations, execution engine v1, builder, vault credentials, scheduler, notifications ✅
 3. **AI** — provider abstraction, agents, knowledge/RAG, evaluations, cost tracking ✅
 4. **Agent tool execution** — permission scopes, consequential-action approvals, real integration calls ✅
-5. **Operations** — monitoring, incidents, audit logs ✅, analytics, ROI, reports
+5. **Operations** — monitoring, incidents, audit logs ✅, analytics, ROI, reports ✅
 6. **Commercial** — billing, subscriptions, opportunity & audit management
 7. **Hardening** — security review (headers ✅, RLS policies next), performance, a11y, tests, deployment
 
