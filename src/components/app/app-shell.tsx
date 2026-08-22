@@ -49,6 +49,12 @@ async function buildNav(ctx: SessionContext): Promise<NavSection[]> {
   if (can(ctx, "billing.view")) account.push({ href: "/app/billing", label: "Billing" });
   sections.push({ title: "Account", items: account });
 
+  // AutoMSP's own pipeline — only in the operations tenant (operator/agent orgs
+  // follow the same can() rule on other routes)
+  if (ctx.organization.kind === "automsp" && can(ctx, "commercial.view")) {
+    sections.push({ title: "AutoMSP", items: [{ href: "/app/commercial", label: "Commercial" }] });
+  }
+
   return sections;
 }
 

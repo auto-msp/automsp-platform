@@ -499,6 +499,129 @@ export interface UsageRecordRecord {
   recordedAt: string;
 }
 
+// ── Commercial: billing, opportunities, audits, clients, projects ──────────
+
+export type SubscriptionStatus = "trialing" | "active" | "past_due" | "cancelled";
+
+export interface SubscriptionRecord {
+  id: string;
+  organizationId: string;
+  stripeCustomerId: string | null;
+  stripeSubscriptionId: string | null;
+  planKey: string;
+  status: SubscriptionStatus;
+  currency: string;
+  currentPeriodEnd: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type InvoiceStatus = "draft" | "open" | "paid" | "void" | "uncollectible";
+
+export interface InvoiceRecord {
+  id: string;
+  organizationId: string;
+  stripeInvoiceId: string | null;
+  status: InvoiceStatus;
+  currency: string;
+  amountDueCents: number;
+  amountPaidCents: number;
+  dueAt: string | null;
+  paidAt: string | null;
+  createdAt: string;
+}
+
+export type OpportunityStage =
+  | "new"
+  | "qualified"
+  | "discovery"
+  | "audit"
+  | "proposal"
+  | "negotiation"
+  | "won"
+  | "lost";
+
+export interface OpportunityRecord {
+  id: string;
+  organizationId: string;
+  company: string;
+  contactName: string | null;
+  contactEmail: string | null;
+  source: string | null;
+  industry: string | null;
+  size: string | null;
+  estimatedValue: number | null;
+  stage: OpportunityStage;
+  probability: number | null;
+  expectedClose: string | null;
+  owner: string | null;
+  notes: string | null;
+  nextAction: string | null;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string | null;
+}
+
+export type AuditStatus = "received" | "in_review" | "scheduled" | "completed" | "declined";
+
+export interface AuditRecord {
+  id: string;
+  organizationId: string;
+  company: string;
+  contactName: string;
+  contactEmail: string;
+  phone: string | null;
+  role: string | null;
+  companySize: string | null;
+  industry: string | null;
+  aiUsage: string | null;
+  currentSystems: string | null;
+  bottlenecks: string | null;
+  processVolume: string | null;
+  desiredOutcomes: string | null;
+  status: AuditStatus;
+  /** identified opportunities, scored: businessImpact × frequency × feasibility × strategicFit */
+  findings: unknown;
+  priorityScore: number | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ClientRecord {
+  id: string;
+  organizationId: string;
+  name: string;
+  industry: string | null;
+  size: string | null;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string | null;
+}
+
+export type ProjectStage =
+  | "lead"
+  | "discovery"
+  | "audit"
+  | "proposal"
+  | "approved"
+  | "design"
+  | "build"
+  | "testing"
+  | "deployment"
+  | "managed_operations"
+  | "expansion";
+
+export interface ProjectRecord {
+  id: string;
+  organizationId: string;
+  clientId: string | null;
+  name: string;
+  stage: ProjectStage;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string | null;
+}
+
 // ── Evaluations ─────────────────────────────────────────────────────────────
 
 export type EvalScorer = "exact" | "contains" | "llm_judge";

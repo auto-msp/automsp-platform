@@ -8,10 +8,12 @@ import type {
   AiRunRecord,
   ApprovalRecord,
   AuditLogRecord,
+  AuditRecord,
   AuditRequestRecord,
   AuthAttemptRecord,
   AutomationRecord,
   AutomationVersionRecord,
+  ClientRecord,
   DocumentChunkRecord,
   DocumentRecord,
   EvalCaseRecord,
@@ -23,13 +25,17 @@ import type {
   ExecutionStepRecord,
   IncidentRecord,
   IntegrationRecord,
+  InvoiceRecord,
   KnowledgeSourceRecord,
   MembershipRecord,
   MetricRecord,
   NotificationRecord,
+  OpportunityRecord,
   OrganizationRecord,
+  ProjectRecord,
   ReportRecord,
   SessionRecord,
+  SubscriptionRecord,
   SystemRecord,
   UsageRecordRecord,
   UserRecord,
@@ -78,6 +84,12 @@ export interface Collections {
   eval_cases: EvalCaseRecord;
   eval_runs: EvalRunRecord;
   eval_results: EvalResultRecord;
+  subscriptions: SubscriptionRecord;
+  invoices: InvoiceRecord;
+  opportunities: OpportunityRecord;
+  audits: AuditRecord;
+  clients: ClientRecord;
+  projects: ProjectRecord;
 }
 
 export type CollectionName = keyof Collections;

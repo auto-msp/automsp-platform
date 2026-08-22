@@ -23,6 +23,8 @@ export const ALL_PERMISSIONS = [
   "reports.generate",
   "billing.view",
   "billing.manage",
+  "commercial.view",
+  "commercial.manage",
   "integrations.view",
   "integrations.manage",
   "agents.view",
@@ -57,6 +59,8 @@ const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
     "knowledge.view",
     "evals.view",
     "evals.run",
+    "commercial.view",
+    "commercial.manage",
   ],
   automsp_analyst: [
     "org.view",
@@ -68,6 +72,7 @@ const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
     "agents.view",
     "knowledge.view",
     "evals.view",
+    "commercial.view",
   ],
   customer_owner: [
     "org.view",

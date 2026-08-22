@@ -78,6 +78,12 @@ function delegate(name: CollectionName): Delegate {
     eval_cases: "evalCase",
     eval_runs: "evalRun",
     eval_results: "evalResult",
+    subscriptions: "subscription",
+    invoices: "invoice",
+    opportunities: "opportunity",
+    audits: "audit",
+    clients: "client",
+    projects: "project",
   };
   const pk: Partial<Record<CollectionName, string>> = { auth_attempts: "email" };
   const clientRow = client() as unknown as Record<string, Delegate>;
@@ -243,6 +249,16 @@ const FROM: { [K in CollectionName]: (row: Row) => Collections[K] } = {
   eval_cases: (r) => dates(r, ["createdAt"]) as unknown as Collections["eval_cases"],
   eval_runs: (r) => dates(r, ["startedAt", "completedAt"]) as unknown as Collections["eval_runs"],
   eval_results: (r) => dates(r, ["createdAt"]) as unknown as Collections["eval_results"],
+  subscriptions: (r) =>
+    dates(r, ["createdAt", "updatedAt", "currentPeriodEnd"]) as unknown as Collections["subscriptions"],
+  invoices: (r) =>
+    dates(r, ["createdAt", "dueAt", "paidAt"]) as unknown as Collections["invoices"],
+  opportunities: (r) =>
+    nums(dates(r, ["createdAt", "updatedAt", "expectedClose"]), ["estimatedValue"]) as unknown as Collections["opportunities"],
+  audits: (r) =>
+    nums(dates(r, ["createdAt", "updatedAt"]), ["priorityScore"]) as unknown as Collections["audits"],
+  clients: (r) => dates(r, ["createdAt", "updatedAt"]) as unknown as Collections["clients"],
+  projects: (r) => dates(r, ["createdAt", "updatedAt"]) as unknown as Collections["projects"],
 };
 
 /** undefined patch values mean "clear the column" in the JSON store → null. */
