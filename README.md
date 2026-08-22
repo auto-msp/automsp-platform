@@ -109,6 +109,26 @@ full on each report's "basis & method" detail section.
 Six report types: weekly operations, monthly impact, system health,
 automation performance, AI cost, and incident review.
 
+### Commercial
+
+Two distinct workspaces, one rule each:
+
+- **Customer billing** (`/app/billing`) — metered usage is real: it sums
+  `UsageRecord` rows the engine and AI layer write (workflow runs, tokens,
+  agent runs) for the current period, and shows the unit-price basis when one
+  is configured. The subscription/invoice layer is honest about its state:
+  with no `STRIPE_SECRET_KEY` it reports "not configured" and shows the plan
+  catalog — it never fabricates a subscription or an invoice.
+- **AutoMSP's own pipeline** (`/app/commercial`, operator tenant only) — the
+  inbound "Book an audit" inbox, the opportunity pipeline, clients, and
+  delivery projects. The public funnel writes a typed `Audit` into the
+  operator organization and opens a matching opportunity; nothing on the board
+  is simulated. Pipeline totals are operator-entered estimates and are labeled
+  **Estimated**; cross-tenant reads/writes are blocked at the service layer.
+
+`scripts/seed-operator.mjs` provisions the operator org + internal users in
+the local dev store (idempotent).
+
 ## Visual direction
 
 Enterprise Swiss Editorial — crisp, structured, light-first. Monochrome foundation
@@ -175,7 +195,7 @@ docs/                  architecture, security, database notes
 3. **AI** — provider abstraction, agents, knowledge/RAG, evaluations, cost tracking ✅
 4. **Agent tool execution** — permission scopes, consequential-action approvals, real integration calls ✅
 5. **Operations** — monitoring, incidents, audit logs ✅, analytics, ROI, reports ✅
-6. **Commercial** — billing, subscriptions, opportunity & audit management
+6. **Commercial** — billing, subscriptions, opportunity & audit management ✅
 7. **Hardening** — security review (headers ✅, RLS policies next), performance, a11y, tests, deployment
 
 Rules that don't change: nothing fake presented as real · tenant isolation at the
