@@ -28,6 +28,29 @@ Workflow AI steps reference an agent and can retrieve knowledge chunks for
 context; each run records model, tokens, estimated cost, and which retrieval
 method (semantic/lexical) served it (`ai_runs` + `usage_records`).
 
+### Agent tool execution
+
+Agents can be granted tool scopes (`agent_versions.permissionScopes`) from a
+fixed registry (`src/server/ai/tools.ts`): `http_request` (calls an endpoint
+on a connected integration — the vault credential is injected as an auth
+header at call time and never appears in results, logs, or the client),
+`knowledge_write` (indexes a document into a knowledge source), and
+`notify_send` (in-app notification). Two gates protect every call, enforced
+server-side in `src/server/ai/agent-runner.ts`:
+
+1. **Scope** — a tool whose scope is not granted on the running version is
+   never executed; the denial is fed back to the model as a tool result.
+2. **Consequential actions** — tools flagged consequential pause the run and
+   create an approval (`approvals.kind = "agent_tool"`) that pins the exact
+   arguments the model supplied. Approving executes those recorded arguments
+   verbatim; rejecting ends the run as `rejected`.
+
+Runs are persisted (`agent_runs`) with the full transcript, invocation
+outcomes, and pending calls, so a paused run resumes from durable state.
+Every model call in a run records an `ai_runs` row linked by `agentRunId`.
+Tool calling is wired for Anthropic and OpenAI; Gemini reports the limitation
+honestly instead of silently dropping granted tools.
+
 ### Persistence: one interface, two adapters
 
 Every data access goes through `src/server/db/store.ts`, which picks an adapter
@@ -125,9 +148,10 @@ docs/                  architecture, security, database notes
 1. **Foundation** — repo, design system, marketing site, audit funnel, auth, orgs, RBAC ✅
 2. **Core platform** — systems, automations, execution engine v1, builder, vault credentials, scheduler, notifications ✅
 3. **AI** — provider abstraction, agents, knowledge/RAG, evaluations, cost tracking ✅
-4. **Operations** — monitoring, incidents, audit logs ✅, analytics, ROI, reports
-5. **Commercial** — billing, subscriptions, opportunity & audit management
-6. **Hardening** — security review (headers ✅, RLS policies next), performance, a11y, tests, deployment
+4. **Agent tool execution** — permission scopes, consequential-action approvals, real integration calls ✅
+5. **Operations** — monitoring, incidents, audit logs ✅, analytics, ROI, reports
+6. **Commercial** — billing, subscriptions, opportunity & audit management
+7. **Hardening** — security review (headers ✅, RLS policies next), performance, a11y, tests, deployment
 
 Rules that don't change: nothing fake presented as real · tenant isolation at the
 database layer · human approval for consequential AI actions · every reported

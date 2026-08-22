@@ -62,10 +62,35 @@ const KEY_ENV: Record<ProviderKey, string> = {
 export interface CompletionParams {
   model: string;
   system?: string;
-  messages: { role: "user" | "assistant"; content: string }[];
+  messages: ConversationMessage[];
+  /** tools offered to the model; providers without tool support must not receive any */
+  tools?: ToolSchema[];
   maxTokens: number;
   temperature: number;
 }
+
+/** Tool definition in provider-neutral form, mapped per provider at send time. */
+export interface ToolSchema {
+  name: string;
+  description: string;
+  inputSchema: Record<string, unknown>;
+}
+
+export interface ProviderToolCall {
+  id: string;
+  name: string;
+  arguments: Record<string, unknown>;
+}
+
+/**
+ * Neutral transcript message. The persisted agent-run transcript
+ * (AgentTranscriptMessage) uses the same shape, so the agent runner passes
+ * messages straight through; each provider maps them to its wire format here.
+ */
+export type ConversationMessage =
+  | { role: "user"; content: string }
+  | { role: "assistant"; content: string; toolCalls?: ProviderToolCall[] }
+  | { role: "tool"; toolCallId: string; name: string; content: string };
 
 export interface CompletionResult {
   text: string;
@@ -73,12 +98,16 @@ export interface CompletionResult {
   promptTokens: number;
   completionTokens: number;
   latencyMs: number;
+  /** tool calls the model requested this turn; absent for a plain-text turn */
+  toolCalls?: ProviderToolCall[];
 }
 
 export interface AiProvider {
   key: ProviderKey;
   /** Whether this provider can produce embeddings for knowledge retrieval */
   supportsEmbeddings: boolean;
+  /** Whether this provider can request tool calls (function calling) */
+  supportsTools: boolean;
   complete(params: CompletionParams): Promise<CompletionResult>;
   embed?(texts: string[]): Promise<number[][]>;
 }
@@ -132,7 +161,8 @@ function anthropicProvider(apiKey: string): AiProvider {
   return {
     key: "anthropic",
     supportsEmbeddings: false,
-    async complete({ model, system, messages, maxTokens, temperature }) {
+    supportsTools: true,
+    async complete({ model, system, messages, tools, maxTokens, temperature }) {
       const started = Date.now();
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
@@ -141,21 +171,78 @@ function anthropicProvider(apiKey: string): AiProvider {
           "x-api-key": apiKey,
           "anthropic-version": "2023-06-01",
         },
-        body: JSON.stringify({ model, system, messages, max_tokens: maxTokens, temperature }),
+        body: JSON.stringify({
+          model,
+          system,
+          messages: toAnthropicMessages(messages),
+          ...(tools?.length
+            ? {
+                tools: tools.map((t) => ({
+                  name: t.name,
+                  description: t.description,
+                  input_schema: t.inputSchema,
+                })),
+              }
+            : {}),
+          max_tokens: maxTokens,
+          temperature,
+        }),
         signal: AbortSignal.timeout(60_000),
       });
       const data = await readJson(res);
-      const content = Array.isArray(data.content) ? (data.content as { type?: string; text?: string }[]) : [];
+      const content = Array.isArray(data.content)
+        ? (data.content as { type?: string; text?: string; id?: string; name?: string; input?: unknown }[])
+        : [];
       const usage = (data.usage ?? {}) as { input_tokens?: number; output_tokens?: number };
+      const toolCalls = content
+        .filter((b) => b.type === "tool_use")
+        .map((b) => ({
+          id: String(b.id ?? ""),
+          name: String(b.name ?? ""),
+          arguments: (typeof b.input === "object" && b.input !== null ? b.input : {}) as Record<string, unknown>,
+        }));
       return {
         text: content.filter((b) => b.type === "text").map((b) => b.text ?? "").join(""),
         model: String(data.model ?? model),
         promptTokens: usage.input_tokens ?? 0,
         completionTokens: usage.output_tokens ?? 0,
         latencyMs: Date.now() - started,
+        ...(toolCalls.length > 0 ? { toolCalls } : {}),
       };
     },
   };
+}
+
+/**
+ * Anthropic wire format: assistant turns become text + tool_use blocks; tool
+ * results ride inside the next user turn as tool_result blocks (consecutive
+ * tool messages merge into one user turn).
+ */
+function toAnthropicMessages(
+  messages: ConversationMessage[],
+): { role: "user" | "assistant"; content: unknown }[] {
+  const out: { role: "user" | "assistant"; content: unknown }[] = [];
+  for (const m of messages) {
+    if (m.role === "user") {
+      out.push({ role: "user", content: m.content });
+    } else if (m.role === "assistant") {
+      const blocks: Record<string, unknown>[] = [];
+      if (m.content) blocks.push({ type: "text", text: m.content });
+      for (const tc of m.toolCalls ?? []) {
+        blocks.push({ type: "tool_use", id: tc.id, name: tc.name, input: tc.arguments });
+      }
+      out.push({ role: "assistant", content: blocks.length > 0 ? blocks : [{ type: "text", text: "" }] });
+    } else {
+      const block = { type: "tool_result", tool_use_id: m.toolCallId, content: m.content };
+      const prev = out[out.length - 1];
+      if (prev && prev.role === "user" && Array.isArray(prev.content)) {
+        (prev.content as Record<string, unknown>[]).push(block);
+      } else {
+        out.push({ role: "user", content: [block] });
+      }
+    }
+  }
+  return out;
 }
 
 function openAiProvider(apiKey: string): AiProvider {
@@ -164,7 +251,8 @@ function openAiProvider(apiKey: string): AiProvider {
   return {
     key: "openai",
     supportsEmbeddings: true,
-    async complete({ model, system, messages, maxTokens, temperature }) {
+    supportsTools: true,
+    async complete({ model, system, messages, tools, maxTokens, temperature }) {
       const started = Date.now();
       const res = await fetch(`${base}/chat/completions`, {
         method: "POST",
@@ -173,22 +261,49 @@ function openAiProvider(apiKey: string): AiProvider {
           model,
           messages: [
             ...(system ? [{ role: "system", content: system }] : []),
-            ...messages,
+            ...toOpenAiMessages(messages),
           ],
+          ...(tools?.length
+            ? {
+                tools: tools.map((t) => ({
+                  type: "function",
+                  function: { name: t.name, description: t.description, parameters: t.inputSchema },
+                })),
+              }
+            : {}),
           max_tokens: maxTokens,
           temperature,
         }),
         signal: AbortSignal.timeout(60_000),
       });
       const data = await readJson(res);
-      const choices = Array.isArray(data.choices) ? (data.choices as { message?: { content?: string } }[]) : [];
+      const choices = Array.isArray(data.choices)
+        ? (data.choices as {
+            message?: {
+              content?: string | null;
+              tool_calls?: { id?: string; function?: { name?: string; arguments?: string } }[];
+            };
+          }[])
+        : [];
       const usage = (data.usage ?? {}) as { prompt_tokens?: number; completion_tokens?: number };
+      const message = choices[0]?.message;
+      const toolCalls = (message?.tool_calls ?? []).map((tc) => {
+        let args: Record<string, unknown> = {};
+        try {
+          const parsed: unknown = JSON.parse(tc.function?.arguments ?? "{}");
+          if (typeof parsed === "object" && parsed !== null) args = parsed as Record<string, unknown>;
+        } catch {
+          // malformed arguments JSON → empty args; the tool executor validates
+        }
+        return { id: String(tc.id ?? ""), name: String(tc.function?.name ?? ""), arguments: args };
+      });
       return {
-        text: choices[0]?.message?.content ?? "",
+        text: message?.content ?? "",
         model: String(data.model ?? model),
         promptTokens: usage.prompt_tokens ?? 0,
         completionTokens: usage.completion_tokens ?? 0,
         latencyMs: Date.now() - started,
+        ...(toolCalls.length > 0 ? { toolCalls } : {}),
       };
     },
     async embed(texts) {
@@ -205,12 +320,38 @@ function openAiProvider(apiKey: string): AiProvider {
   };
 }
 
+function toOpenAiMessages(messages: ConversationMessage[]): Record<string, unknown>[] {
+  return messages.map((m) => {
+    if (m.role === "user") return { role: "user", content: m.content };
+    if (m.role === "tool") {
+      return { role: "tool", tool_call_id: m.toolCallId, name: m.name, content: m.content };
+    }
+    return {
+      role: "assistant",
+      content: m.content || null,
+      ...(m.toolCalls?.length
+        ? {
+            tool_calls: m.toolCalls.map((tc) => ({
+              id: tc.id,
+              type: "function",
+              function: { name: tc.name, arguments: JSON.stringify(tc.arguments) },
+            })),
+          }
+        : {}),
+    };
+  });
+}
+
 function googleProvider(apiKey: string): AiProvider {
   const base = "https://generativelanguage.googleapis.com/v1beta";
   const headers = { "content-type": "application/json", "x-goog-api-key": apiKey };
   return {
     key: "google",
     supportsEmbeddings: true,
+    // Tool calling is not implemented for Gemini in this release — the agent
+    // runner checks supportsTools and reports the limitation honestly instead
+    // of silently dropping granted tools.
+    supportsTools: false,
     async complete({ model, system, messages, maxTokens, temperature }) {
       const started = Date.now();
       const res = await fetch(`${base}/models/${model}:generateContent`, {

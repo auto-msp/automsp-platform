@@ -171,10 +171,17 @@ export interface ExecutionRecord {
 
 export type ApprovalStatus = "pending" | "approved" | "rejected";
 
+/** workflow = engine approval node; agent_tool = consequential agent tool call */
+export type ApprovalKind = "workflow" | "agent_tool";
+
 export interface ApprovalRecord {
   id: string;
   organizationId: string;
-  executionId: string;
+  kind: ApprovalKind;
+  /** set for workflow approvals; null for agent-tool approvals */
+  executionId: string | null;
+  /** set for agent_tool approvals; null for workflow approvals */
+  agentRunId: string | null;
   action: string;
   rationale: string;
   payload: Record<string, unknown>;
@@ -291,12 +298,68 @@ export interface AgentVersionRecord {
   version: number;
   model: string;
   systemInstructions: string;
-  /** tool scopes granted to this version; tools ship in a later slice */
+  /** tool scopes granted to this version (see AGENT_TOOL_CATALOG in server/ai/tools) */
   permissionScopes: string[];
   approvalPolicy: AgentApprovalPolicy;
   limits: AgentLimits;
   createdAt: string;
   createdBy: string | null;
+}
+
+// ── Agent tool runs ─────────────────────────────────────────────────────────
+
+/** One tool call the model asked for (provider-reported, before any gating). */
+export interface AgentToolCallRecord {
+  id: string;
+  name: string;
+  arguments: Record<string, unknown>;
+}
+
+/** Outcome of one attempted tool execution inside a run. */
+export interface AgentToolInvocationRecord {
+  call: AgentToolCallRecord;
+  status: "executed" | "denied_scope" | "failed" | "skipped";
+  /** truncated (≤ chars) tool result text fed back to the model */
+  resultPreview: string | null;
+  error: string | null;
+  /** approval id when this invocation was authorized by a human decision */
+  approvalId: string | null;
+  latencyMs: number;
+  createdAt: string;
+}
+
+/** Neutral transcript message — mapped to each provider's wire format at send time. */
+export type AgentTranscriptMessage =
+  | { role: "user"; content: string }
+  | { role: "assistant"; content: string; toolCalls?: AgentToolCallRecord[] }
+  | { role: "tool"; toolCallId: string; name: string; content: string };
+
+export type AgentRunStatus =
+  | "running"
+  | "waiting_approval"
+  | "completed"
+  | "failed"
+  | "rejected";
+
+export interface AgentRunRecord {
+  id: string;
+  organizationId: string;
+  agentId: string;
+  agentVersionId: string;
+  status: AgentRunStatus;
+  /** transcript so far; tool messages carry tool results back to the model */
+  messages: AgentTranscriptMessage[];
+  invocations: AgentToolInvocationRecord[];
+  /** tool calls awaiting a decision or execution (approval-gated) */
+  pendingToolCalls: AgentToolCallRecord[];
+  finalText: string | null;
+  error: string | null;
+  turns: number;
+  maxTurns: number;
+  source: "playground";
+  createdBy: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // ── Knowledge / RAG ─────────────────────────────────────────────────────────
@@ -344,7 +407,7 @@ export interface DocumentChunkRecord {
 
 // ── AI usage & cost ─────────────────────────────────────────────────────────
 
-export type AiRunSource = "playground" | "workflow" | "evaluation";
+export type AiRunSource = "playground" | "workflow" | "evaluation" | "agent";
 
 export interface AiRunRecord {
   id: string;
@@ -352,6 +415,8 @@ export interface AiRunRecord {
   agentId: string | null;
   executionId: string | null;
   evalRunId: string | null;
+  /** the agent run this model call belongs to, when source = "agent" */
+  agentRunId: string | null;
   source: AiRunSource;
   provider: string;
   model: string;

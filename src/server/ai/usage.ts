@@ -19,6 +19,7 @@ export interface RecordAiRunInput {
   agentId?: string | null;
   executionId?: string | null;
   evalRunId?: string | null;
+  agentRunId?: string | null;
   source: AiRunSource;
   provider: string;
   model: string;
@@ -45,6 +46,7 @@ export async function recordAiRun(input: RecordAiRunInput): Promise<AiRunRecord>
     agentId: input.agentId ?? null,
     executionId: input.executionId ?? null,
     evalRunId: input.evalRunId ?? null,
+    agentRunId: input.agentRunId ?? null,
     source: input.source,
     provider: input.provider,
     model: input.model,

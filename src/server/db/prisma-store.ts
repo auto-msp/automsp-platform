@@ -65,6 +65,7 @@ function delegate(name: CollectionName): Delegate {
     integrations: "integrationConnection",
     agents: "agent",
     agent_versions: "agentVersion",
+    agent_runs: "agentRun",
     knowledge_sources: "knowledgeSource",
     documents: "document",
     document_chunks: "documentChunk",
@@ -172,6 +173,7 @@ const FROM: { [K in CollectionName]: (row: Row) => Collections[K] } = {
     const base = fill(dates(r, ["createdAt", "decidedAt"]), ["rationale"]);
     if (base.payload === null || base.payload === undefined) base.payload = {};
     if (!["low", "medium", "high"].includes(String(base.riskLevel))) base.riskLevel = "medium";
+    if (base.kind !== "agent_tool") base.kind = "workflow";
     return opt(base, ["reviewerId", "decidedAt", "decisionNote"]) as unknown as Collections["approvals"];
   },
   audit_logs: (r) =>
@@ -202,6 +204,13 @@ const FROM: { [K in CollectionName]: (row: Row) => Collections[K] } = {
     if (!base.limits || typeof base.limits !== "object")
       base.limits = { maxOutputTokens: 1024, timeoutMs: 30000 };
     return base as unknown as Collections["agent_versions"];
+  },
+  agent_runs: (r) => {
+    const base = dates(r, ["createdAt", "updatedAt"]);
+    if (!Array.isArray(base.messages)) base.messages = [];
+    if (!Array.isArray(base.invocations)) base.invocations = [];
+    if (!Array.isArray(base.pendingToolCalls)) base.pendingToolCalls = [];
+    return base as unknown as Collections["agent_runs"];
   },
   knowledge_sources: (r) =>
     strip(dates(r, ["createdAt", "updatedAt"]), ["permissions"]) as unknown as Collections["knowledge_sources"],

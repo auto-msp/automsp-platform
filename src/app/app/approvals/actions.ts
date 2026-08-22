@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { resumeAgentRunFromApproval } from "@/server/ai/agent-runner";
 import { writeAuditLog } from "@/server/audit";
 import { getSessionContext, requirePermission } from "@/server/auth/session";
 import { store } from "@/server/db/store";
@@ -46,7 +47,14 @@ export async function decideApprovalAction(
     decisionNote,
   });
 
-  const result = await resumeExecution(approval.executionId, decision, ctx.user.name, decisionNote);
+  // Workflow approvals resume the paused execution; agent-tool approvals
+  // execute the exact recorded tool call and drive the agent run forward.
+  const isAgentTool = approval.kind === "agent_tool";
+  const result = isAgentTool
+    ? await resumeAgentRunFromApproval(approval, decision, ctx.user.name, decisionNote)
+    : approval.executionId
+      ? await resumeExecution(approval.executionId, decision, ctx.user.name, decisionNote)
+      : { ok: false as const, error: "This approval is not linked to an execution." };
 
   await writeAuditLog({
     organizationId: ctx.organization.id,
@@ -54,12 +62,21 @@ export async function decideApprovalAction(
     action: `approval.${decision}`,
     resource: "approval",
     resourceId: approvalId,
-    metadata: { executionId: approval.executionId, action: approval.action },
+    metadata: {
+      kind: approval.kind,
+      executionId: approval.executionId,
+      agentRunId: approval.agentRunId,
+      action: approval.action,
+    },
   });
 
   revalidatePath("/app/approvals");
   revalidatePath("/app/operations");
-  revalidatePath(`/app/operations/${approval.executionId}`);
+  if (approval.executionId) revalidatePath(`/app/operations/${approval.executionId}`);
+  if (isAgentTool) {
+    const agentId = typeof approval.payload.agentId === "string" ? approval.payload.agentId : null;
+    if (agentId) revalidatePath(`/app/agents/${agentId}`);
+  }
 
   if (!result.ok) return { error: result.error };
 

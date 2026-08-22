@@ -163,7 +163,9 @@ async function executeNode(
       const pending: ApprovalRecord = {
         id: newId(),
         organizationId: "", // filled by caller
+        kind: "workflow",
         executionId: "", // filled by caller
+        agentRunId: null,
         action: interpolate(String(node.config.action), context),
         rationale: interpolate(String(node.config.rationale), context),
         payload: interpolateMapping(

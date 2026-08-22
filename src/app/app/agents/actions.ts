@@ -3,8 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { createAgent, runAgentCompletion, saveAgentVersion, setAgentStatus } from "@/server/ai/agents";
+import { startAgentRun } from "@/server/ai/agent-runner";
+import { createAgent, saveAgentVersion, setAgentStatus } from "@/server/ai/agents";
 import { MODELS } from "@/server/ai/provider";
+import { AGENT_TOOL_CATALOG } from "@/server/ai/tools";
 import { writeAuditLog } from "@/server/audit";
 import { getSessionContext, requirePermission } from "@/server/auth/session";
 
@@ -23,6 +25,12 @@ const agentSchema = z.object({
 
 function validModel(model: string): boolean {
   return MODELS.some((m) => m.key === model);
+}
+
+/** Repeated `scope` form fields, restricted to scopes that exist in the tool registry. */
+function readScopes(formData: FormData): string[] {
+  const known = new Set(AGENT_TOOL_CATALOG.map((t) => t.scope));
+  return [...new Set(formData.getAll("scope").map(String))].filter((s) => known.has(s));
 }
 
 export async function createAgentAction(
@@ -51,6 +59,7 @@ export async function createAgentAction(
       description: parsed.data.description ?? "",
       model: parsed.data.model,
       systemInstructions: parsed.data.systemInstructions,
+      permissionScopes: readScopes(formData),
     },
     ctx.user.id,
   );
@@ -84,6 +93,7 @@ export async function saveAgentAction(
   }
   if (!validModel(parsed.data.model)) return { error: "Unknown model." };
 
+  const permissionScopes = readScopes(formData);
   const version = await saveAgentVersion(
     ctx.organization.id,
     agentId,
@@ -93,6 +103,7 @@ export async function saveAgentAction(
       description: parsed.data.description ?? "",
       model: parsed.data.model,
       systemInstructions: parsed.data.systemInstructions,
+      permissionScopes,
     },
     ctx.user.id,
   );
@@ -103,23 +114,29 @@ export async function saveAgentAction(
     action: "agent.version_saved",
     resource: "agent",
     resourceId: agentId,
-    metadata: { version: version.version, model: parsed.data.model },
+    metadata: { version: version.version, model: parsed.data.model, scopes: permissionScopes },
   });
   revalidatePath(`/app/agents/${agentId}`);
   return {};
 }
 
+export interface PlaygroundInvocation {
+  name: string;
+  status: string;
+  resultPreview: string | null;
+  error: string | null;
+}
+
 export interface PlaygroundState {
   error?: string;
   notConfigured?: boolean;
-  result?: {
-    text: string;
-    model: string;
-    promptTokens: number;
-    completionTokens: number;
-    costEstimatedUsd: number | null;
-    latencyMs: number;
-    retrieval: { method: string; chunks: number } | null;
+  run?: {
+    id: string;
+    status: "running" | "waiting_approval" | "completed" | "failed" | "rejected";
+    finalText: string | null;
+    error: string | null;
+    turns: number;
+    invocations: PlaygroundInvocation[];
   };
 }
 
@@ -145,24 +162,34 @@ export async function runPlaygroundAction(
     return { error: parsed.error.issues[0]?.message ?? "A prompt is required." };
   }
 
-  const result = await runAgentCompletion({
+  // Agent runs go through the tool runner: scope-gated tool calling with
+  // consequential-action approval pauses. No tools granted → a plain
+  // single-turn completion, recorded the same way.
+  const result = await startAgentRun({
     organizationId: ctx.organization.id,
     agentId,
     prompt: parsed.data.prompt,
     source: "playground",
+    createdBy: ctx.user.id,
   });
   if (!result.ok) {
     return { error: result.error, notConfigured: result.notConfigured === true };
   }
+  const run = result.run;
+  revalidatePath(`/app/agents/${agentId}`);
   return {
-    result: {
-      text: result.text,
-      model: result.model,
-      promptTokens: result.promptTokens,
-      completionTokens: result.completionTokens,
-      costEstimatedUsd: result.costEstimatedUsd,
-      latencyMs: result.latencyMs,
-      retrieval: result.retrieval,
+    run: {
+      id: run.id,
+      status: run.status,
+      finalText: run.finalText,
+      error: run.error,
+      turns: run.turns,
+      invocations: run.invocations.map((inv) => ({
+        name: inv.call.name,
+        status: inv.status,
+        resultPreview: inv.resultPreview,
+        error: inv.error,
+      })),
     },
   };
 }

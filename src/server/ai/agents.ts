@@ -7,11 +7,11 @@ import { DEFAULT_MODEL_BY_PROVIDER, getProvider, modelInfo } from "./provider";
 import { recordAiRun } from "./usage";
 
 /**
- * Versioned agents: every save creates a new AgentVersion, so instructions and
- * model choices are auditable like automation definitions. Agents are runners
- * (prompt + model + optional retrieval) — tool *execution* (send email, write
- * CRM records) is a later slice; versions carry empty permissionScopes until
- * then and the UI says tools are not configurable.
+ * Versioned agents: every save creates a new AgentVersion, so instructions,
+ * model choices, and granted tool scopes are auditable like automation
+ * definitions. Tool scopes are least-privilege grants from the registry in
+ * ./tools — a version without a scope can never execute that tool, and the
+ * agent runner enforces the grant server-side.
  */
 
 export const DEFAULT_APPROVAL_POLICY = { consequentialActions: "require_approval" } as const;
@@ -46,7 +46,14 @@ export async function listVersions(agentId: string): Promise<AgentVersionRecord[
 
 export async function createAgent(
   organizationId: string,
-  input: { name: string; purpose: string; description: string; model: string; systemInstructions: string },
+  input: {
+    name: string;
+    purpose: string;
+    description: string;
+    model: string;
+    systemInstructions: string;
+    permissionScopes?: string[];
+  },
   createdBy: string,
 ): Promise<AgentRecord> {
   const now = new Date().toISOString();
@@ -69,7 +76,7 @@ export async function createAgent(
     version: 1,
     model: input.model,
     systemInstructions: input.systemInstructions,
-    permissionScopes: [],
+    permissionScopes: input.permissionScopes ?? [],
     approvalPolicy: DEFAULT_APPROVAL_POLICY,
     limits: DEFAULT_LIMITS,
     createdAt: now,
@@ -78,11 +85,19 @@ export async function createAgent(
   return agent;
 }
 
-/** Every material save is a new version — instructions/models are auditable. */
+/** Every material save is a new version — instructions/models/scopes are auditable. */
 export async function saveAgentVersion(
   organizationId: string,
   agentId: string,
-  input: { model: string; systemInstructions: string; name?: string; purpose?: string; description?: string },
+  input: {
+    model: string;
+    systemInstructions: string;
+    name?: string;
+    purpose?: string;
+    description?: string;
+    /** granted tool scopes; omit to carry the current version's grants forward */
+    permissionScopes?: string[];
+  },
   createdBy: string,
 ): Promise<AgentVersionRecord | null> {
   const agent = await getAgent(organizationId, agentId);
@@ -94,7 +109,7 @@ export async function saveAgentVersion(
     version: (current?.version ?? 0) + 1,
     model: input.model,
     systemInstructions: input.systemInstructions,
-    permissionScopes: current?.permissionScopes ?? [],
+    permissionScopes: input.permissionScopes ?? current?.permissionScopes ?? [],
     approvalPolicy: current?.approvalPolicy ?? DEFAULT_APPROVAL_POLICY,
     limits: current?.limits ?? DEFAULT_LIMITS,
     createdAt: new Date().toISOString(),

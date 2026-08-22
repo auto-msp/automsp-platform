@@ -1,11 +1,21 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { runPlaygroundAction, type PlaygroundState } from "../actions";
+
+const INV_CLS: Record<string, string> = {
+  executed: "text-ok",
+  denied_scope: "text-warn",
+  failed: "text-risk",
+  skipped: "text-mute",
+};
 
 export function Playground({ agentId }: { agentId: string }) {
   const bound = runPlaygroundAction.bind(null, agentId);
   const [state, formAction, pending] = useActionState<PlaygroundState | null, FormData>(bound, null);
+
+  const run = state?.run;
 
   return (
     <div>
@@ -38,18 +48,72 @@ export function Playground({ agentId }: { agentId: string }) {
         </div>
       ) : null}
 
-      {state?.result ? (
-        <div className="mt-4 border border-fog bg-haze px-4 py-3">
-          <p className="whitespace-pre-wrap text-[13px] leading-relaxed text-ink">{state.result.text}</p>
+      {run ? (
+        <div
+          className={`mt-4 border px-4 py-3 ${
+            run.status === "completed"
+              ? "border-fog bg-haze"
+              : run.status === "waiting_approval"
+                ? "border-warn/40 bg-warn/10"
+                : run.status === "failed" || run.status === "rejected"
+                  ? "border-risk/30 bg-risk/5"
+                  : "border-fog bg-haze"
+          }`}
+        >
+          {run.status === "waiting_approval" ? (
+            <>
+              <p className="text-[13px] font-medium text-warn">Paused — waiting on approval</p>
+              <p className="mt-1 text-[13px] text-slate">
+                The agent requested a consequential tool. A person must review the exact arguments
+                before anything executes.{" "}
+                <Link href="/app/approvals" className="underline underline-offset-2">
+                  Decide in Approvals →
+                </Link>
+              </p>
+            </>
+          ) : run.status === "rejected" ? (
+            <>
+              <p className="text-[13px] font-medium text-risk">Tool call rejected</p>
+              <p className="mt-1 text-[13px] text-slate">{run.error}</p>
+            </>
+          ) : run.status === "failed" ? (
+            <>
+              <p className="text-[13px] font-medium text-risk">Run failed</p>
+              <p className="mt-1 text-[13px] text-slate">{run.error}</p>
+            </>
+          ) : (
+            <p className="whitespace-pre-wrap text-[13px] leading-relaxed text-ink">
+              {run.finalText ?? "(no text)"}
+            </p>
+          )}
+
+          {run.invocations.length > 0 ? (
+            <div className="mt-3 border-t border-fog pt-2">
+              <p className="mb-1.5 text-[11px] font-medium tracking-wide text-mute uppercase">
+                Tool calls
+              </p>
+              <ul className="space-y-1.5">
+                {run.invocations.map((inv, i) => (
+                  <li key={i} className="text-[12px]">
+                    <span className="font-medium text-ink">{inv.name}</span>
+                    <span className={`ml-2 ${INV_CLS[inv.status] ?? "text-slate"}`}>
+                      {inv.status.replace("_", " ")}
+                    </span>
+                    {inv.error ? <p className="mt-0.5 text-slate">{inv.error}</p> : null}
+                    {inv.resultPreview ? (
+                      <pre className="tnum mt-1 max-h-24 overflow-auto bg-paper p-2 text-[11px] text-graphite">
+                        {inv.resultPreview}
+                      </pre>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
           <p className="tnum mt-3 border-t border-fog pt-2 text-[11px] text-slate">
-            {state.result.model} · {state.result.promptTokens}+{state.result.completionTokens} tokens ·{" "}
-            {state.result.costEstimatedUsd !== null
-              ? `$${state.result.costEstimatedUsd.toFixed(5)} (Estimated — list price)`
-              : "cost not computable (unknown model)"}{" "}
-            · {state.result.latencyMs}ms
-            {state.result.retrieval
-              ? ` · retrieval: ${state.result.retrieval.method} (${state.result.retrieval.chunks} chunks)`
-              : ""}
+            run {run.id} · {run.turns} turn{run.turns === 1 ? "" : "s"} · model calls recorded under
+            Recent model runs (tokens actual, USD estimated)
           </p>
         </div>
       ) : null}

@@ -61,6 +61,9 @@ export default async function ApprovalsPage() {
                 >
                   {approval.riskLevel} risk
                 </span>
+                <span className="border border-fog bg-haze px-1.5 py-px text-[11px] font-medium tracking-[0.08em] text-slate uppercase">
+                  {approval.kind === "agent_tool" ? "agent tool" : "workflow"}
+                </span>
                 <span className="tnum ml-auto text-[11px] text-mute">
                   requested {formatDateTime(approval.createdAt)}
                 </span>
@@ -72,12 +75,25 @@ export default async function ApprovalsPage() {
                 </pre>
               ) : null}
               <div className="mt-3 flex items-center justify-between gap-4">
-                <Link
-                  href={`/app/operations/${approval.executionId}`}
-                  className="text-[13px] text-slate hover:text-ink"
-                >
-                  Open execution →
-                </Link>
+                {approval.kind === "agent_tool" ? (
+                  typeof approval.payload.agentId === "string" ? (
+                    <Link
+                      href={`/app/agents/${approval.payload.agentId}`}
+                      className="text-[13px] text-slate hover:text-ink"
+                    >
+                      Open agent →
+                    </Link>
+                  ) : (
+                    <span />
+                  )
+                ) : (
+                  <Link
+                    href={`/app/operations/${approval.executionId}`}
+                    className="text-[13px] text-slate hover:text-ink"
+                  >
+                    Open execution →
+                  </Link>
+                )}
                 {canDecide ? (
                   <DecisionButtons approvalId={approval.id} />
                 ) : (

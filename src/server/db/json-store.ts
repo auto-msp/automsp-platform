@@ -3,6 +3,7 @@ import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type {
   AgentRecord,
+  AgentRunRecord,
   AgentVersionRecord,
   AiRunRecord,
   ApprovalRecord,
@@ -61,6 +62,7 @@ export interface Collections {
   integrations: IntegrationRecord;
   agents: AgentRecord;
   agent_versions: AgentVersionRecord;
+  agent_runs: AgentRunRecord;
   knowledge_sources: KnowledgeSourceRecord;
   documents: DocumentRecord;
   document_chunks: DocumentChunkRecord;

@@ -27,12 +27,21 @@ function Field({
   );
 }
 
+export interface ToolOption {
+  name: string;
+  description: string;
+  scope: string;
+  consequential: boolean;
+}
+
 export function AgentForm({
   models,
+  tools,
   agentId,
   initial,
 }: {
   models: { key: string; label: string }[];
+  tools: ToolOption[];
   agentId?: string;
   initial?: {
     name: string;
@@ -40,6 +49,7 @@ export function AgentForm({
     description: string;
     model: string;
     systemInstructions: string;
+    scopes: string[];
   };
 }) {
   const action = agentId ? saveAgentAction.bind(null, agentId) : createAgentAction;
@@ -84,7 +94,7 @@ export function AgentForm({
 
       <Field
         label="System instructions"
-        hint="Role, boundaries, and tone. Consequential actions stay behind workflow approval steps regardless."
+        hint="Role, boundaries, and tone. Consequential actions stay behind human approvals regardless."
         error={state?.fieldErrors?.systemInstructions}
       >
         <textarea
@@ -96,6 +106,45 @@ export function AgentForm({
           className={`${inputCls} font-mono text-[13px]`}
         />
       </Field>
+
+      <fieldset>
+        <legend className="mb-1.5 block text-[13px] font-medium text-ink">Tool scopes</legend>
+        <p className="mb-3 text-[11px] leading-relaxed text-mute">
+          Grant the least the agent needs. Scopes are enforced server-side on every tool call.
+          Consequential tools always pause for human approval with the exact arguments recorded.
+        </p>
+        <div className="space-y-2.5">
+          {tools.map((tool) => {
+            const checked = initial?.scopes.includes(tool.scope) ?? false;
+            return (
+              <label
+                key={tool.scope}
+                className="flex cursor-pointer items-start gap-3 border border-fog bg-surface px-3 py-2.5"
+              >
+                <input
+                  type="checkbox"
+                  name="scope"
+                  value={tool.scope}
+                  defaultChecked={checked}
+                  className="mt-0.5 h-4 w-4 accent-current"
+                />
+                <span className="min-w-0">
+                  <span className="flex flex-wrap items-center gap-2 text-[13px] font-medium text-ink">
+                    {tool.name}
+                    <code className="tnum text-[11px] text-mute">{tool.scope}</code>
+                    {tool.consequential ? (
+                      <span className="border border-warn/40 bg-warn/10 px-1.5 py-px text-[10px] font-medium tracking-[0.08em] text-warn uppercase">
+                        approval required
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className="mt-0.5 block text-[12px] leading-relaxed text-slate">{tool.description}</span>
+                </span>
+              </label>
+            );
+          })}
+        </div>
+      </fieldset>
 
       {state?.error ? (
         <p className="border border-risk/30 bg-risk/5 px-4 py-3 text-[13px] text-risk" role="alert">

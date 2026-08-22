@@ -46,6 +46,7 @@ model Organization {
   auditLogs     AuditLog[]
   apiKeys       ApiKey[]
   aiRuns        AiRun[]
+  agentRuns     AgentRun[]
   evalSuites    EvalSuite[]
   evalRuns      EvalRun[]
 
@@ -369,6 +370,7 @@ model Agent {
   system       System?       @relation(fields: [systemId], references: [id])
   versions     AgentVersion[]
   aiRuns       AiRun[]
+  agentRuns    AgentRun[]
   evalSuites   EvalSuite[]
 
   @@index([organizationId, status])
@@ -390,6 +392,7 @@ model AgentVersion {
 
   agent Agent        @relation(fields: [agentId], references: [id], onDelete: Cascade)
   tools AgentTool[]
+  runs  AgentRun[]
 
   @@unique([agentId, version])
   @@map("agent_versions")
@@ -583,7 +586,10 @@ model ExecutionLog {
 model Approval {
   id             String    @id @default(uuid())
   organizationId String    @map("organization_id")
+  // workflow | agent_tool
+  kind           String    @default("workflow")
   executionId    String?   @map("execution_id")
+  agentRunId     String?   @map("agent_run_id")
   action         String
   rationale      String?
   payload        Json?
@@ -597,6 +603,7 @@ model Approval {
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   execution   Execution?    @relation(fields: [executionId], references: [id])
+  agentRun    AgentRun?     @relation(fields: [agentRunId], references: [id])
 
   @@index([organizationId, status])
   @@map("approvals")
@@ -737,7 +744,8 @@ model AiRun {
   agentId          String?  @map("agent_id")
   executionId      String?  @map("execution_id")
   evalRunId        String?  @map("eval_run_id")
-  // playground | workflow | evaluation
+  agentRunId       String?  @map("agent_run_id")
+  // playground | workflow | evaluation | agent
   source           String
   provider         String
   model            String
@@ -758,9 +766,41 @@ model AiRun {
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   agent        Agent?       @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  agentRun     AgentRun?    @relation(fields: [agentRunId], references: [id], onDelete: SetNull)
 
   @@index([organizationId, createdAt])
   @@map("ai_runs")
+}
+
+model AgentRun {
+  id               String   @id @default(uuid())
+  organizationId   String   @map("organization_id")
+  agentId          String   @map("agent_id")
+  agentVersionId   String   @map("agent_version_id")
+  // running | waiting_approval | completed | failed | rejected
+  status           String   @default("running")
+  // transcript (user/assistant/tool), invocation outcomes, pending calls
+  messages         Json
+  invocations      Json
+  pendingToolCalls Json     @map("pending_tool_calls")
+  finalText        String?  @map("final_text")
+  error            String?
+  turns            Int      @default(0)
+  maxTurns         Int      @default(6) @map("max_turns")
+  // playground
+  source           String   @default("playground")
+  createdBy        String?  @map("created_by")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  organization  Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  agent         Agent         @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  agentVersion  AgentVersion  @relation(fields: [agentVersionId], references: [id], onDelete: Cascade)
+  approvals     Approval[]
+  aiRuns        AiRun[]
+
+  @@index([organizationId, createdAt])
+  @@map("agent_runs")
 }
 
 model EvalSuite {
