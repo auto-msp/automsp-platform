@@ -196,7 +196,12 @@ docs/                  architecture, security, database notes
 4. **Agent tool execution** — permission scopes, consequential-action approvals, real integration calls ✅
 5. **Operations** — monitoring, incidents, audit logs ✅, analytics, ROI, reports ✅
 6. **Commercial** — billing, subscriptions, opportunity & audit management ✅
-7. **Hardening** — security review (headers ✅, RLS policies next), performance, a11y, tests, deployment
+7. **Hardening** — CSP ✅ (route-aware nonce policy via `src/proxy.ts`),
+   security headers ✅, public-endpoint rate limiting ✅, automated tests ✅
+   (`pnpm test`), RLS policies designed (`docs/rls-policies.sql`, DRAFT — not
+   yet applied/verified against a live database), deployment runbook ✅
+   (`docs/DEPLOYMENT.md`); remaining: SQL pushdown for store predicates,
+   multi-instance scheduler switch, shared rate-limit store
 
 Rules that don't change: nothing fake presented as real · tenant isolation at the
 database layer · human approval for consequential AI actions · every reported

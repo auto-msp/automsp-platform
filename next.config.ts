@@ -1,22 +1,11 @@
 import type { NextConfig } from "next";
 
 /**
- * Baseline browser hardening. CSP is deferred to the deployment slice (the
- * marketing pages would need a nonce pipeline); everything here is
- * side-effect free.
+ * Security headers — including the Content-Security-Policy — are applied
+ * per-request by src/proxy.ts (Next 16's successor to middleware). Keeping
+ * them there lets the CSP carry a fresh nonce on every response; a static
+ * header in this file could not.
  */
-const securityHeaders = [
-  { key: "X-Frame-Options", value: "DENY" },
-  { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-  { key: "X-DNS-Prefetch-Control", value: "off" },
-];
-
-const nextConfig: NextConfig = {
-  async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
-  },
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;
