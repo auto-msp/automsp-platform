@@ -7,6 +7,7 @@ import { listAgents } from "@/server/ai/agents";
 import { modelInfo, providerStatus } from "@/server/ai/provider";
 import { can, getSessionContext } from "@/server/auth/session";
 import { formatDateTime, truncateId } from "@/lib/format";
+import { SeedFleetButton } from "./seed-fleet-button";
 
 export const metadata: Metadata = { title: "Agents" };
 export const dynamic = "force-dynamic";
@@ -31,16 +32,19 @@ export default async function AgentsPage() {
     <div>
       <AppPageHeader
         title="Agents"
-        description="Versioned model runners — instructions and model choices are recorded per version. Tool execution (writing to connected systems) is not built yet; agents that produce consequential output pair with approval steps in workflows."
+        description="Versioned model runners — instructions and model choices are recorded per version. Seed the nine-specialist starter fleet (Orchestrator, Social, Outreach, Support, Ads, Finance, and more), then tailor each one. Consequential tool calls always pause for approval."
       >
-        {canManage ? (
-          <Link
-            href="/app/agents/new"
-            className="inline-flex h-10 items-center bg-ink px-4 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite"
-          >
-            New agent
-          </Link>
-        ) : null}
+        <div className="flex items-start gap-3">
+          {canManage ? <SeedFleetButton /> : null}
+          {canManage ? (
+            <Link
+              href="/app/agents/new"
+              className="inline-flex h-10 items-center bg-ink px-4 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite"
+            >
+              New agent
+            </Link>
+          ) : null}
+        </div>
       </AppPageHeader>
 
       <div className="mb-6 border border-fog bg-haze px-4 py-3">

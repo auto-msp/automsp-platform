@@ -8,6 +8,7 @@ import { getSessionContext, requirePermission } from "@/server/auth/session";
 import { newId } from "@/server/db/id";
 import { store } from "@/server/db/store";
 import { notify } from "@/server/notifications";
+import { setSandboxMode } from "@/server/org-settings";
 import { formatRole } from "@/server/roles";
 import type { Role } from "@/server/db/types";
 
@@ -192,4 +193,40 @@ export async function removeMemberAction(
 
   revalidatePath("/app/organization");
   return { success: "Member removed." };
+}
+
+const toggleSandboxSchema = z.object({ enabled: z.enum(["on", "off"]) });
+
+export async function toggleSandboxModeAction(
+  _prev: OrgFormState | null,
+  formData: FormData,
+): Promise<OrgFormState> {
+  const ctx = await getSessionContext();
+  if (!ctx) redirect("/sign-in");
+  try {
+    requirePermission(ctx, "org.update");
+  } catch {
+    return { error: "Your role cannot change workspace settings." };
+  }
+
+  const parsed = toggleSandboxSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return { error: "Invalid request." };
+
+  const enabled = parsed.data.enabled === "off" ? false : true;
+  await setSandboxMode(ctx.organization.id, enabled);
+  await writeAuditLog({
+    organizationId: ctx.organization.id,
+    actorId: ctx.user.id,
+    action: enabled ? "sandbox.enabled" : "sandbox.disabled",
+    resource: "organization",
+    resourceId: ctx.organization.id,
+    metadata: { by: ctx.user.email },
+  });
+  revalidatePath("/app/organization");
+
+  return {
+    success: enabled
+      ? "Sandbox mode is ON — every consequential action stays approval-gated."
+      : "Sandbox mode is OFF — approved consequential actions now dispatch externally. You own what goes out.",
+  };
 }

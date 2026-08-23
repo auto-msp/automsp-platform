@@ -21,6 +21,9 @@ model Organization {
   kind      String   @default("customer")
   industry  String?
   size      String?
+  // sandbox mode (default true): consequential outbound actions stay approval-gated;
+  // nightly cycles record reports without dispatching anything external
+  sandboxMode Boolean @default(true) @map("sandbox_mode")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

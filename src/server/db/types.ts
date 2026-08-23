@@ -29,6 +29,13 @@ export interface OrganizationRecord {
   kind: "automsp" | "customer";
   industry?: string;
   size?: string;
+  /**
+   * Sandbox mode (default true): agent runs execute end-to-end but every
+   * consequential outbound action stays gated behind approvals, and nightly
+   * cycles record reports without dispatching anything external. Flipping it
+   * off is an explicit owner action and is audit-logged.
+   */
+  sandboxMode?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -216,6 +223,7 @@ export type ReportType =
   | "weekly_ops"
   | "monthly_impact"
   | "system_health"
+  | "morning_brief"
   | "automation_performance"
   | "ai_cost"
   | "incident";
@@ -409,7 +417,8 @@ export interface AgentRunRecord {
   error: string | null;
   turns: number;
   maxTurns: number;
-  source: "playground";
+  // playground (manual) | nightly-cycle (scheduled orchestrator pass)
+  source: "playground" | "nightly-cycle";
   createdBy: string | null;
   createdAt: string;
   updatedAt: string;

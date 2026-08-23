@@ -3,8 +3,10 @@ import { AppPageHeader } from "@/components/app/page-header";
 import { formatDate } from "@/lib/format";
 import { can, getSessionContext } from "@/server/auth/session";
 import { store } from "@/server/db/store";
+import { isSandboxMode } from "@/server/org-settings";
 import { InviteForm } from "./invite-form";
 import { MemberRow } from "./member-row";
+import { SandboxToggle } from "./sandbox-toggle";
 
 export const metadata: Metadata = { title: "Organization" };
 
@@ -51,6 +53,10 @@ export default async function OrganizationPage() {
           <dd className="tnum mt-1.5 text-sm text-ink">{formatDate(ctx.organization.createdAt)}</dd>
         </div>
       </dl>
+
+      <div className="mt-8">
+        <SandboxToggle sandboxed={isSandboxMode(ctx.organization)} />
+      </div>
 
       <div className="mt-8">
         <h2 className="mb-3 text-sm font-semibold text-ink">Members ({members.length})</h2>

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { startAgentRun } from "@/server/ai/agent-runner";
 import { createAgent, saveAgentVersion, setAgentStatus } from "@/server/ai/agents";
+import { seedFleet } from "@/server/ai/fleet";
 import { MODELS } from "@/server/ai/provider";
 import { AGENT_TOOL_CATALOG } from "@/server/ai/tools";
 import { writeAuditLog } from "@/server/audit";
@@ -211,4 +212,40 @@ export async function setAgentStatusAction(
     metadata: { status },
   });
   revalidatePath(`/app/agents/${agentId}`);
+}
+
+export interface SeedFleetState {
+  error?: string;
+  success?: string;
+}
+
+export async function seedFleetAction(
+  _prev: SeedFleetState | null,
+  _formData: FormData,
+): Promise<SeedFleetState> {
+  const ctx = await getSessionContext();
+  if (!ctx) redirect("/sign-in");
+  try {
+    requirePermission(ctx, "agents.manage");
+  } catch {
+    return { error: "Your role cannot manage agents." };
+  }
+
+  const { created, skipped } = await seedFleet(ctx.organization.id, ctx.user.id);
+  if (created.length === 0) {
+    return { success: `Starter fleet already present — ${skipped} agent(s) skipped.` };
+  }
+
+  await writeAuditLog({
+    organizationId: ctx.organization.id,
+    actorId: ctx.user.id,
+    action: "fleet.seeded",
+    resource: "agent",
+    metadata: { created: created.map((c) => c.name) },
+  });
+  revalidatePath("/app/agents");
+
+  return {
+    success: `Seeded ${created.length} specialist agent(s): ${created.map((c) => c.name).join(", ")}.`,
+  };
 }

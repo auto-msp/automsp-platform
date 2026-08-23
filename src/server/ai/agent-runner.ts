@@ -44,7 +44,8 @@ export interface StartAgentRunInput {
   organizationId: string;
   agentId: string;
   prompt: string;
-  source: "playground";
+  // playground (manual) | nightly-cycle (scheduled orchestrator pass)
+  source: "playground" | "nightly-cycle";
   createdBy: string | null;
 }
 

@@ -362,4 +362,5 @@ export const REPORT_TYPE_LABELS: Record<ReportType, string> = {
   automation_performance: "Automation performance",
   ai_cost: "AI cost",
   incident: "Incident review",
+  morning_brief: "Morning brief",
 };

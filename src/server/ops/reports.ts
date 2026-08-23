@@ -52,6 +52,8 @@ export const REPORT_PERIODS_DAYS: Record<ReportType, number> = {
   automation_performance: 30,
   ai_cost: 30,
   incident: 30,
+  // written directly by the nightly cycle; not a generated aggregate
+  morning_brief: 1,
 };
 
 const fmtUsd = (n: number) => `$${n.toFixed(2)}`;

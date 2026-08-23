@@ -3,6 +3,7 @@ import { store } from "@/server/db/store";
 import { notify } from "@/server/notifications";
 import { getCurrentDefinition, scheduleIntervalMs } from "./automations";
 import { startExecution } from "./engine/executor";
+import { maybeRunNightlyCycles } from "./ops/nightly-cycle";
 
 /**
  * In-process interval scheduler.
@@ -26,6 +27,7 @@ import { startExecution } from "./engine/executor";
  */
 
 const TICK_MS = 30_000;
+const NIGHTLY_CHECK_MS = 10 * 60_000; // cheap idempotent check, at most every 10 min
 const GLOBAL_KEY = "__automsp_scheduler__";
 
 /**
@@ -101,11 +103,23 @@ export function startScheduler(): void {
   const g = globalThis as Record<string, unknown>;
   if (g[GLOBAL_KEY]) return;
 
+  let lastNightlyCheck = 0;
   const handle = setInterval(() => {
     tick().catch((err) => {
       // Never let a tick kill the process; the error is recorded for the ops view.
       console.error("[scheduler] tick failed:", err instanceof Error ? err.message : err);
     });
+    // The nightly cycle is idempotent per org per day (checked against the
+    // most recent morning_brief), so a missed window heals on the next check.
+    if (Date.now() - lastNightlyCheck >= NIGHTLY_CHECK_MS) {
+      lastNightlyCheck = Date.now();
+      maybeRunNightlyCycles().catch((err) => {
+        console.error(
+          "[scheduler] nightly cycle failed:",
+          err instanceof Error ? err.message : err,
+        );
+      });
+    }
   }, TICK_MS);
   handle.unref();
   g[GLOBAL_KEY] = handle;
