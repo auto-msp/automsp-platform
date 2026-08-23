@@ -1,23 +1,93 @@
 export const site = {
   name: "AutoMSP",
   descriptor: "AI Automation Services",
-  domain: "automsp.us",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://automsp.us",
-  email: "hello@automsp.us",
-  tagline: "Build an AI operating layer without building an AI department.",
+  domain: "automsp.cloud",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://automsp.cloud",
+  email: "hello@automsp.cloud",
+  tagline: "An autonomous AI team that runs your business while you sleep.",
   description:
-    "AutoMSP designs, builds, integrates, and operates secure AI automation systems that work with your business, your data, and your people.",
+    "AutoMSP gives you a team of specialized AI agents that run marketing, outreach, support, ads, finance, and engineering on a nightly schedule — with human approval gates on every consequential action.",
 } as const;
 
-export const marketingNav = [
-  { label: "Capabilities", href: "/capabilities" },
-  { label: "Solutions", href: "/solutions" },
-  { label: "Industries", href: "/industries" },
-  { label: "Approach", href: "/approach" },
-  { label: "Results", href: "/results" },
-  { label: "Resources", href: "/resources" },
-  { label: "About", href: "/about" },
-] as const;
+export interface NavChild {
+  label: string;
+  href: string;
+  description: string;
+}
+
+export interface NavItem {
+  label: string;
+  /** fallback link for the top-level label itself (used when there are no children) */
+  href: string;
+  children?: NavChild[];
+}
+
+export const marketingNav: NavItem[] = [
+  {
+    label: "Platform",
+    href: "/agents",
+    children: [
+      {
+        label: "Agent Team",
+        href: "/agents",
+        description: "Nine specialist agents working as one org chart",
+      },
+      {
+        label: "How It Works",
+        href: "/how-it-works",
+        description: "The nightly cycle that executes while you sleep",
+      },
+      {
+        label: "Security",
+        href: "/security",
+        description: "Credential vault, approval gates, audit trails",
+      },
+    ],
+  },
+  {
+    label: "Solutions",
+    href: "/solutions",
+    children: [
+      {
+        label: "Solutions",
+        href: "/solutions",
+        description: "Back office, revenue ops, customer operations",
+      },
+      {
+        label: "Industries",
+        href: "/industries",
+        description: "Playbooks tuned to your sector's realities",
+      },
+      {
+        label: "Results",
+        href: "/results",
+        description: "Measured outcomes, reported with their basis",
+      },
+    ],
+  },
+  { label: "Pricing", href: "/pricing" },
+  {
+    label: "Resources",
+    href: "/resources",
+    children: [
+      {
+        label: "Resources",
+        href: "/resources",
+        description: "Guides on AI opportunity, ROI, and guardrails",
+      },
+      {
+        label: "Approach",
+        href: "/approach",
+        description: "How we design, deploy, and operate systems",
+      },
+      {
+        label: "Contact",
+        href: "/contact",
+        description: "Talk to the team behind the platform",
+      },
+    ],
+  },
+];
 
 export const footerNav = {
   services: [
