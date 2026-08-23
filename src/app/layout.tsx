@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/site";
+import { ScrollManager } from "@/components/scroll-manager";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,7 +41,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${instrument.variable}`}>
-      <body className="flex min-h-svh flex-col">{children}</body>
+      <body className="flex min-h-svh flex-col">
+        <ScrollManager />
+        {children}
+      </body>
     </html>
   );
 }

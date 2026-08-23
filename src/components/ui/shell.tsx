@@ -26,7 +26,8 @@ export function Section({
   id?: string;
 }) {
   return (
-    <section id={id} className={cn("py-16 sm:py-24", className)}>
+    // scroll-mt clears the sticky 68px header when jumped to via #anchor
+    <section id={id} className={cn("scroll-mt-[84px] py-16 sm:py-24", className)}>
       {children}
     </section>
   );
