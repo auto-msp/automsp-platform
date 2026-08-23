@@ -48,6 +48,29 @@ Operational notes:
 - The JSON dev store and a Postgres deployment share nothing; do not point a
   production instance at a database whose contents you do not control.
 
+### Supabase Postgres (recommended)
+
+1. Create a Supabase project, then create the `automsp_app` role and apply
+   `docs/rls-policies.sql` in the SQL editor (staging first).
+2. Set `DATABASE_URL` to the **session pooler** connection string (port 5432,
+   region pooler host), not the direct connection — serverless/elastic
+   deployments exhaust direct connections quickly:
+
+   ```
+   postgresql://automsp_app:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres
+   ```
+
+3. Run migrations from your machine or CI (which may use the direct
+   connection), never from the pooled app role:
+   `DATABASE_URL=<direct-url> pnpm prisma migrate deploy`.
+4. Supabase's shared pooler runs PgBouncer in transaction mode; the RLS
+   contract requires `SET LOCAL automsp.org_id` per transaction and
+   `DISCARD ALL` on return. Verify this against staging behaviour before
+   production — see §2 above.
+5. Health check: after deploy, `GET /api/health` must report
+   `"store": "postgres"`. If it reports `json-file`, `DATABASE_URL` did not
+   reach the process.
+
 ## 3. Build & run
 
 ```bash
