@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     "",
     "/capabilities",
+    "/aeo-services",
     "/solutions",
     "/industries",
     "/approach",
@@ -17,6 +18,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/contact",
     "/book-audit",
     "/security",
+    "/pricing",
+    "/how-it-works",
+    "/agents",
     "/privacy",
     "/terms",
   ].map((path) => ({

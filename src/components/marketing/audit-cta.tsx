@@ -10,13 +10,14 @@ export function AuditCta() {
           <div>
             <Eyebrow tone="dark">Book a free AI opportunity audit</Eyebrow>
             <h2 className="font-display mt-6 text-5xl leading-[1.05] tracking-tight sm:text-6xl">
-              Get your 3 prioritized AI opportunities.
+              Find the first AI workflow worth putting into production.
             </h2>
           </div>
           <div>
             <p className="text-[15px] leading-relaxed text-white/70">
-              A focused assessment for COOs, CIOs, CTOs, and operations leaders seeking practical
-              AI that drives measurable results.
+              Book a 30-minute AI opportunity audit. We will identify three practical
+              opportunities, prioritize them by likely impact and complexity, and recommend the
+              best next step. No obligation, no generic AI presentation.
             </p>
             <Link
               href="/book-audit"

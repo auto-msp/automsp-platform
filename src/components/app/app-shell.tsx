@@ -25,6 +25,7 @@ async function buildNav(ctx: SessionContext): Promise<NavSection[]> {
   if (can(ctx, "automations.view")) work.push({ href: "/app/automations", label: "Automations" });
   if (can(ctx, "agents.view")) work.push({ href: "/app/agents", label: "Agents" });
   if (can(ctx, "knowledge.view")) work.push({ href: "/app/knowledge", label: "Knowledge" });
+  if (can(ctx, "knowledge.view")) work.push({ href: "/app/growth", label: "Growth" });
   if (can(ctx, "evals.view")) work.push({ href: "/app/evals", label: "Evaluations" });
   if (can(ctx, "integrations.view")) work.push({ href: "/app/integrations", label: "Integrations" });
   sections.push({ title: "Work", items: work });

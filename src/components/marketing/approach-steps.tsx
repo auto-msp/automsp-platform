@@ -6,22 +6,26 @@ const steps = [
   {
     n: "01",
     title: "Discover",
-    body: "We identify high-impact AI opportunities aligned to your goals, constraints, and data reality.",
+    body: "We map the workflow, systems, data, bottlenecks, and business objective.",
+    deliverable: "Prioritized opportunity brief",
   },
   {
     n: "02",
-    title: "Prioritize",
-    body: "You receive three prioritized opportunities with impact and feasibility assessed for each.",
+    title: "Design",
+    body: "We define the architecture, integrations, success metrics, controls, and rollout plan.",
+    deliverable: "Technical and implementation blueprint",
   },
   {
     n: "03",
-    title: "Design & Build",
-    body: "We architect, integrate, test, and deploy secure, production-ready AI systems.",
+    title: "Deploy",
+    body: "We build, test, document, and release the system through a controlled production rollout.",
+    deliverable: "Working production system",
   },
   {
     n: "04",
-    title: "Operate & Optimize",
-    body: "We monitor, evaluate, and continuously improve every system we run for you.",
+    title: "Operate",
+    body: "We monitor outcomes, resolve failures, optimize performance, and expand successful use cases.",
+    deliverable: "Ongoing performance and improvement plan",
   },
 ] as const;
 
@@ -31,9 +35,9 @@ export function ApproachSteps() {
       <Shell>
         <div className="grid gap-10 lg:grid-cols-[1fr_2fr] lg:gap-20">
           <div>
-            <Eyebrow>Our approach</Eyebrow>
+            <Eyebrow>Process</Eyebrow>
             <h2 className="font-display mt-6 text-4xl leading-[1.08] tracking-tight text-ink sm:text-5xl">
-              Business impact first. Enterprise-grade by design.
+              A controlled path from opportunity to production.
             </h2>
             <Link
               href="/approach"
@@ -46,10 +50,15 @@ export function ApproachSteps() {
 
           <ol className="grid gap-px bg-fog sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s) => (
-              <li key={s.n} className="bg-paper p-6 sm:p-7">
+              <li key={s.n} className="flex flex-col bg-paper p-6 sm:p-7">
                 <span className="tnum text-xs font-medium tracking-[0.2em] text-mute">{s.n}</span>
                 <h3 className="mt-6 text-lg font-semibold tracking-tight text-ink">{s.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate">{s.body}</p>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-slate">{s.body}</p>
+                <p className="mt-4 border-t border-fog pt-3 text-[12px] leading-snug text-graphite">
+                  <span className="font-medium tracking-[0.08em] text-mute uppercase">Deliverable</span>
+                  <br />
+                  {s.deliverable}
+                </p>
               </li>
             ))}
           </ol>

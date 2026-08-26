@@ -1,54 +1,54 @@
-import { ArrowUpRight, AudioLines, Database, MonitorCog, Sparkles, Workflow } from "lucide-react";
+import { ArrowUpRight, Database, MonitorCog, Route, Sparkles, Workflow } from "lucide-react";
 import Link from "next/link";
 import { Eyebrow, Section, Shell } from "@/components/ui/shell";
 
 const capabilities = [
   {
+    id: "ai-opportunity-architecture",
+    icon: Route,
+    title: "AI Opportunity and Architecture",
+    description:
+      "Identify where AI can create measurable value before committing — workflow assessment, prioritization, feasibility, data-readiness, ROI roadmap.",
+  },
+  {
     id: "infrastructure",
     icon: Database,
-    title: "AI Infrastructure & RAG Systems",
+    title: "AI Infrastructure",
     description:
-      "Secure data foundations, retrieval systems, and model orchestration built for your enterprise.",
+      "A secure, observable foundation for production AI: cloud and model infrastructure, enterprise RAG, integrations, access controls, evaluation.",
   },
   {
     id: "workflow-automation",
     icon: Workflow,
     title: "Workflow Automation",
     description:
-      "Eliminate manual work and accelerate processes across your organization with human approval gates.",
+      "Automate repeatable work across your existing systems — documents, reporting, reconciliation, CRM workflows, approvals, exception routing.",
   },
   {
     id: "agents",
     icon: Sparkles,
-    title: "Production AI Agents",
+    title: "AI Agents",
     description:
-      "Task-specific agents that act within defined permissions and improve with human-in-the-loop controls.",
+      "Task-focused agents with defined tools, permissions, and escalation rules — support, knowledge assistants, revenue ops, research, voice.",
   },
   {
     id: "managed-operations",
     icon: MonitorCog,
     title: "Managed AI Operations",
     description:
-      "Monitoring, observability, security, and continuous optimization — operated for you.",
-  },
-  {
-    id: "voice-ai",
-    icon: AudioLines,
-    title: "Voice AI Systems",
-    description:
-      "Voice agents and assistants that improve customer and employee experiences at scale.",
+      "Keep production systems reliable as models, data, and requirements change — monitoring, optimization, incident response, new use cases.",
   },
 ] as const;
 
 export function CapabilitiesList() {
   return (
-    <Section id="capabilities">
+    <Section className="hairline-t">
       <Shell>
         <div className="grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
           <div>
-            <Eyebrow>End-to-end managed AI</Eyebrow>
+            <Eyebrow>Solutions</Eyebrow>
             <h2 className="font-display mt-6 text-4xl leading-[1.08] tracking-tight text-ink sm:text-5xl">
-              We design, run, and optimize AI systems that deliver real business outcomes.
+              One partner from opportunity discovery to ongoing operation.
             </h2>
             <Link
               href="/capabilities"

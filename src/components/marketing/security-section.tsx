@@ -1,13 +1,15 @@
-import { Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
+import Link from "next/link";
 import { Eyebrow, Section, Shell } from "@/components/ui/shell";
 
 const assurances = [
-  "Human-in-the-loop controls",
-  "Role-based access & governance",
-  "Audit logs & full traceability",
-  "Security-first architecture",
-  "Data residency options",
-  "Your data stays yours",
+  "Least-privilege tool and system access",
+  "Human approval for sensitive actions",
+  "Logging and workflow traceability",
+  "Configurable data-retention controls",
+  "Evaluation before production release",
+  "Cloud, private-network, and hybrid options",
+  "Documented escalation and recovery paths",
 ];
 
 export function SecuritySection() {
@@ -16,10 +18,14 @@ export function SecuritySection() {
       <Shell>
         <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_1fr_1fr] lg:gap-16">
           <div>
-            <Eyebrow tone="dark">Secure. Compliant. Controlled.</Eyebrow>
+            <Eyebrow tone="dark">Security</Eyebrow>
             <h2 className="font-display mt-6 text-4xl leading-[1.08] tracking-tight sm:text-5xl">
-              Enterprise AI with human-in-the-loop and full visibility.
+              Control is part of the architecture.
             </h2>
+            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/70">
+              AI systems should operate within defined boundaries. AutoMSP designs deployments
+              around your security, privacy, and operational requirements.
+            </p>
           </div>
 
           <ul className="space-y-4">
@@ -30,6 +36,15 @@ export function SecuritySection() {
               </li>
             ))}
           </ul>
+          <div className="lg:col-span-2">
+            <Link
+              href="/security"
+              className="inline-flex items-center gap-2 border-b border-white/30 pb-1 text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:border-paper"
+            >
+              Review our security approach
+              <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden />
+            </Link>
+          </div>
 
           {/* Governance diagram — dotted technical frame with lock */}
           <div aria-hidden className="relative hidden aspect-square lg:block">
