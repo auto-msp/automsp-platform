@@ -13,6 +13,8 @@ export const auditRequestSchema = z.object({
   aiUsage: z.string().trim().min(1, "Select your current AI usage"),
   processVolume: z.string().trim().max(200).optional().or(z.literal("")),
   outcomes: z.string().trim().max(2000).optional().or(z.literal("")),
+  // Honeypot: hidden from humans (CSS), irresistible to bots. Any value = bot.
+  websiteUrl: z.string().max(0, "Rejected").optional().or(z.literal("")),
 });
 
 export type AuditRequestInput = z.infer<typeof auditRequestSchema>;

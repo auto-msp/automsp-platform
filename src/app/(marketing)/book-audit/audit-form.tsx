@@ -204,6 +204,15 @@ export function AuditForm() {
         </Field>
       </div>
 
+      {/* Honeypot — visually hidden and removed from the tab/accessibility
+          tree; bots that autofill every field reveal themselves here. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+        <label>
+          Website
+          <input type="text" name="websiteUrl" tabIndex={-1} autoComplete="off" defaultValue="" />
+        </label>
+      </div>
+
       {formError ? (
         <p className="mt-6 border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
           {formError}
