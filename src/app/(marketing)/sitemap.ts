@@ -8,6 +8,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     "",
     "/capabilities",
+    "/ai-infrastructure",
+    "/ai-agents",
+    "/managed-ai-operations",
     "/aeo-services",
     "/solutions",
     "/industries",
