@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { Handshake, MessagesSquare, ShieldCheck, UserCheck } from "lucide-react";
 import { PageHeader } from "@/components/marketing/page-header";
 import { AuditCta } from "@/components/marketing/audit-cta";
 import { Section, Shell, Eyebrow } from "@/components/ui/shell";
@@ -61,6 +62,56 @@ export default function AboutPage() {
                 </ul>
               </div>
             </div>
+          </div>
+        </Shell>
+      </Section>
+
+      <Section className="bg-haze">
+        <Shell>
+          <div className="max-w-2xl">
+            <Eyebrow>The team</Eyebrow>
+            <h2 className="mt-3 font-display text-3xl text-ink sm:text-4xl">
+              A small, senior team. You work with the people who build.
+            </h2>
+            <p className="mt-5 text-[15px] leading-relaxed text-slate">
+              AutoMSP is founder-led and deliberately small. There is no account
+              management layer between you and the engineers architecting your
+              systems — the person you talk to in the first audit is the person
+              who ships your automations and answers for their operation.
+            </p>
+          </div>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                icon: UserCheck,
+                title: "Founder-led engagements",
+                body: "Every engagement starts with the founder in the room. Scope, priorities, and trade-offs are set by someone with authority to change them.",
+              },
+              {
+                icon: Handshake,
+                title: "Builders, not brokers",
+                body: "The team that scopes your systems is the team that writes, tests, and operates them. Nothing is outsourced downstream.",
+              },
+              {
+                icon: MessagesSquare,
+                title: "Direct line, always",
+                body: "One point of contact from audit through operation. When a system fails at 2 a.m., you reach an engineer, not a ticket queue.",
+              },
+              {
+                icon: ShieldCheck,
+                title: "Accountable by design",
+                body: "Small team, named responsibility. Every system we operate has a human owner whose job is knowing why it works.",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-2xl border border-ink/10 bg-white p-6"
+              >
+                <item.icon className="size-6 text-ink" strokeWidth={1.5} />
+                <h3 className="mt-4 font-display text-lg text-ink">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate">{item.body}</p>
+              </div>
+            ))}
           </div>
         </Shell>
       </Section>
