@@ -1,5 +1,7 @@
 import Script from "next/script";
 
+import { MixpanelAnalytics } from "@/components/mixpanel-analytics";
+
 /**
  * GA4 loader — inert until NEXT_PUBLIC_GA_MEASUREMENT_ID is set in the
  * environment. No measurement ID, no third-party script: the site ships
@@ -12,6 +14,7 @@ export function Analytics() {
 
   return (
     <>
+      <MixpanelAnalytics />
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
         strategy="afterInteractive"
