@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { Check } from "lucide-react";
 import { PageHeader } from "@/components/marketing/page-header";
 import { Section, Shell, Eyebrow } from "@/components/ui/shell";
 import { AuditForm } from "./audit-form";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Book a Free AI Opportunity Audit",
-  description:
-    "Tell us about your operations and receive three prioritized AI opportunities with impact and feasibility assessment — plus a high-level implementation path. Free, no obligations.",
-};
+  description: "Tell us about your operations and receive three prioritized AI opportunities with impact and feasibility assessment — plus a high-level implementation path. Free, no obligations.",
+  path: "/book-audit",
+});
 
 const youGet = [
   "3 prioritized AI opportunities, tailored to your business",

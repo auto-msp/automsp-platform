@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { AudioLines, Database, MonitorCog, Sparkles, Workflow, ArrowRight, Check } from "lucide-react";
 import { PageHeader } from "@/components/marketing/page-header";
 import { AuditCta } from "@/components/marketing/audit-cta";
 import { Section, Shell, Eyebrow } from "@/components/ui/shell";
 
-export const metadata: Metadata = {
-  title: "Capabilities",
-  description:
-    "AI infrastructure & RAG systems, workflow automation, production AI agents, managed AI operations, and voice AI — designed, built, and operated by AutoMSP.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Capabilities — AI Infrastructure, Automation & Agents",
+  description: "AI infrastructure & RAG systems, workflow automation, production AI agents, managed AI operations, and voice AI — designed, built, and operated by AutoMSP.",
+  path: "/capabilities",
+});
 
 const capabilities = [
   {

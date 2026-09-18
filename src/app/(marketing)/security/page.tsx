@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { ShieldCheck, KeyRound, FileSearch, Users } from "lucide-react";
 import { PageHeader } from "@/components/marketing/page-header";
 import { AuditCta } from "@/components/marketing/audit-cta";
 import { Section, Shell } from "@/components/ui/shell";
+import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Security",
-  description:
-    "How AutoMSP secures managed AI systems: tenant isolation, role-based access, encrypted secrets, audit logs, least-privilege integrations, and human approval for consequential actions.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Security — Controls, Data Handling & Deployment",
+  description: "How AutoMSP secures managed AI systems: tenant isolation, role-based access, encrypted secrets, audit logs, least-privilege integrations, and human approval for consequential actions.",
+  path: "/security",
+});
 
 const pillars = [
   {
@@ -89,7 +91,7 @@ export default function SecurityPage() {
               discussions as part of every engagement. Contact us to start the process.
             </p>
             <a
-              href="mailto:hello@automsp.us?subject=Security%20review%20request"
+              href={`mailto:${site.email}?subject=Security%20review%20request`}
               className="mt-5 inline-block text-[13px] font-medium tracking-[0.08em] text-ink uppercase underline-offset-4 hover:underline"
             >
               Request security documentation

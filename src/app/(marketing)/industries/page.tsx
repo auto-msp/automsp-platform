@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { PageHeader } from "@/components/marketing/page-header";
@@ -6,11 +7,11 @@ import { AuditCta } from "@/components/marketing/audit-cta";
 import { Section, Shell } from "@/components/ui/shell";
 import { industries } from "@/lib/content";
 
-export const metadata: Metadata = {
-  title: "Industries",
-  description:
-    "AutoMSP industry focus: manufacturing, logistics, professional services, healthcare operations, and financial services.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Industries — AI Automation by Sector",
+  description: "AutoMSP industry focus: manufacturing, logistics, professional services, healthcare operations, and financial services.",
+  path: "/industries",
+});
 
 export default function IndustriesPage() {
   return (

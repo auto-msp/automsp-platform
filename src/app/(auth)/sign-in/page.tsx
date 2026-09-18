@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
 import { SignInForm } from "./sign-in-form";
 
-export const metadata: Metadata = {
+// Utility page: it ranks for nothing useful and competes with the marketing
+// pages for brand queries. Kept crawlable (not disallowed in robots.txt) so the
+// directive is actually seen, with follow left on so the links out of it still
+// pass through.
+export const metadata: Metadata = pageMetadata({
   title: "Sign in",
   description: "Sign in to the AutoMSP client platform.",
-};
+  path: "/sign-in",
+  index: false,
+});
 
 export default function SignInPage() {
   return (

@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
+import { jsonLdGraph, pageMetadata, serviceSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
 import Link from "next/link";
 import { PageHeader } from "@/components/marketing/page-header";
 import { ButtonLink } from "@/components/ui/button";
 import { Eyebrow, Section, Shell } from "@/components/ui/shell";
 
-export const metadata: Metadata = {
-  title: {
-    absolute: "AEO Services — Answer Engine Optimization for B2B | AutoMSP",
-  },
-  description:
-    "AutoMSP's AEO services make your company citable by AI answer engines — ChatGPT, Perplexity, and Google AI Overviews. Structured content, schema, and GEO tracking. Book a free audit.",
-  alternates: { canonical: "/aeo-services" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "AEO Services — Answer Engine Optimization for B2B",
+  description: "AutoMSP's AEO services make your company citable by AI answer engines — ChatGPT, Perplexity, and Google AI Overviews. Structured content, schema, and GEO tracking. Book a free audit.",
+  path: "/aeo-services",
+});
 
 const faqs = [
   {
@@ -29,22 +28,27 @@ const faqs = [
 ];
 
 export default function AeoServicesPage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
+  const structuredData = jsonLdGraph(
+    serviceSchema({
+      name: "Answer Engine Optimization (AEO)",
+      description: "Make your company citable by AI answer engines — ChatGPT, Perplexity, and Google AI Overviews.",
+      path: "/aeo-services",
+      serviceType: "Answer engine optimization",
+    }),
+    // FAQPage stays: the questions and answers below are visible on the page.
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+  );
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={structuredData} />
       <PageHeader
         eyebrow="AEO services"
         title="Get cited by the answer engines your buyers ask."

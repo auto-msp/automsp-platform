@@ -5,8 +5,24 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://automsp.cloud",
   email: "hello@automsp.cloud",
   tagline: "An autonomous AI team that runs your business while you sleep.",
+  /**
+   * The site-wide fallback description, and the text used for the Organization
+   * entity in structured data.
+   *
+   * Previously this described the nine-agent fleet ("marketing, outreach,
+   * support, ads, finance, engineering on a nightly schedule"), which is the
+   * /agents page's positioning and contradicts every other surface: the homepage
+   * title, description, H1 and FAQ, the footer, the OG card and llms.txt all say
+   * "managed AI systems partner for mid-market companies". Two competing
+   * descriptions of the same Organization is the one thing an entity graph must
+   * not contain — search and answer engines resolve the company to whichever
+   * they read last. This now matches the rest of the site.
+   *
+   * Note this text is never rendered to users; it appears only in meta tags and
+   * JSON-LD. Visible copy is unchanged.
+   */
   description:
-    "AutoMSP gives you a team of specialized AI agents that run marketing, outreach, support, ads, finance, and engineering on a nightly schedule — with human approval gates on every consequential action.",
+    "AutoMSP designs, deploys, and operates AI infrastructure, workflow automations, and production-ready agents for mid-market companies.",
 } as const;
 
 export interface NavChild {
@@ -90,12 +106,18 @@ export const marketingNav: NavItem[] = [
 ];
 
 export const footerNav = {
+  // Where a dedicated page exists for a service, the footer points at that page
+  // rather than at a section anchor inside /capabilities. Anchor links fragment
+  // the signal for a topic across two URLs and left the dedicated pages with no
+  // inbound links at all; this is the site's main always-present link surface,
+  // so it is what makes every service page reachable within one hop.
   services: [
-    { label: "AI Infrastructure", href: "/capabilities#infrastructure" },
+    { label: "AI Infrastructure", href: "/ai-infrastructure" },
     { label: "Workflow Automation", href: "/capabilities#workflow-automation" },
-    { label: "AI Agents", href: "/capabilities#agents" },
-    { label: "Managed Operations", href: "/capabilities#managed-operations" },
+    { label: "AI Agents", href: "/ai-agents" },
+    { label: "Managed Operations", href: "/managed-ai-operations" },
     { label: "Voice AI", href: "/capabilities#voice-ai" },
+    { label: "AEO Services", href: "/aeo-services" },
   ],
   company: [
     { label: "About", href: "/about" },

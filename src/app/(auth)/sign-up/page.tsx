@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
 import { SignUpForm } from "./sign-up-form";
 
-export const metadata: Metadata = {
+// Utility page — see the note on the sign-in route.
+export const metadata: Metadata = pageMetadata({
   title: "Create your account",
   description: "Create an AutoMSP organization account.",
-};
+  path: "/sign-up",
+  index: false,
+});
 
 export default function SignUpPage() {
   return (

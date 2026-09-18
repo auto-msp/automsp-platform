@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/marketing/page-header";
 import { Section, Shell } from "@/components/ui/shell";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Terms of Service",
   description: "Terms governing use of the AutoMSP website and services.",
-};
+  path: "/terms",
+});
 
 const sections = [
   {

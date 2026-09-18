@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { jsonLdGraph, pageMetadata, serviceSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHeader } from "@/components/marketing/page-header";
 import { ButtonLink } from "@/components/ui/button";
 import { Eyebrow, Section, Shell } from "@/components/ui/shell";
 
-export const metadata: Metadata = {
-  title: { absolute: "Managed AI Operations — Monitoring, Evaluation & Maintenance | AutoMSP" },
-  description:
-    "AutoMSP keeps production AI systems reliable after launch: nightly operational cycles, morning briefs, monitoring, evaluation suites, and continuous optimization. Book a free audit.",
-  alternates: { canonical: "/managed-ai-operations" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Managed AI Operations — Monitoring & Maintenance",
+  description: "AutoMSP keeps production AI systems reliable after launch: nightly operational cycles, morning briefs, monitoring, evaluation suites, and continuous optimization. Book a free audit.",
+  path: "/managed-ai-operations",
+});
 
 const activities = [
   {
@@ -49,22 +50,27 @@ const faqs = [
 ];
 
 export default function ManagedAiOperationsPage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
+  const structuredData = jsonLdGraph(
+    serviceSchema({
+      name: "Managed AI Operations",
+      description: "Monitoring, evaluation, incident response, and continuous optimization for production AI systems.",
+      path: "/managed-ai-operations",
+      serviceType: "Managed AI operations",
+    }),
+    // FAQPage stays: the questions and answers below are visible on the page.
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+  );
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={structuredData} />
       <PageHeader
         eyebrow="Managed AI Operations"
         title="Deployment is day one. Operation is the product."

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { auditRequestSchema } from "@/lib/validation";
+import { site } from "@/lib/site";
 import { createAuditRequest } from "@/server/audit-requests";
 import { createAuditFromFunnel } from "@/server/commercial";
 import { checkRateLimitAuto, clientIp, rateLimitHeaders } from "@/server/rate-limit";
@@ -59,7 +60,7 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error("audit-request:create", err);
     return NextResponse.json(
-      { error: "We could not record your request. Please try again or email hello@automsp.us." },
+      { error: `We could not record your request. Please try again or email ${site.email}.` },
       { status: 500 },
     );
   }

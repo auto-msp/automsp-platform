@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { jsonLdGraph, pageMetadata, serviceSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHeader } from "@/components/marketing/page-header";
 import { ButtonLink } from "@/components/ui/button";
 import { Eyebrow, Section, Shell } from "@/components/ui/shell";
 
-export const metadata: Metadata = {
-  title: { absolute: "AI Infrastructure Services for Mid-Market Companies | AutoMSP" },
-  description:
-    "Secure model access, enterprise RAG, integrations, and cost-transparent AI infrastructure — designed, deployed, and operated by AutoMSP. Book a free audit.",
-  alternates: { canonical: "/ai-infrastructure" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "AI Infrastructure Services for Mid-Market Companies",
+  description: "Secure model access, enterprise RAG, integrations, and cost-transparent AI infrastructure — designed, deployed, and operated by AutoMSP. Book a free audit.",
+  path: "/ai-infrastructure",
+});
 
 const pillars = [
   {
@@ -45,22 +46,27 @@ const faqs = [
 ];
 
 export default function AiInfrastructurePage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
+  const structuredData = jsonLdGraph(
+    serviceSchema({
+      name: "AI Infrastructure",
+      description: "Secure model access, enterprise RAG, integrations, and cost-transparent AI infrastructure — designed, deployed, and operated by AutoMSP.",
+      path: "/ai-infrastructure",
+      serviceType: "AI infrastructure",
+    }),
+    // FAQPage stays: the questions and answers below are visible on the page.
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+  );
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={structuredData} />
       <PageHeader
         eyebrow="AI Infrastructure"
         title="A foundation for production AI that survives due diligence."

@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/marketing/page-header";
 import { AuditCta } from "@/components/marketing/audit-cta";
 import { Section, Shell, Eyebrow } from "@/components/ui/shell";
 
-export const metadata: Metadata = {
-  title: "Approach",
-  description:
-    "From opportunity to operational impact: Discover, Prioritize, Design & Build, Operate & Optimize. The AutoMSP delivery model for managed AI systems.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Approach — How We Deliver Managed AI Systems",
+  description: "From opportunity to operational impact: Discover, Prioritize, Design & Build, Operate & Optimize. The AutoMSP delivery model for managed AI systems.",
+  path: "/approach",
+});
 
 const phases = [
   {

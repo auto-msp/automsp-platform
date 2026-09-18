@@ -10,62 +10,67 @@ import { SecuritySection } from "@/components/marketing/security-section";
 import { PricingSection } from "@/components/marketing/pricing-section";
 import { FaqSection } from "@/components/marketing/faq-section";
 import { AuditCta } from "@/components/marketing/audit-cta";
+import { JsonLd } from "@/components/seo/json-ld";
+import { ORG_ID, absoluteUrl, jsonLdGraph, pageMetadata } from "@/lib/seo";
+import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: {
-    absolute: "Managed AI Infrastructure & Automation for Mid-Market Companies | AutoMSP",
-  },
+export const metadata: Metadata = pageMetadata({
+  title: "AI Automation & Managed AI Infrastructure",
   description:
     "AutoMSP designs, deploys, and operates AI infrastructure, workflow automations, and production-ready agents for mid-market companies. Book an AI opportunity audit.",
-};
+  path: "/",
+});
+
+/**
+ * Homepage entity. The Organization node itself lives in the marketing layout's
+ * site-wide graph — declaring it twice would give crawlers two competing
+ * descriptions of the same @id, so this node only adds what is specific to the
+ * homepage: the professional-service offering and its published price points.
+ */
+const homeService = jsonLdGraph({
+  "@type": "ProfessionalService",
+  "@id": `${absoluteUrl("/")}#service`,
+  name: site.name,
+  url: site.url,
+  description: site.description,
+  serviceType: [
+    "AI infrastructure",
+    "Workflow automation",
+    "AI agent development",
+    "Managed AI operations",
+    "Answer engine optimization (AEO)",
+  ],
+  areaServed: { "@type": "Country", name: "United States" },
+  parentOrganization: { "@id": ORG_ID },
+  makesOffer: [
+    {
+      "@type": "Offer",
+      name: "AI Opportunity Audit",
+      description: "Free discovery session with three prioritized opportunities.",
+      price: "0",
+      priceCurrency: "USD",
+    },
+    {
+      "@type": "Offer",
+      name: "AI Automation Pilot",
+      description: "One production workflow, starting at $7,500.",
+      price: "7500",
+      priceCurrency: "USD",
+    },
+    {
+      "@type": "Offer",
+      name: "Managed AI Infrastructure",
+      description: "Ongoing managed capability, starting at $12,000 per month.",
+      price: "12000",
+      priceCurrency: "USD",
+    },
+  ],
+});
 
 export default function HomePage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Organization",
-        "@id": "https://automsp.cloud/#organization",
-        name: "AutoMSP",
-        url: "https://automsp.cloud",
-        description:
-          "Managed AI systems partner for mid-market companies. AutoMSP designs, deploys, and operates AI infrastructure, workflow automations, and production-ready agents.",
-      },
-      {
-        "@type": "ProfessionalService",
-        "@id": "https://automsp.cloud/#service",
-        name: "AutoMSP",
-        url: "https://automsp.cloud",
-        serviceType: [
-          "AI infrastructure",
-          "Workflow automation",
-          "AI agent development",
-          "Managed AI operations",
-          "Answer engine optimization (AEO)",
-        ],
-        areaServed: "North America",
-        parentOrganization: { "@id": "https://automsp.cloud/#organization" },
-        makesOffer: [
-          { "@type": "Offer", name: "Free AI Opportunity Audit", price: "0", priceCurrency: "USD" },
-          { "@type": "Offer", name: "AI Automation Pilot", price: "7500", priceCurrency: "USD" },
-          {
-            "@type": "Offer",
-            name: "Managed AI Infrastructure",
-            price: "12000",
-            priceCurrency: "USD",
-            unitText: "MONTH",
-          },
-        ],
-      },
-    ],
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={homeService} />
       <Hero />
       <TrustStrip />
       <ProblemSection />

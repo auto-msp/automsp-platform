@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { PageHeader } from "@/components/marketing/page-header";
 import { Section, Shell, Eyebrow } from "@/components/ui/shell";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Contact",
+export const metadata: Metadata = pageMetadata({
+  title: "Contact AutoMSP",
   description: "Talk to AutoMSP about managed AI systems for your business.",
-};
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

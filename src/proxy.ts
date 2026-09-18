@@ -103,6 +103,15 @@ export function proxy(request: NextRequest) {
     headers["Strict-Transport-Security"] = "max-age=63072000; includeSubDomains; preload";
   }
 
+  // Crawler policy for the private half of the app. The /app layout already
+  // sets a robots meta tag, but a meta tag only exists in HTML bodies that
+  // actually get rendered — an unauthenticated request to /app/* is redirected
+  // before any markup is produced, and /api/* never returns HTML at all. The
+  // header covers every response shape and survives a rendering regression.
+  if (isDynamicRoute(request.nextUrl.pathname)) {
+    headers["X-Robots-Tag"] = "noindex, nofollow, noarchive";
+  }
+
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   for (const [key, value] of Object.entries(headers)) {
     response.headers.set(key, value);

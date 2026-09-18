@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/lib/site";
+import { ORIGIN, canonicalUrl } from "@/lib/seo";
 
 /**
  * Crawler policy tuned for both classic SEO and answer-engine visibility
@@ -7,6 +7,11 @@ import { site } from "@/lib/site";
  * aggressive training-only scrapers are not. Note: when the zone is proxied
  * through Cloudflare, its "AI Audit" settings can override this file at the
  * edge — keep both in sync.
+ *
+ * `/sign-in` and `/sign-up` are deliberately NOT disallowed. A Disallow rule
+ * stops a crawler from ever fetching the page, which means it never reads the
+ * `noindex` those routes set — the URL can still be indexed from external
+ * links. Blocking and noindexing are opposites, not belt and braces.
  */
 export default function robots(): MetadataRoute.Robots {
   const allow = ["/"];
@@ -40,7 +45,7 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "CCBot", disallow: "/" },
       { userAgent: "Bytespider", disallow: "/" },
     ],
-    sitemap: `${site.url}/sitemap.xml`,
-    host: site.url,
+    sitemap: canonicalUrl("/sitemap.xml"),
+    host: ORIGIN,
   };
 }

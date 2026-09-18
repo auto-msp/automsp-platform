@@ -1,14 +1,32 @@
 import { ArrowUpRight, Database, MonitorCog, Route, Sparkles, Workflow } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { Eyebrow, Section, Shell } from "@/components/ui/shell";
 
-const capabilities = [
+type Capability = {
+  id: string;
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  /**
+   * Where this card links. Defaults to the matching section on /capabilities.
+   * Set it explicitly only where the capability has no section on that page.
+   */
+  href?: string;
+};
+
+const capabilities: Capability[] = [
   {
     id: "ai-opportunity-architecture",
     icon: Route,
     title: "AI Opportunity and Architecture",
     description:
       "Identify where AI can create measurable value before committing — workflow assessment, prioritization, feasibility, data-readiness, ROI roadmap.",
+    // /capabilities documents the build-and-operate capabilities and has no
+    // section for the discovery phase; this one already has a home on /approach,
+    // which walks through Discover → Prioritize. Pointing at a fragment that
+    // does not exist sent visitors to the top of a page about something else.
+    href: "/approach",
   },
   {
     id: "infrastructure",
@@ -38,7 +56,7 @@ const capabilities = [
     description:
       "Keep production systems reliable as models, data, and requirements change — monitoring, optimization, incident response, new use cases.",
   },
-] as const;
+];
 
 export function CapabilitiesList() {
   return (
@@ -63,7 +81,7 @@ export function CapabilitiesList() {
             {capabilities.map((c) => (
               <li key={c.id}>
                 <Link
-                  href={`/capabilities#${c.id}`}
+                  href={c.href ?? `/capabilities#${c.id}`}
                   className="group flex items-center gap-5 py-6 transition-colors hover:bg-surface/70 sm:gap-8 sm:py-7"
                 >
                   <c.icon className="size-6 shrink-0 text-graphite" strokeWidth={1.4} aria-hidden />

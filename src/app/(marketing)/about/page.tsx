@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import { Handshake, MessagesSquare, ShieldCheck, UserCheck } from "lucide-react";
 import { PageHeader } from "@/components/marketing/page-header";
 import { AuditCta } from "@/components/marketing/audit-cta";
 import { Section, Shell, Eyebrow } from "@/components/ui/shell";
 
-export const metadata: Metadata = {
-  title: "About",
-  description:
-    "AutoMSP is a Managed AI Systems Partner. We design, build, integrate, operate, and continuously improve AI-powered business systems.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "About — Managed AI Systems Partner",
+  description: "AutoMSP is a Managed AI Systems Partner. We design, build, integrate, operate, and continuously improve AI-powered business systems.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (
@@ -47,7 +48,9 @@ export default function AboutPage() {
             <div className="flex flex-col items-start gap-6">
               <Image
                 src="/brand/automsp-logo.png"
-                alt="AutoMSP company logo"
+                // Decorative: the "What the rings represent" list directly below
+                // is this graphic's complete text equivalent.
+                alt=""
                 width={180}
                 height={180}
                 className="size-44 rounded-full"

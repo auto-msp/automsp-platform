@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { Check } from "lucide-react";
 import { PageHeader } from "@/components/marketing/page-header";
 import { ButtonLink } from "@/components/ui/button";
 import { Eyebrow, Section, Shell } from "@/components/ui/shell";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = {
-  title: "Pricing",
-  description:
-    "Engagement models for managed AI systems: a free AI opportunity audit, fixed-fee automation pilots from $7,500, and managed AI infrastructure from $12,000/month.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Pricing — Audit, Pilot & Managed Engagement Models",
+  description: "Engagement models for managed AI systems: a free AI opportunity audit, fixed-fee automation pilots from $7,500, and managed AI infrastructure from $12,000/month.",
+  path: "/pricing",
+});
 
 const tiers = [
   {

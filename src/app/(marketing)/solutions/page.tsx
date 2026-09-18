@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { PageHeader } from "@/components/marketing/page-header";
 import { AuditCta } from "@/components/marketing/audit-cta";
 import { Section, Shell } from "@/components/ui/shell";
 
-export const metadata: Metadata = {
-  title: "Solutions",
-  description:
-    "AutoMSP solution patterns: back-office automation, customer operations, revenue operations, document intelligence, and operational knowledge systems.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Solutions — AI Automation by Business Function",
+  description: "AutoMSP solution patterns: back-office automation, customer operations, revenue operations, and operational knowledge systems.",
+  path: "/solutions",
+});
 
 const solutions = [
   {

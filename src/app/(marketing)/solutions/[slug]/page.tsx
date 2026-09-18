@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, ArrowLeft } from "lucide-react";
 import { PageHeader } from "@/components/marketing/page-header";
 import { AuditCta } from "@/components/marketing/audit-cta";
 import { Section, Shell, Eyebrow } from "@/components/ui/shell";
+import { JsonLd } from "@/components/seo/json-ld";
 import { getSolution, solutions } from "@/lib/content";
+import { breadcrumbSchema, jsonLdGraph, pageMetadata, serviceSchema } from "@/lib/seo";
 
 export function generateStaticParams() {
   return solutions.map((s) => ({ slug: s.slug }));
@@ -18,7 +21,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const solution = getSolution(slug);
   if (!solution) return {};
-  return { title: solution.title, description: solution.summary };
+  return pageMetadata({
+    title: solution.title,
+    description: solution.summary,
+    path: `/solutions/${solution.slug}`,
+  });
 }
 
 export default async function SolutionPage({
@@ -32,10 +39,32 @@ export default async function SolutionPage({
 
   return (
     <>
+      <JsonLd
+        data={jsonLdGraph(
+          serviceSchema({
+            name: solution.title,
+            description: solution.summary,
+            path: `/solutions/${solution.slug}`,
+            serviceType: solution.title,
+          }),
+          breadcrumbSchema([
+            ["Home", "/"],
+            ["Solutions", "/solutions"],
+            [solution.title, `/solutions/${solution.slug}`],
+          ]),
+        )}
+      />
       <PageHeader eyebrow="Solution" title={solution.title} lede={solution.summary} />
 
       <Section>
         <Shell>
+          <Link
+            href="/solutions"
+            className="mb-10 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.08em] text-slate uppercase hover:text-ink"
+          >
+            <ArrowLeft className="size-4" strokeWidth={1.75} aria-hidden />
+            All solutions
+          </Link>
           <div className="grid gap-12 lg:grid-cols-3 lg:gap-16">
             <div>
               <Eyebrow>The problem</Eyebrow>
@@ -76,7 +105,6 @@ export default async function SolutionPage({
                     0{i + 1}
                   </span>
                   <span className="text-sm text-white/90">{step}</span>
-                  {i === arr.length - 2 ? null : null}
                 </div>
                 {i < arr.length - 1 ? (
                   <div className="flex justify-center py-1" aria-hidden>
@@ -86,6 +114,22 @@ export default async function SolutionPage({
               </div>
             ))}
           </div>
+          {/* Related pattern — keeps the solution cluster connected instead of
+              each page dead-ending into the CTA. */}
+          <p className="mt-10 text-sm text-white/70">
+            Related:{" "}
+            <Link href="/industries" className="underline underline-offset-4 hover:text-paper">
+              industry playbooks
+            </Link>{" "}
+            and{" "}
+            <Link
+              href="/how-it-works"
+              className="underline underline-offset-4 hover:text-paper"
+            >
+              how the nightly cycle runs
+            </Link>
+            .
+          </p>
         </Shell>
       </Section>
 

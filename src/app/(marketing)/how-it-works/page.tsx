@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/marketing/page-header";
 import { AuditCta } from "@/components/marketing/audit-cta";
 import { Eyebrow, Section, Shell } from "@/components/ui/shell";
 
-export const metadata: Metadata = {
-  title: "How It Works — The Nightly Cycle",
-  description:
-    "Agents wake on their own, check your business, pick the highest-leverage move, execute it behind approval gates, and email you a structured report every morning.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "How It Works — The Nightly Agent Cycle",
+  description: "Agents wake on their own, check your business, pick the highest-leverage move, execute it behind approval gates, and email you a structured report every morning.",
+  path: "/how-it-works",
+});
 
 const steps = [
   {

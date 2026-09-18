@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { jsonLdGraph, pageMetadata, serviceSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHeader } from "@/components/marketing/page-header";
 import { ButtonLink } from "@/components/ui/button";
 import { Eyebrow, Section, Shell } from "@/components/ui/shell";
 
-export const metadata: Metadata = {
-  title: { absolute: "Production AI Agents With Human Approval Controls | AutoMSP" },
-  description:
-    "Task-focused AI agents with defined tools, permissions, and escalation rules — deployed, monitored, and operated by AutoMSP for mid-market companies. Book a free audit.",
-  alternates: { canonical: "/ai-agents" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Production AI Agents With Human Approval Controls",
+  description: "Task-focused AI agents with defined tools, permissions, and escalation rules — deployed, monitored, and operated by AutoMSP for mid-market companies. Book a free audit.",
+  path: "/ai-agents",
+});
 
 const agentRoles = [
   {
@@ -45,22 +46,27 @@ const faqs = [
 ];
 
 export default function AiAgentsPage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
+  const structuredData = jsonLdGraph(
+    serviceSchema({
+      name: "Production AI Agents",
+      description: "Task-focused AI agents with defined tools, permissions, and escalation rules — deployed, monitored, and operated by AutoMSP.",
+      path: "/ai-agents",
+      serviceType: "AI agent development",
+    }),
+    // FAQPage stays: the questions and answers below are visible on the page.
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+  );
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={structuredData} />
       <PageHeader
         eyebrow="AI Agents"
         title="Agents that act inside boundaries you set."

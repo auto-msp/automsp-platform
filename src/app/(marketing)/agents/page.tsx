@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/marketing/page-header";
 import { AuditCta } from "@/components/marketing/audit-cta";
 import { Eyebrow, Section, Shell } from "@/components/ui/shell";
 
-export const metadata: Metadata = {
-  title: "The Agent Team",
-  description:
-    "Nine specialized AI agents that run your business operations on a schedule — research, outreach, social, support, ads, finance, planning, engineering, and orchestration.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "The AutoMSP Agent Team — Nine Specialist AI Agents",
+  description: "Nine specialized AI agents that run your business operations on a schedule — research, outreach, social, support, ads, finance, planning, engineering, and orchestration.",
+  path: "/agents",
+});
 
 const agents = [
   {

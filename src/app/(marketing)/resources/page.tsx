@@ -1,41 +1,16 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { PageHeader } from "@/components/marketing/page-header";
 import { AuditCta } from "@/components/marketing/audit-cta";
 import { Section, Shell, Eyebrow } from "@/components/ui/shell";
+import { articles } from "@/lib/content";
 
-export const metadata: Metadata = {
-  title: "Resources",
-  description:
-    "Guides and playbooks for evaluating and operating AI automation in mid-market businesses.",
-};
-
-const resources = [
-  {
-    slug: "ai-opportunity-guide",
-    type: "Guide",
-    title: "How to Identify AI Opportunities Worth Building",
-    description:
-      "A practical framework for scoring automation candidates on impact, frequency, feasibility, and strategic fit — the same model we use in our audits.",
-    readTime: "12 min read",
-  },
-  {
-    slug: "human-in-the-loop",
-    type: "Playbook",
-    title: "Human-in-the-Loop: Designing Approval Gates That Work",
-    description:
-      "Where to place approval gates, how to route exceptions, and how to keep people in control without creating bottlenecks.",
-    readTime: "9 min read",
-  },
-  {
-    slug: "measuring-ai-roi",
-    type: "Guide",
-    title: "Measuring AI Automation ROI Without Fooling Yourself",
-    description:
-      "Calculation methods for hours saved, cost avoided, and cycle-time reduction — with the caveats that keep numbers honest.",
-    readTime: "10 min read",
-  },
-] as const;
+export const metadata: Metadata = pageMetadata({
+  title: "Resources — AI Automation Guides & Playbooks",
+  description: "Guides and playbooks for evaluating and operating AI automation in mid-market businesses.",
+  path: "/resources",
+});
 
 export default function ResourcesPage() {
   return (
@@ -49,7 +24,7 @@ export default function ResourcesPage() {
       <Section>
         <Shell>
           <ul className="divide-y divide-fog border-y border-fog">
-            {resources.map((r, i) => (
+            {articles.map((r, i) => (
               <li key={r.slug}>
                 <Link
                   href={`/resources/${r.slug}`}

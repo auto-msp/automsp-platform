@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/marketing/page-header";
 import { AuditCta } from "@/components/marketing/audit-cta";
 import { Section, Shell, Eyebrow } from "@/components/ui/shell";
 import { Kpi } from "@/components/ui/kpi";
 
-export const metadata: Metadata = {
-  title: "Results",
-  description:
-    "How AutoMSP measures the business impact of managed AI systems: time saved, cycle-time reduction, cost avoidance, and reliability — with a clear calculation method for every metric.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Results — Measuring AI Automation Impact",
+  description: "How AutoMSP measures the business impact of managed AI systems: time saved, cycle-time reduction, cost avoidance, and reliability — with a clear calculation method for every metric.",
+  path: "/results",
+});
 
 const benchmarks = [
   { value: "30–50%", label: "Process cycle-time reduction", method: "Median handling time before vs. after automation, measured over 4+ weeks of production executions." },
