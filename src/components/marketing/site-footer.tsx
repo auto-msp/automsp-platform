@@ -5,7 +5,14 @@ import { footerNav, site } from "@/lib/site";
 function Column({ title, items }: { title: string; items: readonly { label: string; href: string }[] }) {
   return (
     <div>
-      <h3 className="text-[11px] font-medium uppercase tracking-[0.18em] text-mute">{title}</h3>
+      {/*
+        h2, not h3. The footer is its own landmark and these columns are its
+        top-level sections, so h2 keeps the outline honest on pages that have no
+        h2 content of their own (e.g. /book-audit, whose h1 runs straight into
+        the footer) without skipping a level. Styling is class-driven, so the
+        element change is invisible.
+      */}
+      <h2 className="text-[11px] font-medium uppercase tracking-[0.18em] text-mute">{title}</h2>
       <ul className="mt-5 space-y-3">
         {items.map((item) => (
           <li key={item.label}>
@@ -27,7 +34,9 @@ export function SiteFooter() {
           <div>
             <Image
               src="/brand/automsp-logo.png"
-              alt="AutoMSP logo"
+              // Decorative: the company name appears as text immediately below,
+              // and "logo" adds nothing for a screen reader.
+              alt=""
               width={64}
               height={64}
               className="size-14 rounded-full"

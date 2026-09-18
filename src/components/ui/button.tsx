@@ -5,8 +5,20 @@ import { cn } from "@/lib/utils";
 type Variant = "primary" | "secondary" | "ghost" | "inverse";
 type Size = "md" | "lg" | "sm";
 
+/**
+ * No `whitespace-nowrap` here. Combined with the long primary labels
+ * ("Book a free AI opportunity audit" is ~366px at this size), a fixed-height
+ * no-wrap button is wider than a 375px phone's content column — it pushed the
+ * hero grid column to 386px and widened the layout viewport on every viewport
+ * below ~400px. Labels still sit on one line wherever they fit; they simply
+ * wrap instead of overflowing when they don't.
+ *
+ * `max-w-full` bounds the button by its container, and the sizes below use
+ * `min-h-*` rather than `h-*` so a wrapped label grows the button instead of
+ * being clipped by a fixed height.
+ */
 const base =
-  "group/btn inline-flex items-center justify-center gap-2.5 whitespace-nowrap font-medium transition-colors duration-200 select-none";
+  "group/btn inline-flex max-w-full items-center justify-center gap-2.5 text-center font-medium transition-colors duration-200 select-none";
 
 const variants: Record<Variant, string> = {
   // Swiss primary: solid ink block, squared corners, tracked label
@@ -18,8 +30,9 @@ const variants: Record<Variant, string> = {
 };
 
 const sizes: Record<Size, string> = {
-  md: "h-11 px-6",
-  lg: "h-[52px] px-8",
+  md: "min-h-11 px-6",
+  // Tighter gutters on phones so the long CTA labels wrap less often.
+  lg: "min-h-[52px] px-6 sm:px-8",
   sm: "h-9 px-4 text-xs",
 };
 
