@@ -4,6 +4,18 @@ import { store } from "@/server/db/store";
 import type { NotificationRecord } from "@/server/db/types";
 
 /**
+ * Notification links are rendered as <Link href>. Agent tools and workflow
+ * steps can supply them, so accept only same-origin relative paths — never
+ * javascript:, data:, or protocol-relative (//host) URLs.
+ */
+export function safeNotificationHref(href: string | null | undefined): string | null {
+  if (!href) return null;
+  const value = href.trim();
+  if (!value.startsWith("/") || value.startsWith("//") || value.startsWith("/\\")) return null;
+  return value;
+}
+
+/**
  * In-app notifications. Email delivery is intentionally not attempted until a
  * mail provider is configured — nothing is simulated.
  *
@@ -25,7 +37,7 @@ export async function notify(entry: {
     kind: entry.kind,
     title: entry.title,
     body: entry.body,
-    href: entry.href ?? null,
+    href: safeNotificationHref(entry.href),
     readAt: null,
     createdAt: new Date().toISOString(),
   };

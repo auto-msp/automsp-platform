@@ -15,6 +15,11 @@ import { scryptSync, randomBytes } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync, renameSync } from "node:fs";
 import { join } from "node:path";
 
+if (process.env.NODE_ENV === "production") {
+  console.error("seed-operator is for local development only; refusing to run with NODE_ENV=production.");
+  process.exit(1);
+}
+
 const STORE_DIR = join(process.cwd(), ".data", "store");
 const PASSWORD = process.env.OPERATOR_PASSWORD || "demo12345a";
 
