@@ -58,7 +58,9 @@ export async function POST(req: Request) {
     await createAuditRequest(parsed.data);
     return NextResponse.json({ ok: true, id: audit.id }, { status: 201 });
   } catch (err) {
-    console.error("audit-request:create", err);
+    // Log the error class only: driver/ORM errors can echo the submitted row
+    // (name, email, phone), which must not reach logs.
+    console.error("audit-request:create", err instanceof Error ? err.name : "unknown error");
     return NextResponse.json(
       { error: `We could not record your request. Please try again or email ${site.email}.` },
       { status: 500 },
