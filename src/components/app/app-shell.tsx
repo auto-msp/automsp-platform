@@ -4,6 +4,8 @@ import { can, type SessionContext } from "@/server/auth/session";
 import { store } from "@/server/db/store";
 import { unreadCount } from "@/server/notifications";
 import { formatRole } from "@/server/roles";
+import { ArrowUpRight, Bell, LogOut } from "lucide-react";
+import { MobileNav } from "./mobile-nav";
 import { NavLink } from "./nav-link";
 
 interface NavItem {
@@ -74,95 +76,92 @@ export async function AppShell({
 
   return (
     <div className="flex min-h-svh bg-paper">
-      <aside className="sticky top-0 flex h-svh w-60 shrink-0 flex-col border-r border-fog">
-        <div className="flex h-14 items-center gap-2 border-b border-fog px-5">
+      <a
+        href="#main"
+        className="sr-only z-[60] rounded-(--radius-control) bg-ink px-4 py-3 text-sm font-medium text-paper focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+      >
+        Skip to content
+      </a>
+
+      <aside className="sticky top-0 hidden h-svh w-nav shrink-0 flex-col border-r border-fog lg:flex">
+        <div className="flex h-(--spacing-bar) items-center gap-2 border-b border-fog px-5">
           <Link href="/app/dashboard" className="text-[15px] font-semibold tracking-tight text-ink">
             AutoMSP
           </Link>
-          <span className="border border-fog bg-haze px-1.5 py-px text-[10px] font-medium tracking-[0.1em] text-slate uppercase">
+          <span className="rounded-(--radius-chip) border border-fog bg-haze px-1.5 py-px text-xs font-medium text-slate">
             Platform
           </span>
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-2 py-4">
+        <nav aria-label="Main" className="flex-1 overflow-y-auto py-3">
           {sections.map((section) => (
-            <div key={section.title} className="mb-5">
-              <p className="px-3 pb-1.5 text-[11px] font-medium tracking-[0.12em] text-mute uppercase">
-                {section.title}
-              </p>
-              <div className="space-y-px">
-                {section.items.map((item) => (
-                  <NavLink key={item.href} href={item.href} label={item.label} badge={item.badge} />
-                ))}
-              </div>
+            <div key={section.title} className="mb-4">
+              <p className="px-4 pb-1 text-xs font-semibold text-mute">{section.title}</p>
+              {section.items.map((item) => (
+                <NavLink key={item.href} href={item.href} label={item.label} badge={item.badge} />
+              ))}
             </div>
           ))}
         </nav>
 
         <div className="border-t border-fog p-3">
-          <p className="px-3 pb-2 text-[11px] leading-relaxed text-mute">
+          <p className="px-1 pb-2 text-xs leading-relaxed text-mute">
             Development environment — local data store. External integrations are not configured.
           </p>
           <Link
             href="/"
-            className="block px-3 py-1.5 text-[13px] text-slate transition-colors hover:text-ink"
+            className="flex min-h-10 items-center gap-1.5 px-1 text-[13px] text-slate transition-colors hover:text-ink pointer-coarse:min-h-11"
           >
-            ← automsp.us
+            automsp.us
+            <ArrowUpRight aria-hidden className="size-3.5" strokeWidth={1.75} />
           </Link>
         </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-fog bg-paper px-6">
-          <div className="flex min-w-0 items-center gap-3">
-            <span className="truncate text-sm font-medium text-ink">{ctx.organization.name}</span>
-            <span className="border border-warn/40 bg-warn/10 px-1.5 py-px text-[10px] font-medium tracking-[0.1em] text-warn uppercase">
+        <header className="sticky top-0 z-30 flex h-(--spacing-bar) items-center justify-between gap-2 border-b border-fog bg-paper px-4 md:px-6">
+          <div className="flex min-w-0 items-center gap-2 md:gap-3">
+            <MobileNav sections={sections} />
+            <span className="truncate text-sm font-semibold text-ink">{ctx.organization.name}</span>
+            <span className="shrink-0 rounded-(--radius-chip) border border-warn/40 bg-warn-soft px-1.5 py-px text-xs font-medium text-warn">
               Development
             </span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex shrink-0 items-center gap-1 md:gap-3">
             <Link
               href="/app/notifications"
               aria-label={unread > 0 ? `${unread} unread notifications` : "Notifications"}
-              className="relative flex h-8 w-8 items-center justify-center border border-fog text-slate transition-colors hover:border-ink hover:text-ink"
+              className="relative flex size-11 items-center justify-center rounded-(--radius-control) text-slate transition-colors hover:bg-haze hover:text-ink"
             >
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden
-              >
-                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-              </svg>
+              <Bell aria-hidden className="size-5" strokeWidth={1.75} />
               {unread > 0 ? (
-                <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center bg-accent px-1 text-[10px] font-semibold text-paper">
+                <span
+                  aria-hidden
+                  className="tnum absolute top-1.5 right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[11px] font-semibold text-surface"
+                >
                   {unread > 9 ? "9+" : unread}
                 </span>
               ) : null}
             </Link>
-            <div className="text-right">
-              <p className="text-[13px] font-medium text-ink">{ctx.user.name}</p>
-              <p className="text-[11px] text-mute">{formatRole(ctx.membership.role)}</p>
+            <div className="hidden text-right md:block">
+              <p className="text-[13px] leading-tight font-medium text-ink">{ctx.user.name}</p>
+              <p className="text-xs text-mute">{formatRole(ctx.membership.role)}</p>
             </div>
             <form action={signOut}>
               <button
                 type="submit"
-                className="border border-fog px-3 py-1.5 text-[13px] text-slate transition-colors hover:border-ink hover:text-ink"
+                aria-label="Sign out"
+                className="flex min-h-11 items-center gap-2 rounded-(--radius-control) border border-line px-3 text-[13px] font-medium text-graphite transition-colors hover:border-ink hover:text-ink"
               >
-                Sign out
+                <LogOut aria-hidden className="size-4" strokeWidth={1.75} />
+                <span className="hidden sm:inline">Sign out</span>
               </button>
             </form>
           </div>
         </header>
 
-        <main className="flex-1 px-6 py-8">
-          <div className="mx-auto w-full max-w-5xl">{children}</div>
+        <main id="main" tabIndex={-1} className="flex-1 px-4 py-6 outline-none md:px-6 md:py-8 xl:px-8">
+          <div className="mx-auto w-full max-w-[80rem]">{children}</div>
         </main>
       </div>
     </div>
