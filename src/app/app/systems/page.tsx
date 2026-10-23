@@ -37,7 +37,7 @@ export default async function SystemsPage() {
         {canManage ? (
           <Link
             href="/app/systems/new"
-            className="inline-flex h-10 items-center bg-ink px-5 text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite"
+            className="btn btn-primary"
           >
             New system
           </Link>
@@ -51,24 +51,24 @@ export default async function SystemsPage() {
           action={canManage ? { href: "/app/systems/new", label: "Create a system" } : undefined}
         />
       ) : (
-        <div className="overflow-hidden border border-fog">
-          <table className="w-full text-sm">
+        <div className="table-wrap">
+          <table className="app-table">
             <thead>
-              <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5">System</th>
-                <th className="px-4 py-2.5">Status</th>
-                <th className="px-4 py-2.5">Business outcome</th>
-                <th className="px-4 py-2.5">Automations</th>
-                <th className="px-4 py-2.5">Created</th>
+              <tr>
+                <th>System</th>
+                <th>Status</th>
+                <th>Business outcome</th>
+                <th>Automations</th>
+                <th>Created</th>
               </tr>
             </thead>
             <tbody>
               {systems.map((system) => (
-                <tr key={system.id} className="border-b border-fog last:border-0">
+                <tr key={system.id}>
                   <td className="px-4 py-3">
                     <Link
                       href={`/app/systems/${system.id}`}
-                      className="font-medium text-ink hover:underline"
+                      className="row-link"
                     >
                       {system.name}
                     </Link>

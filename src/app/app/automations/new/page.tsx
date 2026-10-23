@@ -22,7 +22,7 @@ export default async function NewAutomationPage({
 
   return (
     <div>
-      <AppPageHeader
+      <AppPageHeader back={{ href: "/app/automations", label: "Automations" }}
         title="New automation"
         description="Name it, attach it to a system if relevant, then design the steps in the builder."
       />

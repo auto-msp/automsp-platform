@@ -42,18 +42,18 @@ export default async function BillingPage() {
       <div className="border border-fog bg-surface p-5">
         <div className="flex items-baseline justify-between">
           <h2 className="text-sm font-semibold text-ink">Metered usage · this period</h2>
-          <p className="text-[11px] text-mute">
+          <p className="text-xs text-mute">
             <span className="font-medium text-ok">Actual</span> — {periodLabel}
           </p>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
           {overview.usage.map((u) => (
             <div key={u.meter} className="border border-fog bg-paper p-4">
-              <p className="text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
+              <p className="text-xs text-slate font-semibold">
                 {METER_LABEL[u.meter] ?? u.meter}
               </p>
               <p className="tnum mt-1.5 text-2xl font-semibold text-ink">{fmtUsage(u.meter, u.total)}</p>
-              <p className="mt-1 text-[11px] text-mute">
+              <p className="mt-1 text-xs text-mute">
                 {u.estimatedCostUsd !== null
                   ? `≈ $${u.estimatedCostUsd.toFixed(2)} at configured unit price`
                   : "no unit price configured — count only"}
@@ -61,7 +61,7 @@ export default async function BillingPage() {
             </div>
           ))}
         </div>
-        <p className="mt-3 text-[12px] text-mute">
+        <p className="mt-3 text-xs text-mute">
           ROI assumption in use across analytics &amp; reports: labor rate ${laborRate}/hour.
           Catalog plan limits are informational until a payment processor is connected — usage is
           never throttled against a plan that hasn&apos;t been purchased.
@@ -73,7 +73,7 @@ export default async function BillingPage() {
         <div className="flex items-baseline justify-between">
           <h2 className="text-sm font-semibold text-ink">Plan</h2>
           {!overview.configured ? (
-            <span className="border border-fog bg-haze px-2 py-1 text-[11px] font-medium tracking-[0.1em] text-slate uppercase">
+            <span className="border border-fog bg-haze px-2 py-1 text-xs font-medium text-slate">
               Not configured
             </span>
           ) : null}
@@ -106,7 +106,7 @@ export default async function BillingPage() {
               <div className="flex items-baseline justify-between">
                 <p className="text-sm font-semibold text-ink">{p.name}</p>
                 {overview.subscription?.planKey === p.key ? (
-                  <span className="border border-ok/40 bg-ok/10 px-1.5 py-px text-[10px] font-medium tracking-[0.08em] text-ok uppercase">
+                  <span className="border border-ok/40 bg-ok/10 px-1.5 py-px text-xs font-medium text-ok">
                     Current
                   </span>
                 ) : null}
@@ -118,8 +118,8 @@ export default async function BillingPage() {
                     ? `$${p.monthlyPriceUsd}/mo`
                     : "Pilot"}
               </p>
-              <p className="mt-1 text-[12px] leading-snug text-mute">{p.blurb}</p>
-              <p className="mt-2 border-t border-fog pt-2 text-[11px] text-slate">
+              <p className="mt-1 text-xs leading-snug text-mute">{p.blurb}</p>
+              <p className="mt-2 border-t border-fog pt-2 text-xs text-slate">
                 {p.includedExecutions !== null
                   ? `${p.includedExecutions.toLocaleString()} runs · ${(p.includedTokens ?? 0).toLocaleString()} tokens /mo`
                   : "Unmetered — scoped per engagement"}
@@ -133,7 +133,7 @@ export default async function BillingPage() {
       <div className="mt-6">
         <div className="mb-3 flex items-baseline justify-between">
           <h2 className="text-sm font-semibold text-ink">Invoices</h2>
-          <p className="text-[11px] text-mute">
+          <p className="text-xs text-mute">
             <span className="font-medium text-ok">Actual</span> — from the payment provider
           </p>
         </div>
@@ -146,19 +146,19 @@ export default async function BillingPage() {
             </p>
           </div>
         ) : (
-          <div className="overflow-hidden border border-fog">
-            <table className="w-full text-sm">
+          <div className="table-wrap">
+            <table className="app-table">
               <thead>
-                <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                  <th className="px-4 py-2.5">Invoice</th>
-                  <th className="px-4 py-2.5">Status</th>
-                  <th className="px-4 py-2.5">Amount</th>
-                  <th className="px-4 py-2.5">Due</th>
+                <tr>
+                  <th>Invoice</th>
+                  <th>Status</th>
+                  <th>Amount</th>
+                  <th>Due</th>
                 </tr>
               </thead>
               <tbody>
                 {overview.invoices.map((inv) => (
-                  <tr key={inv.id} className="border-b border-fog last:border-0">
+                  <tr key={inv.id}>
                     <td className="px-4 py-3 font-medium text-ink">
                       {inv.stripeInvoiceId ?? inv.id.slice(0, 8)}
                     </td>
@@ -179,7 +179,7 @@ export default async function BillingPage() {
       </div>
 
       {can(ctx, "billing.manage") ? (
-        <p className="mt-6 text-[12px] leading-relaxed text-mute">
+        <p className="mt-6 text-xs leading-relaxed text-mute">
           To connect a payment provider, set <code className="text-ink">STRIPE_SECRET_KEY</code> and
           configure the webhook endpoint; subscriptions and invoices then sync from Stripe.
         </p>

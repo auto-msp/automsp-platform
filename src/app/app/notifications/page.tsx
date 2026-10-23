@@ -6,6 +6,7 @@ import { getSessionContext } from "@/server/auth/session";
 import { listNotifications } from "@/server/notifications";
 import { formatDateTime } from "@/lib/format";
 import { markAllReadAction, markReadAction } from "./actions";
+import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = { title: "Notifications" };
 export const dynamic = "force-dynamic";
@@ -70,16 +71,16 @@ export default async function NotificationsPage() {
                   <p className={`text-sm ${n.readAt === null ? "font-semibold text-ink" : "text-graphite"}`}>
                     {n.title}
                   </p>
-                  <span className="text-[11px] tracking-[0.08em] text-mute uppercase">
+                  <span className="text-xs text-mute">
                     {KIND_LABELS[n.kind] ?? n.kind}
                   </span>
                 </div>
                 <p className="mt-1 text-[13px] leading-relaxed text-slate">{n.body}</p>
-                <div className="mt-1.5 flex items-center gap-4 text-[12px] text-mute">
+                <div className="mt-1.5 flex items-center gap-4 text-xs text-mute">
                   <span className="tnum">{formatDateTime(n.createdAt)}</span>
                   {n.href ? (
                     <Link href={n.href} className="text-accent hover:underline underline-offset-2">
-                      Open →
+                      Open<ArrowRight aria-hidden className="ml-1 inline size-4 align-[-0.2em]" strokeWidth={2} />
                     </Link>
                   ) : null}
                 </div>
@@ -88,7 +89,7 @@ export default async function NotificationsPage() {
                 <form action={markReadAction.bind(null, n.id)} className="shrink-0">
                   <button
                     type="submit"
-                    className="text-[12px] text-slate hover:text-ink underline-offset-2 hover:underline"
+                    className="text-xs text-slate hover:text-ink underline-offset-2 hover:underline"
                   >
                     Mark read
                   </button>

@@ -6,6 +6,7 @@ import { formatDateTime } from "@/lib/format";
 import { can, getSessionContext } from "@/server/auth/session";
 import { store } from "@/server/db/store";
 import { DecisionButtons } from "./decision-form";
+import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = { title: "Approvals" };
 
@@ -47,7 +48,7 @@ export default async function ApprovalsPage() {
 
       <h2 className="mb-3 text-sm font-semibold text-ink">Pending ({pending.length})</h2>
       {pending.length === 0 ? (
-        <p className="border border-dashed border-fog px-6 py-8 text-center text-sm text-mute">
+        <p className="empty-note">
           Nothing waiting on a decision.
         </p>
       ) : (
@@ -61,16 +62,16 @@ export default async function ApprovalsPage() {
                 >
                   {approval.riskLevel} risk
                 </span>
-                <span className="border border-fog bg-haze px-1.5 py-px text-[11px] font-medium tracking-[0.08em] text-slate uppercase">
+                <span className="border border-fog bg-haze px-1.5 py-px text-xs font-medium text-slate">
                   {approval.kind === "agent_tool" ? "agent tool" : "workflow"}
                 </span>
-                <span className="tnum ml-auto text-[11px] text-mute">
+                <span className="tnum ml-auto text-xs text-mute">
                   requested {formatDateTime(approval.createdAt)}
                 </span>
               </div>
               <p className="mt-2 text-[13px] leading-relaxed text-slate">{approval.rationale}</p>
               {Object.keys(approval.payload).length > 0 ? (
-                <pre className="tnum mt-3 max-h-40 overflow-auto bg-haze p-3 text-[11px] leading-relaxed text-graphite">
+                <pre className="tnum mt-3 max-h-40 overflow-auto bg-haze p-3 text-xs leading-relaxed text-graphite">
                   {JSON.stringify(approval.payload, null, 2)}
                 </pre>
               ) : null}
@@ -81,7 +82,7 @@ export default async function ApprovalsPage() {
                       href={`/app/agents/${approval.payload.agentId}`}
                       className="text-[13px] text-slate hover:text-ink"
                     >
-                      Open agent →
+                      Open agent<ArrowRight aria-hidden className="ml-1 inline size-4 align-[-0.2em]" strokeWidth={2} />
                     </Link>
                   ) : (
                     <span />
@@ -91,7 +92,7 @@ export default async function ApprovalsPage() {
                     href={`/app/operations/${approval.executionId}`}
                     className="text-[13px] text-slate hover:text-ink"
                   >
-                    Open execution →
+                    Open execution<ArrowRight aria-hidden className="ml-1 inline size-4 align-[-0.2em]" strokeWidth={2} />
                   </Link>
                 )}
                 {canDecide ? (
@@ -107,24 +108,24 @@ export default async function ApprovalsPage() {
 
       <h2 className="mt-10 mb-3 text-sm font-semibold text-ink">Decided</h2>
       {decided.length === 0 ? (
-        <p className="border border-dashed border-fog px-6 py-8 text-center text-sm text-mute">
+        <p className="empty-note">
           No decisions recorded yet.
         </p>
       ) : (
-        <div className="overflow-hidden border border-fog">
-          <table className="w-full text-sm">
+        <div className="table-wrap">
+          <table className="app-table">
             <thead>
-              <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5">Action</th>
-                <th className="px-4 py-2.5">Decision</th>
-                <th className="px-4 py-2.5">Reviewer</th>
-                <th className="px-4 py-2.5">Note</th>
-                <th className="px-4 py-2.5">Decided</th>
+              <tr>
+                <th>Action</th>
+                <th>Decision</th>
+                <th>Reviewer</th>
+                <th>Note</th>
+                <th>Decided</th>
               </tr>
             </thead>
             <tbody>
               {decided.map((approval) => (
-                <tr key={approval.id} className="border-b border-fog last:border-0">
+                <tr key={approval.id}>
                   <td className="px-4 py-3 text-ink">{approval.action}</td>
                   <td className="px-4 py-3">
                     <StatusPill status={approval.status} />

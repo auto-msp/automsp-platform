@@ -6,6 +6,7 @@ import { listSources } from "@/server/ai/knowledge";
 import { providerStatus } from "@/server/ai/provider";
 import { can, getSessionContext } from "@/server/auth/session";
 import { formatDateTime } from "@/lib/format";
+import { Notice } from "@/components/ui/notice";
 
 export const metadata: Metadata = { title: "Knowledge" };
 export const dynamic = "force-dynamic";
@@ -36,14 +37,14 @@ export default async function KnowledgePage() {
         {canManage ? (
           <Link
             href="/app/knowledge/new"
-            className="inline-flex h-10 items-center bg-ink px-4 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite"
+            className="btn btn-primary"
           >
             New source
           </Link>
         ) : null}
       </AppPageHeader>
 
-      <div className="mb-6 border border-fog bg-haze px-4 py-3">
+      <Notice tone="info" className="mb-6">
         <p className="text-[13px] text-slate">
           {semantic ? (
             <>
@@ -59,7 +60,7 @@ export default async function KnowledgePage() {
           )}{" "}
           File upload and web/integration ingestion are a later slice — documents are pasted text.
         </p>
-      </div>
+      </Notice>
 
       {rows.length === 0 ? (
         <EmptyState
@@ -68,22 +69,22 @@ export default async function KnowledgePage() {
           action={canManage ? { href: "/app/knowledge/new", label: "Create the first source" } : undefined}
         />
       ) : (
-        <div className="border border-fog">
-          <table className="w-full text-left text-sm">
+        <div className="table-wrap">
+          <table className="app-table">
             <thead>
-              <tr className="border-b border-fog text-[11px] tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5 font-medium">Name</th>
-                <th className="px-4 py-2.5 font-medium">Documents</th>
-                <th className="px-4 py-2.5 font-medium">Chunks</th>
-                <th className="px-4 py-2.5 font-medium">Ingestion</th>
-                <th className="px-4 py-2.5 font-medium">Updated</th>
+              <tr>
+                <th className="font-medium">Name</th>
+                <th className="font-medium">Documents</th>
+                <th className="font-medium">Chunks</th>
+                <th className="font-medium">Ingestion</th>
+                <th className="font-medium">Updated</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => (
-                <tr key={row.id} className="border-b border-fog last:border-0">
+                <tr key={row.id}>
                   <td className="px-4 py-3">
-                    <Link href={`/app/knowledge/${row.id}`} className="font-medium text-ink hover:underline">
+                    <Link href={`/app/knowledge/${row.id}`} className="row-link">
                       {row.name}
                     </Link>
                   </td>

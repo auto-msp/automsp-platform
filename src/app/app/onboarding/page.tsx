@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AppPageHeader } from "@/components/app/page-header";
 import { getSessionContext } from "@/server/auth/session";
 import { store } from "@/server/db/store";
+import { Check } from "lucide-react";
 
 export const metadata: Metadata = { title: "Setup checklist" };
 
@@ -26,11 +27,11 @@ function Step({
   return (
     <div className="flex gap-4 border border-fog bg-surface p-5">
       <span
-        className={`tnum flex h-7 w-7 shrink-0 items-center justify-center border text-[13px] font-medium ${
-          done ? "border-ok bg-ok/10 text-ok" : "border-fog text-mute"
+        className={`tnum flex size-8 shrink-0 items-center justify-center rounded-full border text-[13px] font-semibold ${
+          done ? "border-ok bg-ok-soft text-ok" : "border-line text-slate"
         }`}
       >
-        {done ? "✓" : index}
+        {done ? <Check aria-label="Done" className="size-4" strokeWidth={2.5} /> : index}
       </span>
       <div className="min-w-0 flex-1">
         <p className={`text-sm font-medium ${done ? "text-mute line-through" : "text-ink"}`}>
@@ -40,7 +41,7 @@ function Step({
         {!done && href && cta ? (
           <Link
             href={href}
-            className="mt-3 inline-flex h-9 items-center border border-ink px-4 text-[12px] font-medium tracking-[0.08em] text-ink uppercase transition-colors hover:bg-ink hover:text-paper"
+            className="btn btn-secondary btn-sm mt-3"
           >
             {cta}
           </Link>
@@ -53,7 +54,7 @@ function Step({
 
 function StatusBadge() {
   return (
-    <span className="shrink-0 text-[11px] font-medium tracking-[0.1em] text-ok uppercase">
+    <span className="shrink-0 text-xs font-medium text-ok">
       Done
     </span>
   );

@@ -17,7 +17,7 @@ export default async function NewSuitePage() {
 
   return (
     <div>
-      <AppPageHeader
+      <AppPageHeader back={{ href: "/app/evals", label: "Evaluations" }}
         title="New evaluation suite"
         description="Pin an agent to cases and a scorer. LLM-judge scoring consumes tokens (recorded like any call) and is a model opinion, not ground truth."
       />

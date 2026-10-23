@@ -2,9 +2,10 @@
 
 import { useActionState } from "react";
 import { createSuiteAction, type EvalFormState } from "./actions";
+import { Notice } from "@/components/ui/notice";
 
 const inputCls =
-  "w-full border border-fog bg-paper px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none";
+  "field w-full";
 
 export function SuiteForm({ agents }: { agents: { id: string; name: string }[] }) {
   const [state, formAction, pending] = useActionState<EvalFormState | null, FormData>(
@@ -18,7 +19,7 @@ export function SuiteForm({ agents }: { agents: { id: string; name: string }[] }
         <span className="mb-1.5 block text-[13px] font-medium text-ink">Name</span>
         <input name="name" required maxLength={120} className={inputCls} />
         {state?.fieldErrors?.name ? (
-          <span className="mt-1 block text-[12px] text-risk">{state.fieldErrors.name.join(" ")}</span>
+          <span className="field-error">{state.fieldErrors.name.join(" ")}</span>
         ) : null}
       </label>
 
@@ -33,7 +34,7 @@ export function SuiteForm({ agents }: { agents: { id: string; name: string }[] }
           ))}
         </select>
         {state?.fieldErrors?.agentId ? (
-          <span className="mt-1 block text-[12px] text-risk">{state.fieldErrors.agentId.join(" ")}</span>
+          <span className="field-error">{state.fieldErrors.agentId.join(" ")}</span>
         ) : null}
       </label>
 
@@ -52,15 +53,15 @@ export function SuiteForm({ agents }: { agents: { id: string; name: string }[] }
       </label>
 
       {state?.error ? (
-        <p className="border border-risk/30 bg-risk/5 px-4 py-3 text-[13px] text-risk" role="alert">
+        <Notice tone="risk" alert>
           {state.error}
-        </p>
+        </Notice>
       ) : null}
 
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-10 items-center bg-ink px-5 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:opacity-50"
+        className="btn btn-primary"
       >
         {pending ? "Creating…" : "Create suite"}
       </button>

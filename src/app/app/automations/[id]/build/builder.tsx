@@ -1,6 +1,22 @@
 "use client";
 
 import { useState, useActionState } from "react";
+import {
+  ArrowDown,
+  ArrowUp,
+  Bot,
+  Braces,
+  Flag,
+  Globe,
+  Plus,
+  ScrollText,
+  ShieldCheck,
+  Split,
+  Trash2,
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
+import { Notice } from "@/components/ui/notice";
 import type { NodeType, WorkflowNodeRecord } from "@/server/db/types";
 import { saveDefinitionAction, type AutomationFormState } from "../../actions";
 
@@ -19,6 +35,18 @@ const ADDABLE: { type: NodeType; hint: string }[] = [
   { type: "ai", hint: "AI step — requires a configured provider" },
   { type: "output", hint: "Set the run result" },
 ];
+
+// Icon and tone per step type. Orange marks the human gate, blue marks machine steps.
+const STEP_STYLE: Record<string, { icon: LucideIcon; badge: string }> = {
+  trigger: { icon: Zap, badge: "bg-accent text-surface" },
+  condition: { icon: Split, badge: "bg-haze text-ink" },
+  template: { icon: Braces, badge: "bg-haze text-ink" },
+  approval: { icon: ShieldCheck, badge: "bg-brand text-ink" },
+  log: { icon: ScrollText, badge: "bg-haze text-ink" },
+  http: { icon: Globe, badge: "bg-accent-soft text-accent" },
+  ai: { icon: Bot, badge: "bg-accent text-surface" },
+  output: { icon: Flag, badge: "bg-ink text-paper" },
+};
 
 function defaultConfig(type: NodeType): Record<string, unknown> {
   switch (type) {
@@ -42,7 +70,7 @@ function defaultConfig(type: NodeType): Record<string, unknown> {
 }
 
 const inputCls =
-  "w-full border border-fog bg-paper px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none";
+  "field w-full";
 
 export function Builder({
   automationId,
@@ -103,54 +131,66 @@ export function Builder({
     <form action={formAction} noValidate>
       <input type="hidden" name="definition" value={JSON.stringify(steps)} />
 
-      <div className="space-y-3">
-        {steps.map((step, i) => (
-          <div key={i} className="border border-fog bg-surface">
-            <div className="flex items-center gap-3 border-b border-fog px-4 py-2.5">
-              <span className="tnum text-[11px] font-medium text-mute">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="text-[11px] font-medium tracking-[0.1em] text-slate uppercase">
-                {step.type}
-              </span>
-              {step.type === "trigger" ? (
-                <span className="text-[13px] text-mute">
-                  {step.config.triggerType === "schedule"
-                    ? "Scheduled trigger — runs fire on the interval below"
-                    : "Manual trigger — runs start from the automation page"}
-                </span>
-              ) : (
-                <input
-                  aria-label="Step key"
-                  value={step.key}
-                  onChange={(e) => updateStep(i, { key: e.target.value })}
-                  className="w-48 border border-transparent bg-transparent px-1 py-0.5 text-sm text-ink focus:border-fog focus:outline-none"
-                />
-              )}
-              <div className="ml-auto flex items-center gap-1">
-                {i > 0 ? (
-                  <>
-                    <IconButton label="Move up" onClick={() => move(i, -1)} disabled={i <= 1}>
-                      ↑
-                    </IconButton>
-                    <IconButton label="Move down" onClick={() => move(i, 1)} disabled={i === steps.length - 1}>
-                      ↓
-                    </IconButton>
-                    <IconButton label="Remove step" onClick={() => remove(i)}>
-                      ✕
-                    </IconButton>
-                  </>
-                ) : null}
+      <ol className="space-y-0">
+        {steps.map((step, i) => {
+          const look = STEP_STYLE[step.type] ?? STEP_STYLE.log;
+          const Icon = look.icon;
+          return (
+            <li key={i} className="relative pb-4 last:pb-0">
+              {i < steps.length - 1 ? (
+                <span aria-hidden className="absolute top-12 bottom-0 left-[1.4rem] w-px bg-line/50" />
+              ) : null}
+              <div className="border border-fog bg-surface">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-fog px-3 py-2 sm:px-4">
+                  <span className={`flex size-9 shrink-0 items-center justify-center rounded-(--radius-control) ${look.badge}`}>
+                    <Icon aria-hidden className="size-[18px]" strokeWidth={1.75} />
+                  </span>
+                  <span className="tnum text-xs font-semibold text-mute">
+                    Step {i + 1}
+                  </span>
+                  <span className="text-[13px] font-semibold text-ink capitalize">
+                    {step.type}
+                  </span>
+                  {step.type === "trigger" ? (
+                    <span className="min-w-0 flex-1 text-[13px] text-slate">
+                      {step.config.triggerType === "schedule"
+                        ? "Scheduled trigger — runs fire on the interval below"
+                        : "Manual trigger — runs start from the automation page"}
+                    </span>
+                  ) : (
+                    <input
+                      aria-label="Step key"
+                      value={step.key}
+                      onChange={(e) => updateStep(i, { key: e.target.value })}
+                      className="field min-h-11 min-w-0 flex-1 border-transparent bg-transparent font-mono text-[13px]! sm:max-w-xs"
+                    />
+                  )}
+                  <div className="ml-auto flex items-center gap-1">
+                    {i > 0 ? (
+                      <>
+                        <IconButton label="Move step up" onClick={() => move(i, -1)} disabled={i <= 1}>
+                          <ArrowUp aria-hidden className="size-4" strokeWidth={2} />
+                        </IconButton>
+                        <IconButton label="Move step down" onClick={() => move(i, 1)} disabled={i === steps.length - 1}>
+                          <ArrowDown aria-hidden className="size-4" strokeWidth={2} />
+                        </IconButton>
+                        <IconButton label="Remove step" onClick={() => remove(i)} danger>
+                          <Trash2 aria-hidden className="size-4" strokeWidth={2} />
+                        </IconButton>
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+                <div className="px-3 py-4 sm:px-4">
+                  <StepConfig step={step} credentials={credentials} agents={agents} knowledgeSources={knowledgeSources} onChange={(patch) => updateConfig(i, patch)} />
+                </div>
               </div>
-            </div>
-              <div className="px-4 py-4">
-              <StepConfig step={step} credentials={credentials} agents={agents} knowledgeSources={knowledgeSources} onChange={(patch) => updateConfig(i, patch)} />
-            </div>
-          </div>
-        ))}
-      </div>
+            </li>
+          );
+        })}
+      </ol>
 
-      <div className="mt-5 flex flex-wrap items-center gap-3 border border-dashed border-fog px-4 py-3">
+      <div className="mt-5 flex flex-wrap items-center gap-3 border border-dashed border-line/60 bg-surface/60 px-3 py-3 sm:px-4">
         <select
           value={addType}
           onChange={(e) => setAddType(e.target.value as NodeType)}
@@ -166,33 +206,34 @@ export function Builder({
         <button
           type="button"
           onClick={add}
-          className="inline-flex h-9 items-center border border-ink px-4 text-[12px] font-medium tracking-[0.08em] text-ink uppercase transition-colors hover:bg-ink hover:text-paper"
+          className="btn btn-secondary"
         >
+          <Plus aria-hidden className="size-4" strokeWidth={2} />
           Add step
         </button>
       </div>
 
       {state?.errors?.length ? (
-        <div className="mt-5 border border-risk/30 bg-risk/5 px-4 py-3" role="alert">
-          <p className="text-sm font-medium text-risk">The definition needs fixes:</p>
-          <ul className="mt-1.5 list-disc pl-5 text-sm text-risk">
+        <Notice tone="risk" alert className="mt-5">
+          <p className="font-semibold text-risk">The definition needs fixes:</p>
+          <ul className="mt-1.5 list-disc pl-5">
             {state.errors.map((err) => (
               <li key={err}>{err}</li>
             ))}
           </ul>
-        </div>
+        </Notice>
       ) : null}
       {state?.error ? (
-        <p className="mt-5 border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <Notice tone="risk" alert className="mt-5">
           {state.error}
-        </p>
+        </Notice>
       ) : null}
 
       <div className="mt-6">
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex h-11 items-center bg-ink px-6 text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn btn-primary"
         >
           {pending ? "Saving…" : "Save as new version"}
         </button>
@@ -206,11 +247,13 @@ function IconButton({
   label,
   onClick,
   disabled,
+  danger,
 }: {
   children: React.ReactNode;
   label: string;
   onClick: () => void;
   disabled?: boolean;
+  danger?: boolean;
 }) {
   return (
     <button
@@ -219,7 +262,9 @@ function IconButton({
       title={label}
       disabled={disabled}
       onClick={onClick}
-      className="flex h-7 w-7 items-center justify-center border border-fog text-slate transition-colors hover:border-ink hover:text-ink disabled:cursor-not-allowed disabled:opacity-30"
+      className={`flex size-11 items-center justify-center rounded-(--radius-control) text-slate transition-colors disabled:cursor-not-allowed disabled:opacity-30 ${
+        danger ? "hover:bg-risk-soft hover:text-risk" : "hover:bg-haze hover:text-ink"
+      }`}
     >
       {children}
     </button>
@@ -229,9 +274,9 @@ function IconButton({
 function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
     <div className="mb-4 last:mb-0">
-      <label className="mb-1.5 block text-[12px] font-medium text-graphite">{label}</label>
+      <label className="field-label">{label}</label>
       {children}
-      {hint ? <p className="mt-1 text-[11px] text-mute">{hint}</p> : null}
+      {hint ? <p className="field-hint">{hint}</p> : null}
     </div>
   );
 }
@@ -298,7 +343,7 @@ function StepConfig({
             </>
           ) : null}
           {c.triggerType === "schedule" ? (
-            <p className="text-[11px] text-mute sm:col-span-3">
+            <p className="text-xs text-mute sm:col-span-3">
               Scheduled runs only fire while the automation is <span className="text-ink">active</span> and
               this server process is running. A persistent production worker is part of the deployment
               slice.
@@ -472,7 +517,7 @@ function StepConfig({
             ) : null}
           </div>
           {c.credentialId && !credentials.some((cred) => cred.id === c.credentialId) ? (
-            <p className="text-[11px] text-warn">
+            <p className="text-xs text-warn">
               This step references a credential that no longer exists — runs will fail at this step.
             </p>
           ) : null}
@@ -563,12 +608,12 @@ function StepConfig({
             />
           </Field>
           {c.agentId && !agents.some((a) => a.id === c.agentId) ? (
-            <p className="text-[11px] text-warn">
+            <p className="text-xs text-warn">
               This step references an agent that no longer exists — runs will fail at this step.
             </p>
           ) : null}
           {c.knowledgeSourceId && !knowledgeSources.some((s) => s.id === c.knowledgeSourceId) ? (
-            <p className="text-[11px] text-warn">
+            <p className="text-xs text-warn">
               This step references a knowledge source that no longer exists — retrieval returns nothing.
             </p>
           ) : null}

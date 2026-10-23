@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppPageHeader } from "@/components/app/page-header";
 import { getSessionContext } from "@/server/auth/session";
@@ -38,17 +37,12 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
 
   return (
     <div>
-      <div className="mb-2">
-        <Link href="/app/reports" className="text-[13px] text-slate hover:text-ink">
-          ← All reports
-        </Link>
-      </div>
-      <AppPageHeader
+      <AppPageHeader back={{ href: "/app/reports", label: "All reports" }}
         title={payload.title ?? REPORT_TYPE_LABELS[report.type]}
         description={payload.basisNote}
       />
 
-      <div className="mb-6 flex items-center gap-3 text-[12px] text-mute">
+      <div className="mb-6 flex items-center gap-3 text-xs text-mute">
         <span>
           Period {report.periodStart.slice(0, 10)} → {report.periodEnd.slice(0, 10)}
         </span>
@@ -67,13 +61,13 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
             <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
               {section.kpis.map((kpi, j) => (
                 <div key={j} className="border border-fog bg-paper p-3">
-                  <p className="text-[11px] font-medium tracking-[0.08em] text-mute uppercase">
+                  <p className="text-xs text-slate font-semibold">
                     {kpi.label}
                   </p>
                   <p className="tnum mt-1 text-xl font-semibold text-ink">{kpi.value}</p>
                   <div className="mt-1.5 flex items-center gap-2">
                     <BasisPill basis={kpi.basis} />
-                    {kpi.note ? <span className="text-[10px] text-mute">{kpi.note}</span> : null}
+                    {kpi.note ? <span className="text-xs text-mute">{kpi.note}</span> : null}
                   </div>
                 </div>
               ))}
@@ -82,9 +76,9 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
 
           {section.table ? (
             <div className="mt-4 overflow-hidden border border-fog">
-              <table className="w-full text-sm">
+              <table className="app-table">
                 <thead>
-                  <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
+                  <tr>
                     {section.table.headers.map((h, k) => (
                       <th key={k} className="px-4 py-2.5">
                         {h}
@@ -101,7 +95,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
                     </tr>
                   ) : (
                     section.table.rows.map((row, r) => (
-                      <tr key={r} className="border-b border-fog last:border-0">
+                      <tr key={r}>
                         {row.map((cell, c) => (
                           <td key={c} className={`px-4 py-3 ${c === 0 ? "font-medium text-ink" : "tnum text-slate"}`}>
                             {cell}
@@ -125,7 +119,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
                     </p>
                     <BasisPill basis={m.basis} />
                   </div>
-                  <p className="mt-1 text-[12px] leading-relaxed text-mute">
+                  <p className="mt-1 text-xs leading-relaxed text-mute">
                     <span className="text-slate">Source:</span> {m.calculation.source}
                     <span aria-hidden> · </span>
                     <span className="text-slate">Method:</span> {m.calculation.method}

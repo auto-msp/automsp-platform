@@ -151,7 +151,7 @@ export async function AppShell({
               <button
                 type="submit"
                 aria-label="Sign out"
-                className="flex min-h-11 items-center gap-2 rounded-(--radius-control) border border-line px-3 text-[13px] font-medium text-graphite transition-colors hover:border-ink hover:text-ink"
+                className="flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-(--radius-control) border border-line px-3 text-[13px] font-medium text-graphite transition-colors hover:border-ink hover:text-ink"
               >
                 <LogOut aria-hidden className="size-4" strokeWidth={1.75} />
                 <span className="hidden sm:inline">Sign out</span>

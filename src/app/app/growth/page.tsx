@@ -7,6 +7,7 @@ import { can, getSessionContext } from "@/server/auth/session";
 import { STRATEGY_DOCS, listStrategyRuns } from "@/server/growth/strategy";
 import { formatDateTime } from "@/lib/format";
 import { StrategyForm } from "./growth-form";
+import { Notice } from "@/components/ui/notice";
 
 export const metadata: Metadata = { title: "Growth" };
 export const dynamic = "force-dynamic";
@@ -36,21 +37,21 @@ export default async function GrowthPage() {
 
       <div className="mb-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {STRATEGY_DOCS.map((doc) => (
-          <div key={doc.key} className="border border-fog bg-haze px-4 py-3">
+          <Notice key={doc.key} tone="info">
             <p className="text-[13px] font-medium text-ink">{doc.title}</p>
-          </div>
+          </Notice>
         ))}
       </div>
 
       {canManage ? (
         <section className="mb-10">
-          <h2 className="mb-4 text-[12px] tracking-[0.08em] text-slate uppercase">New research run</h2>
+          <h2 className="mb-4 text-xs text-slate">New research run</h2>
           <StrategyForm providerConfigured={provider.configured} />
         </section>
       ) : null}
 
       <section>
-        <h2 className="mb-4 text-[12px] tracking-[0.08em] text-slate uppercase">Strategy sources</h2>
+        <h2 className="mb-4 text-xs text-slate">Strategy sources</h2>
         {runs.length === 0 ? (
           <EmptyState
             title="No strategy documents yet"
@@ -66,15 +67,15 @@ export default async function GrowthPage() {
               <li key={run.source.id} className="flex items-center justify-between gap-4 px-5 py-4">
                 <div>
                   <p className="text-sm font-medium text-ink">{run.source.name}</p>
-                  <p className="text-[12px] text-slate">
+                  <p className="text-xs text-slate">
                     {run.documentCount}/5 documents · created {formatDateTime(run.source.createdAt)} ·{" "}
                     {run.source.kind === "web" ? "web-grounded" : "description-grounded"}
                   </p>
-                  <p className="mt-1 text-[12px] text-mute">{run.docs.map((d) => d.filename).join(", ")}</p>
+                  <p className="mt-1 text-xs text-mute">{run.docs.map((d) => d.filename).join(", ")}</p>
                 </div>
                 <Link
                   href={`/app/knowledge/${run.source.id}`}
-                  className="shrink-0 text-[12px] tracking-[0.08em] text-ink uppercase underline decoration-fog underline-offset-4 hover:decoration-ink"
+                  className="shrink-0 text-xs text-ink underline decoration-fog underline-offset-4 hover:decoration-ink"
                 >
                   View source
                 </Link>

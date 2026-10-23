@@ -1,43 +1,67 @@
-const TONES: Record<string, { label: string; cls: string }> = {
+import {
+  Archive,
+  BadgeCheck,
+  Ban,
+  CircleCheck,
+  CircleDot,
+  CirclePause,
+  CircleX,
+  Clock,
+  FlaskConical,
+  PencilLine,
+  TriangleAlert,
+  type LucideIcon,
+} from "lucide-react";
+
+type Tone = "neutral" | "info" | "ok" | "warn" | "risk";
+
+const TONE_CLASS: Record<Tone, string> = {
+  neutral: "bg-haze text-graphite",
+  info: "bg-accent-soft text-accent",
+  ok: "bg-ok-soft text-ok",
+  warn: "bg-warn-soft text-warn",
+  risk: "bg-risk-soft text-risk",
+};
+
+// Every status carries an icon and a word, so colour is never the only signal.
+const STATUS: Record<string, { label: string; tone: Tone; icon: LucideIcon }> = {
   // execution statuses
-  queued: { label: "Queued", cls: "border-fog bg-haze text-slate" },
-  running: { label: "Running", cls: "border-accent/40 bg-accent/10 text-accent" },
-  waiting: { label: "Waiting", cls: "border-warn/40 bg-warn/10 text-warn" },
-  completed: { label: "Completed", cls: "border-ok/40 bg-ok/10 text-ok" },
-  failed: { label: "Failed", cls: "border-risk/40 bg-risk/10 text-risk" },
-  cancelled: { label: "Cancelled", cls: "border-fog bg-haze text-mute" },
+  queued: { label: "Queued", tone: "neutral", icon: Clock },
+  running: { label: "Running", tone: "info", icon: CircleDot },
+  waiting: { label: "Waiting", tone: "warn", icon: Clock },
+  completed: { label: "Completed", tone: "ok", icon: CircleCheck },
+  failed: { label: "Failed", tone: "risk", icon: CircleX },
+  cancelled: { label: "Cancelled", tone: "neutral", icon: Ban },
   // system statuses
-  healthy: { label: "Healthy", cls: "border-ok/40 bg-ok/10 text-ok" },
-  paused: { label: "Paused", cls: "border-fog bg-haze text-slate" },
-  incident: { label: "Incident", cls: "border-risk/40 bg-risk/10 text-risk" },
-  // automation statuses
-  draft: { label: "Draft", cls: "border-fog bg-haze text-slate" },
-  active: { label: "Active", cls: "border-ok/40 bg-ok/10 text-ok" },
-  archived: { label: "Archived", cls: "border-fog bg-haze text-mute" },
+  healthy: { label: "Healthy", tone: "ok", icon: CircleCheck },
+  paused: { label: "Paused", tone: "neutral", icon: CirclePause },
+  incident: { label: "Incident", tone: "risk", icon: TriangleAlert },
+  warning: { label: "Warning", tone: "warn", icon: TriangleAlert },
+  // automation / agent statuses
+  draft: { label: "Draft", tone: "neutral", icon: PencilLine },
+  active: { label: "Active", tone: "ok", icon: CircleCheck },
+  archived: { label: "Archived", tone: "neutral", icon: Archive },
+  testing: { label: "Testing", tone: "info", icon: FlaskConical },
+  production: { label: "Production", tone: "ok", icon: BadgeCheck },
   // approval statuses
-  pending: { label: "Pending", cls: "border-warn/40 bg-warn/10 text-warn" },
-  approved: { label: "Approved", cls: "border-ok/40 bg-ok/10 text-ok" },
-  rejected: { label: "Rejected", cls: "border-risk/40 bg-risk/10 text-risk" },
-  // system status extra
-  warning: { label: "Warning", cls: "border-warn/40 bg-warn/10 text-warn" },
-  // integration statuses
-  revoked: { label: "Revoked", cls: "border-risk/40 bg-risk/10 text-risk" },
-  // agent statuses (draft/paused/archived/approved reuse the tones above)
-  testing: { label: "Testing", cls: "border-accent/40 bg-accent/10 text-accent" },
-  production: { label: "Production", cls: "border-ok/40 bg-ok/10 text-ok" },
-  // document statuses
-  indexed: { label: "Indexed", cls: "border-ok/40 bg-ok/10 text-ok" },
-  // eval run statuses
-  blocked: { label: "Blocked", cls: "border-warn/40 bg-warn/10 text-warn" },
+  pending: { label: "Pending", tone: "warn", icon: Clock },
+  approved: { label: "Approved", tone: "ok", icon: CircleCheck },
+  rejected: { label: "Rejected", tone: "risk", icon: CircleX },
+  // integration / document / eval statuses
+  revoked: { label: "Revoked", tone: "risk", icon: Ban },
+  indexed: { label: "Indexed", tone: "ok", icon: CircleCheck },
+  blocked: { label: "Blocked", tone: "warn", icon: TriangleAlert },
 };
 
 export function StatusPill({ status }: { status: string }) {
-  const tone = TONES[status] ?? { label: status, cls: "border-fog bg-haze text-slate" };
+  const entry = STATUS[status] ?? { label: status, tone: "neutral" as Tone, icon: CircleDot };
+  const Icon = entry.icon;
   return (
     <span
-      className={`inline-block border px-1.5 py-px text-[11px] font-medium tracking-[0.08em] uppercase ${tone.cls}`}
+      className={`inline-flex items-center gap-1 rounded-(--radius-chip) px-2 py-0.5 text-xs font-semibold whitespace-nowrap ${TONE_CLASS[entry.tone]}`}
     >
-      {tone.label}
+      <Icon aria-hidden className="size-3.5 shrink-0" strokeWidth={2} />
+      {entry.label}
     </span>
   );
 }

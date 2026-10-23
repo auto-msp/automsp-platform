@@ -45,7 +45,7 @@ export function GenerateReportForm({ canGenerate }: { canGenerate: boolean }) {
             className="border border-fog p-3 text-left transition-colors hover:border-ink disabled:opacity-50"
           >
             <p className="text-[13px] font-medium text-ink">{t.label}</p>
-            <p className="mt-0.5 text-[12px] leading-snug text-mute">{t.blurb}</p>
+            <p className="mt-0.5 text-xs leading-snug text-mute">{t.blurb}</p>
           </button>
         ))}
       </form>

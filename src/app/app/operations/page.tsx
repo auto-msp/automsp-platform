@@ -48,7 +48,7 @@ export default async function OperationsPage({
         <select
           name="status"
           defaultValue={status ?? ""}
-          className="border border-fog bg-surface px-3 py-2 text-sm text-ink focus:border-ink focus:outline-none"
+          className="field"
         >
           <option value="">All statuses</option>
           {["queued", "running", "waiting", "completed", "failed", "cancelled"].map((s) => (
@@ -60,7 +60,7 @@ export default async function OperationsPage({
         <select
           name="automation"
           defaultValue={automation ?? ""}
-          className="border border-fog bg-surface px-3 py-2 text-sm text-ink focus:border-ink focus:outline-none"
+          className="field"
         >
           <option value="">All automations</option>
           {automations.map((a) => (
@@ -71,7 +71,7 @@ export default async function OperationsPage({
         </select>
         <button
           type="submit"
-          className="border border-ink px-4 py-2 text-[12px] font-medium tracking-[0.08em] text-ink uppercase transition-colors hover:bg-ink hover:text-paper"
+          className="btn btn-secondary"
         >
           Filter
         </button>
@@ -84,23 +84,23 @@ export default async function OperationsPage({
           action={{ href: "/app/automations", label: "Open automations" }}
         />
       ) : (
-        <div className="overflow-hidden border border-fog">
-          <table className="w-full text-sm">
+        <div className="table-wrap">
+          <table className="app-table">
             <thead>
-              <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5">Execution</th>
-                <th className="px-4 py-2.5">Automation</th>
-                <th className="px-4 py-2.5">Status</th>
-                <th className="px-4 py-2.5">Version</th>
-                <th className="px-4 py-2.5">Duration</th>
-                <th className="px-4 py-2.5">Started</th>
+              <tr>
+                <th>Execution</th>
+                <th>Automation</th>
+                <th>Status</th>
+                <th>Version</th>
+                <th>Duration</th>
+                <th>Started</th>
               </tr>
             </thead>
             <tbody>
               {rows.slice(0, 100).map((run) => (
-                <tr key={run.id} className="border-b border-fog last:border-0">
+                <tr key={run.id}>
                   <td className="tnum px-4 py-3 text-slate">
-                    <Link href={`/app/operations/${run.id}`} className="hover:text-ink hover:underline">
+                    <Link href={`/app/operations/${run.id}`} className="row-link row-link-id">
                       {truncateId(run.id)}
                     </Link>
                   </td>

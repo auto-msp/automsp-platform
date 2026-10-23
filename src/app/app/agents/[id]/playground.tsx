@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { runPlaygroundAction, type PlaygroundState } from "../actions";
+import { Notice } from "@/components/ui/notice";
+import { ArrowRight } from "lucide-react";
 
 const INV_CLS: Record<string, string> = {
   executed: "text-ok",
@@ -26,26 +28,26 @@ export function Playground({ agentId }: { agentId: string }) {
           required
           maxLength={8000}
           placeholder="Write a prompt to test this agent's current version…"
-          className="w-full border border-fog bg-paper px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none"
+          className="field w-full"
         />
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex h-9 items-center border border-ink px-4 text-[12px] font-medium tracking-[0.08em] text-ink uppercase transition-colors hover:bg-ink hover:text-paper disabled:opacity-50"
+          className="btn btn-secondary btn-sm"
         >
           {pending ? "Running…" : "Run"}
         </button>
       </form>
 
       {state?.notConfigured ? (
-        <div className="mt-4 border border-warn/40 bg-warn/10 px-4 py-3">
+        <Notice tone="warn" className="mt-4">
           <p className="text-[13px] font-medium text-warn">AI provider not configured</p>
           <p className="mt-1 text-[13px] text-slate">{state.error}</p>
-        </div>
+        </Notice>
       ) : state?.error ? (
-        <div className="mt-4 border border-risk/30 bg-risk/5 px-4 py-3" role="alert">
+        <Notice tone="risk" alert className="mt-4">
           <p className="text-[13px] text-risk">{state.error}</p>
-        </div>
+        </Notice>
       ) : null}
 
       {run ? (
@@ -67,7 +69,7 @@ export function Playground({ agentId }: { agentId: string }) {
                 The agent requested a consequential tool. A person must review the exact arguments
                 before anything executes.{" "}
                 <Link href="/app/approvals" className="underline underline-offset-2">
-                  Decide in Approvals →
+                  Decide in Approvals<ArrowRight aria-hidden className="ml-1 inline size-4 align-[-0.2em]" strokeWidth={2} />
                 </Link>
               </p>
             </>
@@ -89,19 +91,19 @@ export function Playground({ agentId }: { agentId: string }) {
 
           {run.invocations.length > 0 ? (
             <div className="mt-3 border-t border-fog pt-2">
-              <p className="mb-1.5 text-[11px] font-medium tracking-wide text-mute uppercase">
+              <p className="mb-1.5 text-xs tracking-wide text-slate font-semibold">
                 Tool calls
               </p>
               <ul className="space-y-1.5">
                 {run.invocations.map((inv, i) => (
-                  <li key={i} className="text-[12px]">
+                  <li key={i} className="text-xs">
                     <span className="font-medium text-ink">{inv.name}</span>
                     <span className={`ml-2 ${INV_CLS[inv.status] ?? "text-slate"}`}>
                       {inv.status.replace("_", " ")}
                     </span>
                     {inv.error ? <p className="mt-0.5 text-slate">{inv.error}</p> : null}
                     {inv.resultPreview ? (
-                      <pre className="tnum mt-1 max-h-24 overflow-auto bg-paper p-2 text-[11px] text-graphite">
+                      <pre className="tnum mt-1 max-h-24 overflow-auto bg-paper p-2 text-xs text-graphite">
                         {inv.resultPreview}
                       </pre>
                     ) : null}
@@ -111,7 +113,7 @@ export function Playground({ agentId }: { agentId: string }) {
             </div>
           ) : null}
 
-          <p className="tnum mt-3 border-t border-fog pt-2 text-[11px] text-slate">
+          <p className="tnum mt-3 border-t border-fog pt-2 text-xs text-slate">
             run {run.id} · {run.turns} turn{run.turns === 1 ? "" : "s"} · model calls recorded under
             Recent model runs (tokens actual, USD estimated)
           </p>

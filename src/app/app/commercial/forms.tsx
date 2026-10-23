@@ -9,8 +9,8 @@ import {
 } from "./actions";
 
 const FIELD =
-  "w-full border border-fog bg-paper px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none";
-const LABEL = "mb-1 block text-[11px] font-medium tracking-[0.08em] text-slate uppercase";
+  "field w-full";
+const LABEL = "mb-1 block text-xs font-medium text-slate";
 
 export function NewOpportunityForm() {
   const [state, formAction, pending] = useActionState<ActionState | null, FormData>(
@@ -54,7 +54,7 @@ export function NewOpportunityForm() {
       <button
         type="submit"
         disabled={pending}
-        className="mt-3 border border-ink bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink/90 disabled:opacity-50"
+        className="btn btn-primary mt-3"
       >
         {pending ? "Adding…" : "Add opportunity"}
       </button>
@@ -88,7 +88,7 @@ export function NewClientForm() {
       <button
         type="submit"
         disabled={pending}
-        className="mt-3 border border-ink bg-ink px-4 py-2 text-sm font-medium text-paper hover:bg-ink/90 disabled:opacity-50"
+        className="btn btn-primary mt-3"
       >
         {pending ? "Adding…" : "Add client"}
       </button>
@@ -137,7 +137,7 @@ export function NewProjectForm({ clients }: { clients: { id: string; name: strin
       <button
         type="submit"
         disabled={pending}
-        className="mt-3 border border-ink bg-ink px-4 py-2 text-sm font-medium text-paper hover:bg-ink/90 disabled:opacity-50"
+        className="btn btn-primary mt-3"
       >
         {pending ? "Adding…" : "Add project"}
       </button>

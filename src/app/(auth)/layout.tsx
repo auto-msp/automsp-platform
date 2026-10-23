@@ -11,7 +11,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           </Link>
           <Link
             href="/book-audit"
-            className="text-[13px] font-medium tracking-[0.08em] text-slate uppercase hover:text-ink"
+            className="text-[13px] font-medium text-slate hover:text-ink"
           >
             Book an audit
           </Link>

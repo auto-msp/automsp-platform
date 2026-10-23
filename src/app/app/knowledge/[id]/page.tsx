@@ -21,7 +21,7 @@ export default async function KnowledgeSourcePage({ params }: { params: Promise<
   const source = await getSource(ctx.organization.id, id);
   if (!source) notFound();
   if (!can(ctx, "knowledge.view")) {
-    return <AppPageHeader title={source.name} description="Your role does not include viewing knowledge." />;
+    return <AppPageHeader back={{ href: "/app/knowledge", label: "Knowledge" }} title={source.name} description="Your role does not include viewing knowledge." />;
   }
 
   const canManage = can(ctx, "knowledge.manage");
@@ -52,23 +52,23 @@ export default async function KnowledgeSourcePage({ params }: { params: Promise<
               }
             />
           ) : (
-            <div className="border border-fog">
-              <table className="w-full text-left text-sm">
+            <div className="table-wrap">
+              <table className="app-table">
                 <thead>
-                  <tr className="border-b border-fog text-[11px] tracking-[0.1em] text-mute uppercase">
-                    <th className="px-4 py-2.5 font-medium">Document</th>
-                    <th className="px-4 py-2.5 font-medium">Status</th>
-                    <th className="px-4 py-2.5 font-medium">Chunks</th>
-                    <th className="px-4 py-2.5 font-medium">Added</th>
-                    <th className="px-4 py-2.5" />
+                  <tr>
+                    <th className="font-medium">Document</th>
+                    <th className="font-medium">Status</th>
+                    <th className="font-medium">Chunks</th>
+                    <th className="font-medium">Added</th>
+                    <th />
                   </tr>
                 </thead>
                 <tbody>
                   {documents.map((doc) => (
-                    <tr key={doc.id} className="border-b border-fog last:border-0">
+                    <tr key={doc.id}>
                       <td className="px-4 py-3">
                         <span className="font-medium text-ink">{doc.filename}</span>
-                        <span className="ml-2 text-[11px] text-mute">{doc.mimeType}</span>
+                        <span className="ml-2 text-xs text-mute">{doc.mimeType}</span>
                       </td>
                       <td className="px-4 py-3">
                         <StatusPill status={doc.status} />
@@ -87,7 +87,7 @@ export default async function KnowledgeSourcePage({ params }: { params: Promise<
         </div>
 
         <div className="border border-fog bg-paper p-5">
-          <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink uppercase">Test retrieval</h3>
+          <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink">Test retrieval</h3>
           <RetrievalTest sourceId={source.id} />
         </div>
       </div>

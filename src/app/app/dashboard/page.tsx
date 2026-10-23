@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { EmptyState } from "@/components/app/empty-state";
-import { AppPageHeader } from "@/components/app/page-header";
+import { AppPageHeader, SectionHeader } from "@/components/app/page-header";
+import { StatCard } from "@/components/app/stat-card";
 import { StatusPill } from "@/components/app/status-pill";
 import { formatDateTime, truncateId } from "@/lib/format";
 import { getSessionContext } from "@/server/auth/session";
@@ -10,31 +12,6 @@ import { getDashboardMetrics } from "@/server/dashboard";
 export const metadata: Metadata = { title: "Dashboard" };
 
 export const dynamic = "force-dynamic";
-
-function Stat({
-  label,
-  value,
-  method,
-  basis,
-}: {
-  label: string;
-  value: string;
-  method: string;
-  basis: "Actual" | "Estimated";
-}) {
-  return (
-    <div className="border border-fog bg-surface p-5">
-      <p className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">{label}</p>
-      <p className="tnum mt-2 text-3xl font-semibold text-ink">{value}</p>
-      <p className="mt-2 text-[11px] leading-relaxed text-mute">
-        <span className={basis === "Actual" ? "font-medium text-ok" : "font-medium text-warn"}>
-          {basis}
-        </span>{" "}
-        — {method}
-      </p>
-    </div>
-  );
-}
 
 export default async function DashboardPage() {
   const ctx = await getSessionContext();
@@ -50,61 +27,54 @@ export default async function DashboardPage() {
         description={`Operational overview for ${ctx.organization.name}.`}
       />
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4">
+        <StatCard
           label="Systems connected"
           value={String(m.systemsTotal)}
           method="counted from your system registry"
           basis="Actual"
         />
-        <Stat
+        <StatCard
           label="Active automations"
           value={String(m.automationsActive)}
           method={`${m.automationsTotal} defined in total`}
           basis="Actual"
         />
-        <Stat
+        <StatCard
           label="Executions · 30 days"
           value={String(m.executions30d)}
           method="counted from execution records"
           basis="Actual"
+          tone="accent"
         />
-        <Stat
+        <StatCard
           label="Pending approvals"
           value={String(m.pendingApprovals)}
           method="runs paused awaiting a decision"
           basis="Actual"
+          tone={m.pendingApprovals > 0 ? "brand" : "default"}
         />
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <div className="border border-fog bg-surface p-5">
-          <p className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">
-            Run success rate · 30 days
-          </p>
-          <p className="tnum mt-2 text-3xl font-semibold text-ink">
-            {m.successRate30d === null ? "—" : `${Math.round(m.successRate30d * 100)}%`}
-          </p>
-          <p className="mt-2 text-[11px] leading-relaxed text-mute">
-            <span className="font-medium text-ok">Actual</span> —{" "}
-            {m.successRate30d === null
+      <div className="mt-3 grid grid-cols-1 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-2">
+        <StatCard
+          label="Run success rate · 30 days"
+          value={m.successRate30d === null ? "—" : `${Math.round(m.successRate30d * 100)}%`}
+          method={
+            m.successRate30d === null
               ? "no completed or failed runs yet"
-              : "completed runs ÷ (completed + failed runs)"}
-          </p>
-        </div>
-        <div className="border border-fog bg-surface p-5">
-          <p className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">
-            Estimated hours saved · 30 days
-          </p>
-          <p className="tnum mt-2 text-3xl font-semibold text-ink">
-            {m.estHoursSaved30d === 0 ? "—" : m.estHoursSaved30d.toFixed(1)}
-          </p>
-          <p className="mt-2 text-[11px] leading-relaxed text-mute">
-            <span className="font-medium text-warn">Estimated</span> — completed runs × the
-            minutes-saved estimate you set per automation
-            {m.executionsWithEstimate === 0 ? "; no runs carry an estimate yet" : ""}
-          </p>
-        </div>
+              : "completed runs ÷ (completed + failed runs)"
+          }
+          basis="Actual"
+        />
+        <StatCard
+          label="Estimated hours saved · 30 days"
+          value={m.estHoursSaved30d === 0 ? "—" : m.estHoursSaved30d.toFixed(1)}
+          method={`completed runs × the minutes-saved estimate you set per automation${
+            m.executionsWithEstimate === 0 ? "; no runs carry an estimate yet" : ""
+          }`}
+          basis="Estimated"
+        />
       </div>
 
       {isEmpty ? (
@@ -117,12 +87,15 @@ export default async function DashboardPage() {
         </div>
       ) : (
         <div className="mt-8">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-ink">Recent executions</h2>
-            <Link href="/app/operations" className="text-[13px] text-slate hover:text-ink">
-              View all →
+          <SectionHeader title="Recent executions">
+            <Link
+              href="/app/operations"
+              className="-mr-2 inline-flex min-h-11 items-center gap-0.5 px-2 text-[13px] font-medium text-accent hover:text-accent-hover"
+            >
+              View all
+              <ChevronRight aria-hidden className="size-4" strokeWidth={2} />
             </Link>
-          </div>
+          </SectionHeader>
           {m.recentExecutions.length === 0 ? (
             <EmptyState
               title="No executions yet"
@@ -130,29 +103,29 @@ export default async function DashboardPage() {
               action={{ href: "/app/automations", label: "Open automations" }}
             />
           ) : (
-            <div className="overflow-hidden border border-fog">
-              <table className="w-full text-sm">
+            <div className="table-wrap">
+              <table className="app-table">
                 <thead>
-                  <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                    <th className="px-4 py-2.5">Execution</th>
-                    <th className="px-4 py-2.5">Automation</th>
-                    <th className="px-4 py-2.5">Status</th>
-                    <th className="px-4 py-2.5">Started</th>
+                  <tr>
+                    <th>Execution</th>
+                    <th>Automation</th>
+                    <th>Status</th>
+                    <th>Started</th>
                   </tr>
                 </thead>
                 <tbody>
                   {m.recentExecutions.map((run) => (
-                    <tr key={run.id} className="border-b border-fog last:border-0">
-                      <td className="tnum px-4 py-2.5 text-slate">
-                        <Link href={`/app/operations/${run.id}`} className="hover:text-ink hover:underline">
+                    <tr key={run.id}>
+                      <td className="tnum text-slate">
+                        <Link href={`/app/operations/${run.id}`} className="row-link row-link-id">
                           {truncateId(run.id)}
                         </Link>
                       </td>
-                      <td className="px-4 py-2.5 text-ink">{run.automationName}</td>
-                      <td className="px-4 py-2.5">
+                      <td className="text-ink">{run.automationName}</td>
+                      <td>
                         <StatusPill status={run.status} />
                       </td>
-                      <td className="tnum px-4 py-2.5 text-slate">{formatDateTime(run.startedAt)}</td>
+                      <td className="tnum text-slate">{formatDateTime(run.startedAt)}</td>
                     </tr>
                   ))}
                 </tbody>

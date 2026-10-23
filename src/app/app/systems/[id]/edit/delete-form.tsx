@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { deleteSystemAction, type SystemFormState } from "../../actions";
+import { Notice } from "@/components/ui/notice";
 
 export function DeleteSystemForm({ systemId, systemName }: { systemId: string; systemName: string }) {
   const bound = deleteSystemAction.bind(null, systemId);
@@ -21,9 +22,9 @@ export function DeleteSystemForm({ systemId, systemName }: { systemId: string; s
       }}
     >
       {state?.error ? (
-        <p className="mb-3 border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <Notice tone="risk" alert className="mb-3">
           {state.error}
-        </p>
+        </Notice>
       ) : null}
       <button
         type="submit"

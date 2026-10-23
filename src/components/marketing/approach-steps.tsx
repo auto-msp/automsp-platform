@@ -54,7 +54,7 @@ export function ApproachSteps() {
                 <span className="tnum text-xs font-medium tracking-[0.2em] text-mute">{s.n}</span>
                 <h3 className="mt-6 text-lg font-semibold tracking-tight text-ink">{s.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-slate">{s.body}</p>
-                <p className="mt-4 border-t border-fog pt-3 text-[12px] leading-snug text-graphite">
+                <p className="mt-4 border-t border-fog pt-3 text-xs leading-snug text-graphite">
                   <span className="font-medium tracking-[0.08em] text-mute uppercase">Deliverable</span>
                   <br />
                   {s.deliverable}

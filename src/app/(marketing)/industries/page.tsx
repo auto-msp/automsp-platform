@@ -44,7 +44,7 @@ export default function IndustriesPage() {
                   {ind.systems.map((s) => (
                     <span
                       key={s}
-                      className="border border-fog px-3 py-1 text-[11px] font-medium tracking-[0.08em] text-slate uppercase"
+                      className="border border-fog px-3 py-1 text-xs font-medium tracking-[0.08em] text-slate uppercase"
                     >
                       {s}
                     </span>

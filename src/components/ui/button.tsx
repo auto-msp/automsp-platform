@@ -2,40 +2,35 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "secondary" | "ghost" | "inverse";
-type Size = "md" | "lg" | "sm";
+export type ButtonVariant = "primary" | "secondary" | "quiet" | "accent" | "danger" | "ghost" | "inverse";
+export type ButtonSize = "sm" | "md" | "lg";
+
+const variantClass: Record<ButtonVariant, string> = {
+  primary: "btn-primary",
+  secondary: "btn-secondary",
+  quiet: "btn-quiet",
+  accent: "btn-accent",
+  danger: "btn-danger",
+  ghost: "btn-ghost",
+  // On charcoal bands: light fill, ink label
+  inverse: "bg-paper text-ink hover:bg-surface",
+};
+
+const sizeClass: Record<ButtonSize, string> = {
+  sm: "btn-sm",
+  md: "",
+  lg: "btn-lg",
+};
+
+/** Class string for anything that must look like a button (links, submit inputs). */
+export function buttonClass(variant: ButtonVariant = "primary", size: ButtonSize = "md", className?: string) {
+  return cn("btn", variantClass[variant], sizeClass[size], className);
+}
 
 /**
- * No `whitespace-nowrap` here. Combined with the long primary labels
- * ("Book a free AI opportunity audit" is ~366px at this size), a fixed-height
- * no-wrap button is wider than a 375px phone's content column — it pushed the
- * hero grid column to 386px and widened the layout viewport on every viewport
- * below ~400px. Labels still sit on one line wherever they fit; they simply
- * wrap instead of overflowing when they don't.
- *
- * `max-w-full` bounds the button by its container, and the sizes below use
- * `min-h-*` rather than `h-*` so a wrapped label grows the button instead of
- * being clipped by a fixed height.
+ * Link styled as a button. Labels wrap instead of overflowing, so the long
+ * marketing CTAs ("Book a free AI opportunity audit") stay inside a 360px column.
  */
-const base =
-  "group/btn inline-flex max-w-full items-center justify-center gap-2.5 text-center font-medium transition-colors duration-200 select-none";
-
-const variants: Record<Variant, string> = {
-  // Swiss primary: solid ink block, squared corners, tracked label
-  primary: "bg-ink text-paper hover:bg-graphite text-[13px] uppercase tracking-[0.08em]",
-  secondary:
-    "border border-ink/25 bg-transparent text-ink hover:border-ink hover:bg-ink hover:text-paper text-[13px] uppercase tracking-[0.08em]",
-  ghost: "text-ink hover:text-slate normal-case text-sm",
-  inverse: "bg-paper text-ink hover:bg-white text-[13px] uppercase tracking-[0.08em]",
-};
-
-const sizes: Record<Size, string> = {
-  md: "min-h-11 px-6",
-  // Tighter gutters on phones so the long CTA labels wrap less often.
-  lg: "min-h-[52px] px-6 sm:px-8",
-  sm: "h-9 px-4 text-xs",
-};
-
 export function ButtonLink({
   href,
   variant = "primary",
@@ -45,20 +40,20 @@ export function ButtonLink({
   children,
 }: {
   href: string;
-  variant?: Variant;
-  size?: Size;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   withArrow?: boolean;
   className?: string;
   children: React.ReactNode;
 }) {
   return (
-    <Link href={href} className={cn(base, variants[variant], sizes[size], className)}>
+    <Link href={href} className={cn("group/btn", buttonClass(variant, size, className))}>
       {children}
       {withArrow ? (
         <ArrowRight
           aria-hidden
-          className="size-4 transition-transform duration-300 ease-(--ease-out-soft) group-hover/btn:translate-x-1"
-          strokeWidth={1.75}
+          className="size-4 shrink-0 transition-transform duration-200 ease-(--ease-out-soft) group-hover/btn:translate-x-0.5"
+          strokeWidth={2}
         />
       ) : null}
     </Link>

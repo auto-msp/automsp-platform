@@ -7,6 +7,7 @@ import { listSuites } from "@/server/ai/evals";
 import { providerStatus } from "@/server/ai/provider";
 import { can, getSessionContext } from "@/server/auth/session";
 import { formatDateTime } from "@/lib/format";
+import { Notice } from "@/components/ui/notice";
 
 export const metadata: Metadata = { title: "Evaluations" };
 export const dynamic = "force-dynamic";
@@ -43,7 +44,7 @@ export default async function EvalsPage() {
         {canRun ? (
           <Link
             href="/app/evals/new"
-            className="inline-flex h-10 items-center bg-ink px-4 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite"
+            className="btn btn-primary"
           >
             New suite
           </Link>
@@ -51,13 +52,13 @@ export default async function EvalsPage() {
       </AppPageHeader>
 
       {!provider.configured ? (
-        <div className="mb-6 border border-fog bg-haze px-4 py-3">
+        <Notice tone="info" className="mb-6">
           <p className="text-[13px] text-slate">
             <span className="font-medium text-warn">No AI provider configured.</span> Suites and cases are
             fully editable, but a run cannot produce answers to score — it is recorded as{" "}
             <span className="text-ink">blocked</span> with the reason, never as zero passes.
           </p>
-        </div>
+        </Notice>
       ) : null}
 
       {rows.length === 0 ? (
@@ -67,25 +68,25 @@ export default async function EvalsPage() {
           action={canRun ? { href: "/app/evals/new", label: "Create the first suite" } : undefined}
         />
       ) : (
-        <div className="border border-fog">
-          <table className="w-full text-left text-sm">
+        <div className="table-wrap">
+          <table className="app-table">
             <thead>
-              <tr className="border-b border-fog text-[11px] tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5 font-medium">Suite</th>
-                <th className="px-4 py-2.5 font-medium">Agent</th>
-                <th className="px-4 py-2.5 font-medium">Scorer</th>
-                <th className="px-4 py-2.5 font-medium">Cases</th>
-                <th className="px-4 py-2.5 font-medium">Latest run</th>
+              <tr>
+                <th className="font-medium">Suite</th>
+                <th className="font-medium">Agent</th>
+                <th className="font-medium">Scorer</th>
+                <th className="font-medium">Cases</th>
+                <th className="font-medium">Latest run</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => (
-                <tr key={row.id} className="border-b border-fog last:border-0">
+                <tr key={row.id}>
                   <td className="px-4 py-3">
-                    <Link href={`/app/evals/${row.id}`} className="font-medium text-ink hover:underline">
+                    <Link href={`/app/evals/${row.id}`} className="row-link">
                       {row.name}
                     </Link>
-                    {row.description ? <p className="mt-0.5 text-[12px] text-slate">{row.description}</p> : null}
+                    {row.description ? <p className="mt-0.5 text-xs text-slate">{row.description}</p> : null}
                   </td>
                   <td className="px-4 py-3 text-slate">
                     {row.agentId ? (agentNames.get(row.agentId) ?? "removed agent") : "—"}

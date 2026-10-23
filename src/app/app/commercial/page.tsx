@@ -39,7 +39,7 @@ export default async function CommercialPage() {
     return (
       <div>
         <AppPageHeader title="Commercial" />
-        <p className="border border-dashed border-fog px-6 py-8 text-center text-sm text-mute">
+        <p className="empty-note">
           The commercial workspace belongs to AutoMSP&apos;s operations team and isn&apos;t part of
           your customer workspace.
         </p>
@@ -72,18 +72,18 @@ export default async function CommercialPage() {
         <h2 className="flex items-center gap-2 text-sm font-semibold text-ink">
           Audit requests
           {receivedCount > 0 ? (
-            <span className="border border-warn/40 bg-warn/10 px-1.5 py-px text-[10px] font-medium tracking-[0.08em] text-warn uppercase">
+            <span className="border border-warn/40 bg-warn/10 px-1.5 py-px text-xs font-medium text-warn">
               {receivedCount} received
             </span>
           ) : null}
           <InboxAutoRefresh />
         </h2>
-        <p className="text-[11px] text-mute">
+        <p className="text-xs text-mute">
           <span className="font-medium text-ok">Actual</span> — submitted through the public form
         </p>
       </div>
       {audits.length === 0 ? (
-        <p className="border border-dashed border-fog px-6 py-8 text-center text-sm text-mute">
+        <p className="empty-note">
           No audit requests yet. Requests from the &quot;Book an audit&quot; form land here — one
           card per real submission.
         </p>
@@ -97,16 +97,16 @@ export default async function CommercialPage() {
                   {a.contactName} · {a.contactEmail}
                   {a.phone ? ` · ${a.phone}` : ""}
                 </span>
-                <span className="tnum ml-auto text-[11px] text-mute">{formatDate(a.createdAt)}</span>
+                <span className="tnum ml-auto text-xs text-mute">{formatDate(a.createdAt)}</span>
                 {canManage ? (
                   <AuditStatusPicker auditId={a.id} status={a.status} options={AUDIT_STATUSES} />
                 ) : (
-                  <span className="border border-fog bg-haze px-2 py-1 text-[11px] font-medium tracking-[0.08em] text-slate uppercase">
+                  <span className="border border-fog bg-haze px-2 py-1 text-xs font-medium text-slate">
                     {AUDIT_STATUSES.find((s) => s.key === a.status)?.label ?? a.status}
                   </span>
                 )}
               </div>
-              <div className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-mute">
+              <div className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-mute">
                 {a.role ? <span>{a.role}</span> : null}
                 {a.industry ? <span>{a.industry}</span> : null}
                 {a.companySize ? <span>{a.companySize}</span> : null}
@@ -139,7 +139,7 @@ export default async function CommercialPage() {
       {/* ── Pipeline ─────────────────────────────────────────────────── */}
       <div className="mt-10 mb-3 flex items-baseline justify-between">
         <h2 className="text-sm font-semibold text-ink">Pipeline</h2>
-        <p className="text-[11px] text-mute">
+        <p className="text-xs text-mute">
           <span className="font-medium text-warn">Estimated</span> — values and probabilities are
           operator-entered
         </p>
@@ -147,30 +147,30 @@ export default async function CommercialPage() {
 
       <div className="grid grid-cols-3 gap-4">
         <div className="border border-fog bg-surface p-4">
-          <p className="text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
+          <p className="text-xs text-slate font-semibold">
             Open opportunities
           </p>
           <p className="tnum mt-1.5 text-2xl font-semibold text-ink">{pipeline.openCount}</p>
         </div>
         <div className="border border-fog bg-surface p-4">
-          <p className="text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
+          <p className="text-xs text-slate font-semibold">
             Pipeline value
           </p>
           <p className="tnum mt-1.5 text-2xl font-semibold text-ink">
             {pipeline.estimatedPipelineUsd !== null ? fmtUsd(pipeline.estimatedPipelineUsd) : "—"}
           </p>
           {pipeline.estimatedPipelineUsd === null ? (
-            <p className="mt-1 text-[11px] text-mute">no values recorded</p>
+            <p className="mt-1 text-xs text-mute">no values recorded</p>
           ) : null}
         </div>
         <div className="border border-fog bg-surface p-4">
-          <p className="text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
+          <p className="text-xs text-slate font-semibold">
             Probability-weighted
           </p>
           <p className="tnum mt-1.5 text-2xl font-semibold text-ink">
             {pipeline.weightedPipelineUsd !== null ? fmtUsd(pipeline.weightedPipelineUsd) : "—"}
           </p>
-          <p className="mt-1 text-[11px] text-mute">Σ value × probability</p>
+          <p className="mt-1 text-xs text-mute">Σ value × probability</p>
         </div>
       </div>
 
@@ -178,7 +178,7 @@ export default async function CommercialPage() {
         {pipeline.byStage.map((s) => (
           <span
             key={s.stage}
-            className="border border-fog bg-haze px-2 py-1 text-[11px] font-medium tracking-[0.06em] text-slate"
+            className="border border-fog bg-haze px-2 py-1 text-xs font-medium text-slate"
           >
             {s.label} <span className="tnum">{s.count}</span>
           </span>
@@ -186,31 +186,31 @@ export default async function CommercialPage() {
       </div>
 
       {opportunities.length === 0 ? (
-        <p className="mt-4 border border-dashed border-fog px-6 py-8 text-center text-sm text-mute">
+        <p className="empty-note mt-4">
           No opportunities yet. Inbound audit requests open a card automatically; add others by
           hand below.
         </p>
       ) : (
         <div className="mt-4 overflow-x-auto border border-fog">
-          <table className="w-full text-sm">
+          <table className="app-table">
             <thead>
-              <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5">Company</th>
-                <th className="px-4 py-2.5">Stage</th>
-                <th className="px-4 py-2.5">Est. value</th>
-                <th className="px-4 py-2.5">Prob.</th>
-                <th className="px-4 py-2.5">Source</th>
-                <th className="px-4 py-2.5">Next action</th>
-                <th className="px-4 py-2.5">Updated</th>
+              <tr>
+                <th>Company</th>
+                <th>Stage</th>
+                <th>Est. value</th>
+                <th>Prob.</th>
+                <th>Source</th>
+                <th>Next action</th>
+                <th>Updated</th>
               </tr>
             </thead>
             <tbody>
               {opportunities.map((o) => (
-                <tr key={o.id} className="border-b border-fog last:border-0">
+                <tr key={o.id}>
                   <td className="px-4 py-3">
                     <p className="font-medium text-ink">{o.company}</p>
                     {o.contactName || o.contactEmail ? (
-                      <p className="mt-0.5 text-[12px] text-mute">
+                      <p className="mt-0.5 text-xs text-mute">
                         {[o.contactName, o.contactEmail].filter(Boolean).join(" · ")}
                       </p>
                     ) : null}
@@ -271,7 +271,7 @@ export default async function CommercialPage() {
               {clients.map((c) => (
                 <li key={c.id} className="flex items-baseline justify-between gap-3 py-2.5">
                   <p className="text-sm font-medium text-ink">{c.name}</p>
-                  <p className="text-[12px] text-mute">
+                  <p className="text-xs text-mute">
                     {[c.industry, c.size].filter(Boolean).join(" · ") || "—"}
                   </p>
                 </li>
@@ -292,11 +292,11 @@ export default async function CommercialPage() {
                 <li key={p.id} className="flex items-baseline justify-between gap-3 py-2.5">
                   <div>
                     <p className="text-sm font-medium text-ink">{p.name}</p>
-                    <p className="text-[12px] text-mute">
+                    <p className="text-xs text-mute">
                       {p.clientId ? (clientNames.get(p.clientId) ?? "—") : "no client linked"}
                     </p>
                   </div>
-                  <span className="border border-fog bg-haze px-1.5 py-px text-[10px] font-medium tracking-[0.08em] text-slate uppercase">
+                  <span className="border border-fog bg-haze px-1.5 py-px text-xs font-medium text-slate">
                     {PROJECT_STAGES.find((s) => s.key === p.stage)?.label ?? p.stage}
                   </span>
                 </li>

@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { toggleSandboxModeAction, type OrgFormState } from "./actions";
+import { Notice } from "@/components/ui/notice";
 
 export function SandboxToggle({ sandboxed }: { sandboxed: boolean }) {
   const [state, formAction, pending] = useActionState<OrgFormState | null, FormData>(
@@ -18,8 +19,8 @@ export function SandboxToggle({ sandboxed }: { sandboxed: boolean }) {
             <span
               className={
                 sandboxed
-                  ? "border border-ok/40 bg-ok/10 px-2 py-0.5 text-[11px] font-medium tracking-[0.08em] text-ok uppercase"
-                  : "border border-risk/40 bg-risk/10 px-2 py-0.5 text-[11px] font-medium tracking-[0.08em] text-risk uppercase"
+                  ? "border border-ok/40 bg-ok/10 px-2 py-0.5 text-xs font-medium text-ok"
+                  : "border border-risk/40 bg-risk/10 px-2 py-0.5 text-xs font-medium text-risk"
               }
             >
               {sandboxed ? "On" : "Off"}
@@ -39,8 +40,8 @@ export function SandboxToggle({ sandboxed }: { sandboxed: boolean }) {
             disabled={pending}
             className={
               sandboxed
-                ? "inline-flex h-9 items-center bg-ink px-4 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:opacity-60"
-                : "inline-flex h-9 items-center border border-risk px-4 text-[12px] font-medium tracking-[0.08em] text-risk uppercase transition-colors hover:bg-risk hover:text-paper disabled:opacity-60"
+                ? "btn btn-primary btn-sm"
+                : "inline-flex h-9 items-center border border-risk px-4 text-xs font-medium text-risk transition-colors hover:bg-risk hover:text-paper disabled:opacity-60"
             }
           >
             {pending ? "Saving…" : sandboxed ? "Take live" : "Re-enable sandbox"}
@@ -48,9 +49,9 @@ export function SandboxToggle({ sandboxed }: { sandboxed: boolean }) {
         </form>
       </div>
       {state?.error ? (
-        <p className="mt-3 border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <Notice tone="risk" alert className="mt-3">
           {state.error}
-        </p>
+        </Notice>
       ) : null}
       {state?.success ? (
         <p className="mt-3 border border-ok/30 bg-ok/5 px-4 py-3 text-sm text-ok" role="status">

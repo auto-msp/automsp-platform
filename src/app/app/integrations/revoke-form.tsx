@@ -31,7 +31,7 @@ export function RevokeButton({ integrationId, name }: { integrationId: string; n
       >
         {pending ? "Revoking…" : "Revoke"}
       </button>
-      {state?.error ? <span className="ml-2 text-[12px] text-risk">{state.error}</span> : null}
+      {state?.error ? <span className="ml-2 text-xs text-risk">{state.error}</span> : null}
     </form>
   );
 }

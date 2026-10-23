@@ -164,7 +164,7 @@ export function SiteHeader() {
           <Link
             href="/book-audit"
             onClick={closeAll}
-            className="group inline-flex h-10 items-center gap-2 bg-ink px-5 text-[13px] font-medium uppercase tracking-[0.08em] text-paper transition-colors hover:bg-graphite"
+            className="btn btn-primary"
           >
             Book Audit
             <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={1.75} aria-hidden />

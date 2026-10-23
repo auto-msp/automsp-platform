@@ -19,7 +19,7 @@ export function CaseStudySection() {
 
         <div className="mt-12 border border-fog bg-paper">
           <div className="border-b border-fog p-8 sm:p-10">
-            <p className="text-[12px] font-medium tracking-[0.22em] text-mute uppercase">
+            <p className="text-xs font-medium tracking-[0.22em] text-mute uppercase">
               Logistics operations
             </p>
             <h3 className="font-display mt-3 text-2xl tracking-tight text-ink sm:text-3xl">

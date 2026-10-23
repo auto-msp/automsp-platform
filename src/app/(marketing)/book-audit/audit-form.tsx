@@ -10,11 +10,12 @@ import {
   roles,
 } from "@/lib/validation";
 import { cn } from "@/lib/utils";
+import { Notice } from "@/components/ui/notice";
 
 type FieldErrors = Partial<Record<string, string[]>>;
 
 const inputCls =
-  "w-full border border-fog bg-surface px-4 py-3 text-sm text-ink placeholder:text-mute transition-colors focus:border-ink focus:outline-none";
+  "field w-full";
 const labelCls = "mb-2 block text-[13px] font-medium text-graphite";
 
 function Field({
@@ -35,7 +36,7 @@ function Field({
       </label>
       {children}
       {error?.[0] ? (
-        <p className="mt-1.5 text-xs text-risk" role="alert">
+        <p className="field-error" role="alert">
           {error[0]}
         </p>
       ) : null}
@@ -214,15 +215,15 @@ export function AuditForm() {
       </div>
 
       {formError ? (
-        <p className="mt-6 border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <Notice tone="risk" alert className="mt-6">
           {formError}
-        </p>
+        </Notice>
       ) : null}
 
       <button
         type="submit"
         disabled={pending}
-        className="group mt-8 inline-flex h-[52px] w-full items-center justify-center gap-3 bg-ink px-8 text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        className="btn btn-primary mt-8 w-full justify-center sm:w-auto"
       >
         {pending ? "Submitting…" : "Submit audit request"}
         <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.75} aria-hidden />

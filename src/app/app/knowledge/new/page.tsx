@@ -14,7 +14,7 @@ export default async function NewSourcePage() {
 
   return (
     <div>
-      <AppPageHeader
+      <AppPageHeader back={{ href: "/app/knowledge", label: "Knowledge" }}
         title="New knowledge source"
         description="A source groups related documents. Ingestion is pasted text/markdown in this slice — web crawling and integration sync are not built."
       />

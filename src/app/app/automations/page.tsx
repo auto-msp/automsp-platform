@@ -48,7 +48,7 @@ export default async function AutomationsPage() {
         {canManage ? (
           <Link
             href="/app/automations/new"
-            className="inline-flex h-10 items-center bg-ink px-5 text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite"
+            className="btn btn-primary"
           >
             New automation
           </Link>
@@ -62,25 +62,25 @@ export default async function AutomationsPage() {
           action={canManage ? { href: "/app/automations/new", label: "Define an automation" } : undefined}
         />
       ) : (
-        <div className="overflow-hidden border border-fog">
-          <table className="w-full text-sm">
+        <div className="table-wrap">
+          <table className="app-table">
             <thead>
-              <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5">Automation</th>
-                <th className="px-4 py-2.5">Status</th>
-                <th className="px-4 py-2.5">System</th>
-                <th className="px-4 py-2.5">Version</th>
-                <th className="px-4 py-2.5">Runs</th>
-                <th className="px-4 py-2.5">Updated</th>
+              <tr>
+                <th>Automation</th>
+                <th>Status</th>
+                <th>System</th>
+                <th>Version</th>
+                <th>Runs</th>
+                <th>Updated</th>
               </tr>
             </thead>
             <tbody>
               {automations.map((automation) => (
-                <tr key={automation.id} className="border-b border-fog last:border-0">
+                <tr key={automation.id}>
                   <td className="px-4 py-3">
                     <Link
                       href={`/app/automations/${automation.id}`}
-                      className="font-medium text-ink hover:underline"
+                      className="row-link"
                     >
                       {automation.name}
                     </Link>

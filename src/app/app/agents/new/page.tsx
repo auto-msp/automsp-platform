@@ -16,7 +16,7 @@ export default async function NewAgentPage() {
 
   return (
     <div>
-      <AppPageHeader
+      <AppPageHeader back={{ href: "/app/agents", label: "Agents" }}
         title="New agent"
         description="Creates the agent with version 1 — every later save adds an auditable version."
       />

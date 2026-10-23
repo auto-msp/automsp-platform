@@ -12,7 +12,7 @@ function Column({ title, items }: { title: string; items: readonly { label: stri
         the footer) without skipping a level. Styling is class-driven, so the
         element change is invisible.
       */}
-      <h2 className="text-[11px] font-medium uppercase tracking-[0.18em] text-mute">{title}</h2>
+      <h2 className="text-xs font-medium uppercase tracking-[0.18em] text-mute">{title}</h2>
       <ul className="mt-5 space-y-3">
         {items.map((item) => (
           <li key={item.label}>

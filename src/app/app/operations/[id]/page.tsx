@@ -6,6 +6,7 @@ import { StatusPill } from "@/components/app/status-pill";
 import { formatDateTime } from "@/lib/format";
 import { getSessionContext } from "@/server/auth/session";
 import { store } from "@/server/db/store";
+import { Notice } from "@/components/ui/notice";
 
 export const metadata: Metadata = { title: "Execution" };
 
@@ -37,7 +38,7 @@ export default async function ExecutionInspectorPage({
 
   return (
     <div>
-      <AppPageHeader
+      <AppPageHeader back={{ href: "/app/operations", label: "Operations" }}
         title={`Execution ${execution.id.slice(0, 8)}…`}
         description={`${execution.automationName} · v${execution.version} · started ${formatDateTime(execution.startedAt)}`}
       >
@@ -45,7 +46,7 @@ export default async function ExecutionInspectorPage({
         {automation ? (
           <Link
             href={`/app/automations/${automation.id}`}
-            className="inline-flex h-10 items-center border border-fog px-4 text-[13px] font-medium text-slate transition-colors hover:border-ink hover:text-ink"
+            className="btn btn-quiet"
           >
             Open automation
           </Link>
@@ -53,9 +54,9 @@ export default async function ExecutionInspectorPage({
       </AppPageHeader>
 
       {execution.error ? (
-        <p className="mb-6 border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk">
+        <Notice tone="risk" className="mb-6">
           {execution.error}
-        </p>
+        </Notice>
       ) : null}
 
       {pendingApproval ? (
@@ -66,7 +67,7 @@ export default async function ExecutionInspectorPage({
           <p className="mt-1 text-[13px] text-slate">{pendingApproval.rationale}</p>
           <Link
             href="/app/approvals"
-            className="mt-3 inline-flex h-9 items-center border border-ink px-4 text-[12px] font-medium tracking-[0.08em] text-ink uppercase transition-colors hover:bg-ink hover:text-paper"
+            className="btn btn-secondary btn-sm mt-3"
           >
             Decide in Approvals
           </Link>
@@ -85,12 +86,12 @@ export default async function ExecutionInspectorPage({
                 </div>
                 {step.error ? <p className="mt-1.5 text-[13px] text-risk">{step.error}</p> : null}
                 {step.output !== undefined ? (
-                  <pre className="tnum mt-2 max-h-36 overflow-auto bg-haze p-3 text-[11px] leading-relaxed text-graphite">
+                  <pre className="tnum mt-2 max-h-36 overflow-auto bg-haze p-3 text-xs leading-relaxed text-graphite">
                     {JSON.stringify(step.output, null, 2)}
                   </pre>
                 ) : null}
                 {step.finishedAt ? (
-                  <p className="tnum mt-1.5 text-[11px] text-mute">
+                  <p className="tnum mt-1.5 text-xs text-mute">
                     {formatDateTime(step.startedAt)} → {formatDateTime(step.finishedAt)}
                   </p>
                 ) : null}
@@ -99,14 +100,14 @@ export default async function ExecutionInspectorPage({
           </ol>
 
           <h2 className="mt-6 mb-3 text-sm font-semibold text-ink">Input</h2>
-          <pre className="tnum overflow-auto border border-fog bg-surface p-4 text-[12px] leading-relaxed text-graphite">
+          <pre className="tnum overflow-auto border border-fog bg-surface p-4 text-xs leading-relaxed text-graphite">
             {JSON.stringify(execution.input, null, 2)}
           </pre>
 
           {execution.output !== undefined ? (
             <>
               <h2 className="mt-6 mb-3 text-sm font-semibold text-ink">Output</h2>
-              <pre className="tnum overflow-auto border border-fog bg-surface p-4 text-[12px] leading-relaxed text-graphite">
+              <pre className="tnum overflow-auto border border-fog bg-surface p-4 text-xs leading-relaxed text-graphite">
                 {JSON.stringify(execution.output, null, 2)}
               </pre>
             </>
@@ -119,7 +120,7 @@ export default async function ExecutionInspectorPage({
             {sortedLogs.length === 0 ? (
               <p className="text-[13px] text-trail">No log lines.</p>
             ) : (
-              <ul className="space-y-1.5 font-mono text-[12px] leading-relaxed">
+              <ul className="space-y-1.5 font-mono text-xs leading-relaxed">
                 {sortedLogs.map((logLine) => (
                   <li key={logLine.id} className="flex gap-3">
                     <span className="tnum shrink-0 text-trail">{formatDateTime(logLine.createdAt)}</span>
@@ -140,7 +141,7 @@ export default async function ExecutionInspectorPage({
               </ul>
             )}
           </div>
-          <p className="mt-2 text-[11px] text-mute">
+          <p className="mt-2 text-xs text-mute">
             Log lines record run events only. Credentials and secrets are never logged.
           </p>
         </div>

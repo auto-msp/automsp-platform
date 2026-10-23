@@ -2,9 +2,10 @@
 
 import { useActionState } from "react";
 import type { AutomationFormState } from "./actions";
+import { Notice } from "@/components/ui/notice";
 
 const inputCls =
-  "w-full border border-fog bg-surface px-4 py-3 text-sm text-ink placeholder:text-mute transition-colors focus:border-ink focus:outline-none";
+  "field w-full";
 
 type BoundAction = (prev: AutomationFormState | null, data: FormData) => Promise<AutomationFormState>;
 
@@ -93,15 +94,15 @@ export function AutomationSettingsForm({
       ) : null}
 
       {state?.error ? (
-        <p className="border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <Notice tone="risk" alert>
           {state.error}
-        </p>
+        </Notice>
       ) : null}
 
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-11 items-center bg-ink px-6 text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:cursor-not-allowed disabled:opacity-60"
+        className="btn btn-primary"
       >
         {pending ? "Saving…" : submitLabel}
       </button>
@@ -120,9 +121,9 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-2 block text-[13px] font-medium text-graphite">{label}</label>
+      <label className="field-label">{label}</label>
       {children}
-      {error ? <p className="mt-1.5 text-xs text-risk">{error}</p> : null}
+      {error ? <p className="field-error">{error}</p> : null}
     </div>
   );
 }

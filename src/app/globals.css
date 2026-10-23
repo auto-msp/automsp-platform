@@ -165,6 +165,33 @@ body {
   .field-error {
     @apply mt-1.5 flex items-start gap-1.5 text-xs font-medium text-risk;
   }
+  /* lucide "circle-alert" drawn as a mask, so every field error has an icon */
+  .field-error::before {
+    content: "";
+    @apply mt-px size-3.5 shrink-0 bg-current;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' x2='12' y1='8' y2='12'/%3E%3Cline x1='12' x2='12.01' y1='16' y2='16'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' x2='12' y1='8' y2='12'/%3E%3Cline x1='12' x2='12.01' y1='16' y2='16'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  /* Buttons — one shape, five roles. Primary is orange with an ink label
+     (white on orange is 2.8:1). Sentence case, 44px tall. */
+  .btn {
+    @apply inline-flex min-h-11 max-w-full items-center justify-center gap-2 rounded-(--radius-control) border border-transparent px-4 text-center text-sm font-semibold transition-colors select-none;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary { @apply bg-brand text-ink hover:bg-brand-hover; }
+  .btn-secondary { @apply border-ink bg-transparent text-ink hover:bg-ink hover:text-paper; }
+  .btn-quiet { @apply border-line bg-surface text-graphite hover:border-ink hover:text-ink; }
+  .btn-accent { @apply bg-accent text-surface hover:bg-accent-hover; }
+  .btn-danger { @apply bg-risk text-surface hover:bg-risk-fill; }
+  .btn-ghost { @apply text-graphite hover:bg-haze hover:text-ink; }
+  .btn-sm { @apply min-h-9 px-3 text-[13px] pointer-coarse:min-h-11; }
+  .btn-lg { @apply min-h-12 px-6 text-[15px]; }
+
+  /* Inline empty / note block inside a page section */
+  .empty-note {
+    @apply border border-dashed border-line/60 bg-surface/60 px-6 py-8 text-center text-sm text-slate;
+  }
 
   /* Panel: hairline-bordered surface, square corners */
   .panel {
@@ -195,8 +222,18 @@ body {
     @apply text-right;
     font-variant-numeric: tabular-nums;
   }
-  .app-table td a.row-link {
-    @apply -my-2.5 flex min-h-11 flex-col justify-center py-2.5 font-medium text-ink hover:text-accent;
+  .app-table tbody td {
+    height: 2.75rem;
+  }
+  /* Primary link in a row: full 44px target without growing the row */
+  .row-link {
+    @apply inline-flex min-h-11 items-center font-medium text-ink underline-offset-2 hover:text-accent hover:underline;
+  }
+  .app-table .row-link {
+    margin-block: -0.625rem;
+  }
+  .row-link-id {
+    @apply font-mono text-[13px] font-normal text-slate;
   }
 
   /* Small mono for ids, keys and code snippets */

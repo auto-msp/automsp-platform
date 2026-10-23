@@ -9,6 +9,7 @@ import { providerStatus } from "@/server/ai/provider";
 import { can, getSessionContext } from "@/server/auth/session";
 import { formatDateTime } from "@/lib/format";
 import { CaseForm, DeleteCaseButton, RunButton } from "./case-forms";
+import { Notice } from "@/components/ui/notice";
 
 export const metadata: Metadata = { title: "Evaluation suite" };
 export const dynamic = "force-dynamic";
@@ -34,7 +35,7 @@ export default async function EvalSuitePage({
   const suite = await getSuite(ctx.organization.id, id);
   if (!suite) notFound();
   if (!can(ctx, "evals.view")) {
-    return <AppPageHeader title={suite.name} description="Your role does not include viewing evaluations." />;
+    return <AppPageHeader back={{ href: "/app/evals", label: "Evaluations" }} title={suite.name} description="Your role does not include viewing evaluations." />;
   }
 
   const canRun = can(ctx, "evals.run");
@@ -58,12 +59,12 @@ export default async function EvalSuitePage({
       </AppPageHeader>
 
       {!provider.configured ? (
-        <div className="mb-6 border border-fog bg-haze px-4 py-3">
+        <Notice tone="info" className="mb-6">
           <p className="text-[13px] text-slate">
             <span className="font-medium text-warn">Runs are blocked:</span> no AI provider is configured,
             so no answers can be produced to score. Blocked runs record the reason, not zero passes.
           </p>
-        </div>
+        </Notice>
       ) : null}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_22rem]">
@@ -100,7 +101,7 @@ export default async function EvalSuitePage({
 
         <div className="space-y-6">
           <div className="border border-fog bg-paper p-5">
-            <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink uppercase">Runs</h3>
+            <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink">Runs</h3>
             {runs.length === 0 ? (
               <p className="text-[13px] text-slate">No runs yet.</p>
             ) : (
@@ -140,14 +141,14 @@ export default async function EvalSuitePage({
           {selectedRun ? (
             <div className="border border-fog bg-paper p-5">
               <div className="mb-3 flex items-center justify-between">
-                <h3 className="text-[13px] font-medium tracking-wide text-ink uppercase">Run detail</h3>
+                <h3 className="text-[13px] font-medium tracking-wide text-ink">Run detail</h3>
                 <StatusPill status={selectedRun.status} />
               </div>
               {selectedRun.status === "blocked" ? (
-                <div className="border border-warn/40 bg-warn/10 px-3 py-2.5">
-                  <p className="text-[12px] font-medium text-warn">Blocked</p>
-                  <p className="mt-1 text-[12px] leading-relaxed text-slate">{selectedRun.blockedReason}</p>
-                </div>
+                <Notice tone="warn">
+                  <p className="text-xs font-medium text-warn">Blocked</p>
+                  <p className="mt-1 text-xs leading-relaxed text-slate">{selectedRun.blockedReason}</p>
+                </Notice>
               ) : (
                 <>
                   <p className="tnum mb-3 text-sm text-ink">
@@ -158,7 +159,7 @@ export default async function EvalSuitePage({
                     {results.map((result) => {
                       const testCase = caseMap.get(result.caseId);
                       return (
-                        <li key={result.id} className="border-t border-fog pt-3 text-[12px]">
+                        <li key={result.id} className="border-t border-fog pt-3 text-xs">
                           <div className="flex items-baseline justify-between">
                             <span
                               className={
@@ -187,7 +188,7 @@ export default async function EvalSuitePage({
                     })}
                   </ul>
                   {selectedRun.scorerUsed === "llm_judge" ? (
-                    <p className="mt-3 border-t border-fog pt-2 text-[11px] leading-relaxed text-mute">
+                    <p className="mt-3 border-t border-fog pt-2 text-xs leading-relaxed text-mute">
                       LLM-judge scores are another model&rsquo;s opinion of the answer, not ground truth. Judge
                       tokens are recorded as evaluation AI runs.
                     </p>

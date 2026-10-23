@@ -24,7 +24,7 @@ export function StatusButtons({ agentId, status }: { agentId: string; status: st
           key={opt.to}
           type="button"
           onClick={() => void setAgentStatusAction(agentId, opt.to)}
-          className="inline-flex h-9 items-center border border-fog px-3 text-[12px] font-medium tracking-[0.06em] text-slate uppercase transition-colors hover:border-ink hover:text-ink"
+          className="btn btn-quiet btn-sm"
         >
           {opt.label}
         </button>

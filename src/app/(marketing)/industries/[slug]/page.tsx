@@ -80,7 +80,7 @@ export default async function IndustryPage({
                 {industry.systems.map((s) => (
                   <span
                     key={s}
-                    className="border border-fog px-3 py-1.5 text-[11px] font-medium tracking-[0.08em] text-slate uppercase"
+                    className="border border-fog px-3 py-1.5 text-xs font-medium tracking-[0.08em] text-slate uppercase"
                   >
                     {s}
                   </span>

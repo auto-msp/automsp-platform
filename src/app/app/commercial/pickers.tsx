@@ -6,7 +6,7 @@ import type { AuditStatus, OpportunityStage } from "@/server/db/types";
 import { updateAuditStatusAction, updateOpportunityStageAction } from "./actions";
 
 const SELECT =
-  "border border-fog bg-paper px-2 py-1 text-[12px] text-ink focus:border-ink focus:outline-none disabled:opacity-60";
+  "field";
 
 /** Stage picker that persists immediately on change. */
 export function StagePicker({
@@ -45,7 +45,7 @@ export function StagePicker({
           </option>
         ))}
       </select>
-      {error ? <span className="text-[11px] text-risk">{error}</span> : null}
+      {error ? <span className="text-xs text-risk">{error}</span> : null}
     </span>
   );
 }
@@ -87,7 +87,7 @@ export function AuditStatusPicker({
           </option>
         ))}
       </select>
-      {error ? <span className="text-[11px] text-risk">{error}</span> : null}
+      {error ? <span className="text-xs text-risk">{error}</span> : null}
     </span>
   );
 }

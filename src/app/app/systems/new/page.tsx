@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export default function NewSystemPage() {
   return (
     <div>
-      <AppPageHeader
+      <AppPageHeader back={{ href: "/app/systems", label: "Systems" }}
         title="New system"
         description="A system is the container your automations live in — one business outcome per system."
       />

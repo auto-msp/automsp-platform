@@ -8,6 +8,7 @@ import { formatDate, formatDateTime } from "@/lib/format";
 import { can, getSessionContext } from "@/server/auth/session";
 import { store } from "@/server/db/store";
 import { getSystem } from "@/server/systems";
+import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = { title: "System" };
 
@@ -35,7 +36,7 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
 
   return (
     <div>
-      <AppPageHeader
+      <AppPageHeader back={{ href: "/app/systems", label: "Systems" }}
         title={system.name}
         description={system.description || "No description provided."}
       >
@@ -43,7 +44,7 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
         {can(ctx, "systems.manage") ? (
           <Link
             href={`/app/systems/${system.id}/edit`}
-            className="inline-flex h-10 items-center border border-fog px-4 text-[13px] font-medium text-slate transition-colors hover:border-ink hover:text-ink"
+            className="btn btn-quiet"
           >
             Edit
           </Link>
@@ -52,17 +53,17 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
 
       <dl className="grid grid-cols-1 gap-4 border border-fog bg-surface p-5 sm:grid-cols-3">
         <div>
-          <dt className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">
+          <dt className="text-xs text-slate font-semibold">
             Business outcome
           </dt>
           <dd className="mt-1.5 text-sm text-ink">{system.businessOutcome || "—"}</dd>
         </div>
         <div>
-          <dt className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">Owner</dt>
+          <dt className="text-xs text-slate font-semibold">Owner</dt>
           <dd className="mt-1.5 text-sm text-ink">{system.ownerName || "—"}</dd>
         </div>
         <div>
-          <dt className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">Created</dt>
+          <dt className="text-xs text-slate font-semibold">Created</dt>
           <dd className="tnum mt-1.5 text-sm text-ink">{formatDate(system.createdAt)}</dd>
         </div>
       </dl>
@@ -75,7 +76,7 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
               href={`/app/automations/new?system=${system.id}`}
               className="text-[13px] text-slate hover:text-ink"
             >
-              Add automation →
+              Add automation<ArrowRight aria-hidden className="ml-1 inline size-4 align-[-0.2em]" strokeWidth={2} />
             </Link>
           ) : null}
         </div>
@@ -90,22 +91,22 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
             }
           />
         ) : (
-          <div className="overflow-hidden border border-fog">
-            <table className="w-full text-sm">
+          <div className="table-wrap">
+            <table className="app-table">
               <thead>
-                <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                  <th className="px-4 py-2.5">Automation</th>
-                  <th className="px-4 py-2.5">Status</th>
-                  <th className="px-4 py-2.5">Est. minutes saved / run</th>
+                <tr>
+                  <th>Automation</th>
+                  <th>Status</th>
+                  <th>Est. minutes saved / run</th>
                 </tr>
               </thead>
               <tbody>
                 {automations.map((automation) => (
-                  <tr key={automation.id} className="border-b border-fog last:border-0">
+                  <tr key={automation.id}>
                     <td className="px-4 py-3">
                       <Link
                         href={`/app/automations/${automation.id}`}
-                        className="font-medium text-ink hover:underline"
+                        className="row-link"
                       >
                         {automation.name}
                       </Link>
@@ -127,26 +128,26 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
       <div className="mt-8">
         <h2 className="mb-3 text-sm font-semibold text-ink">Recent executions</h2>
         {systemExecutions.length === 0 ? (
-          <p className="border border-dashed border-fog px-6 py-8 text-center text-sm text-mute">
+          <p className="empty-note">
             No executions recorded for this system yet.
           </p>
         ) : (
-          <div className="overflow-hidden border border-fog">
-            <table className="w-full text-sm">
+          <div className="table-wrap">
+            <table className="app-table">
               <thead>
-                <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                  <th className="px-4 py-2.5">Automation</th>
-                  <th className="px-4 py-2.5">Status</th>
-                  <th className="px-4 py-2.5">Started</th>
+                <tr>
+                  <th>Automation</th>
+                  <th>Status</th>
+                  <th>Started</th>
                 </tr>
               </thead>
               <tbody>
                 {systemExecutions.map((run) => (
-                  <tr key={run.id} className="border-b border-fog last:border-0">
+                  <tr key={run.id}>
                     <td className="px-4 py-3">
                       <Link
                         href={`/app/operations/${run.id}`}
-                        className="text-ink hover:underline"
+                        className="row-link"
                       >
                         {run.automationName}
                       </Link>

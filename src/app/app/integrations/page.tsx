@@ -8,6 +8,7 @@ import { listIntegrations, providerByKey } from "@/server/integrations";
 import { usingDevVaultKey } from "@/server/vault";
 import { formatDateTime, truncateId } from "@/lib/format";
 import { RevokeButton } from "./revoke-form";
+import { Notice } from "@/components/ui/notice";
 
 export const metadata: Metadata = { title: "Integrations" };
 export const dynamic = "force-dynamic";
@@ -37,14 +38,14 @@ export default async function IntegrationsPage() {
         {canManage ? (
           <Link
             href="/app/integrations/new"
-            className="inline-flex h-10 items-center bg-ink px-4 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite"
+            className="btn btn-primary"
           >
             Add credential
           </Link>
         ) : null}
       </AppPageHeader>
 
-      <div className="mb-6 border border-fog bg-haze px-4 py-3">
+      <Notice tone="info" className="mb-6">
         <p className="text-[13px] text-slate">
           {devKey ? (
             <>
@@ -60,7 +61,7 @@ export default async function IntegrationsPage() {
             </>
           )}
         </p>
-      </div>
+      </Notice>
 
       {rows.length === 0 ? (
         <EmptyState
@@ -69,22 +70,22 @@ export default async function IntegrationsPage() {
           action={canManage ? { href: "/app/integrations/new", label: "Add the first credential" } : undefined}
         />
       ) : (
-        <div className="border border-fog">
-          <table className="w-full text-left text-sm">
+        <div className="table-wrap">
+          <table className="app-table">
             <thead>
-              <tr className="border-b border-fog text-[11px] tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5 font-medium">Name</th>
-                <th className="px-4 py-2.5 font-medium">Provider</th>
-                <th className="px-4 py-2.5 font-medium">Secret</th>
-                <th className="px-4 py-2.5 font-medium">Status</th>
-                <th className="px-4 py-2.5 font-medium">Last used</th>
-                <th className="px-4 py-2.5 font-medium">Id</th>
-                <th className="px-4 py-2.5" />
+              <tr>
+                <th className="font-medium">Name</th>
+                <th className="font-medium">Provider</th>
+                <th className="font-medium">Secret</th>
+                <th className="font-medium">Status</th>
+                <th className="font-medium">Last used</th>
+                <th className="font-medium">Id</th>
+                <th />
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => (
-                <tr key={row.id} className="border-b border-fog last:border-0">
+                <tr key={row.id}>
                   <td className="px-4 py-3 font-medium text-ink">{row.name}</td>
                   <td className="px-4 py-3 text-slate">
                     {providerByKey(row.providerKey)?.name ?? row.providerKey}
@@ -113,7 +114,7 @@ export default async function IntegrationsPage() {
         </div>
       )}
 
-      <p className="mt-4 text-[12px] leading-relaxed text-mute">
+      <p className="mt-4 text-xs leading-relaxed text-mute">
         Revoking a credential destroys the sealed material. Managed connectors (OAuth sign-in flows,
         automatic sync) are not configured in this environment — credentials work with HTTP workflow
         steps only.

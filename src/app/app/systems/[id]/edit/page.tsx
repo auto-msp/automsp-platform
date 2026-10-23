@@ -24,7 +24,7 @@ export default async function EditSystemPage({ params }: { params: Promise<{ id:
 
   return (
     <div>
-      <AppPageHeader title={`Edit — ${system.name}`} />
+      <AppPageHeader back={{ href: `/app/systems/${system.id}`, label: "Back to system" }} title={`Edit — ${system.name}`} />
       <div className="max-w-xl space-y-10">
         <SystemForm
           action={boundUpdate}

@@ -57,7 +57,7 @@ export default function ApproachPage() {
               <div className="grid gap-8 lg:grid-cols-[0.5fr_1.5fr_1fr] lg:gap-16">
                 <div>
                   <span className="tnum font-display text-7xl leading-none text-fog">{p.n}</span>
-                  <p className="mt-4 text-[11px] font-medium tracking-[0.18em] text-mute uppercase">
+                  <p className="mt-4 text-xs font-medium tracking-[0.18em] text-mute uppercase">
                     {p.duration}
                   </p>
                 </div>

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { AppPageHeader } from "@/components/app/page-header";
 import { can, getSessionContext } from "@/server/auth/session";
 import { notFound } from "next/navigation";
@@ -16,13 +15,10 @@ export default async function NewIntegrationPage() {
 
   return (
     <div>
-      <AppPageHeader
+      <AppPageHeader back={{ href: "/app/integrations", label: "Integrations" }}
         title="Add credential"
         description="The secret is sealed with AES-256-GCM the moment it is submitted. It is never stored in plaintext, never shown again, and never written to logs."
       >
-        <Link href="/app/integrations" className="text-[13px] text-slate hover:text-ink">
-          ← Back
-        </Link>
       </AppPageHeader>
 
       <IntegrationForm

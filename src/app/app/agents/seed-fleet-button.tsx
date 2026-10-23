@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { seedFleetAction, type SeedFleetState } from "./actions";
+import { Notice } from "@/components/ui/notice";
 
 export function SeedFleetButton() {
   const [state, formAction, pending] = useActionState<SeedFleetState | null, FormData>(
@@ -14,14 +15,14 @@ export function SeedFleetButton() {
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-10 items-center border border-ink px-4 text-[12px] font-medium tracking-[0.08em] text-ink uppercase transition-colors hover:bg-ink hover:text-paper disabled:opacity-60"
+        className="btn btn-secondary"
       >
         {pending ? "Seeding…" : "Seed starter fleet"}
       </button>
       {state?.error ? (
-        <p className="w-full border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <Notice tone="risk" alert>
           {state.error}
-        </p>
+        </Notice>
       ) : null}
       {state?.success ? (
         <p className="w-full border border-ok/30 bg-ok/5 px-4 py-3 text-sm text-ok" role="status">
