@@ -69,7 +69,7 @@ export default async function CommercialPage() {
 
       {/* ── Audits inbox ─────────────────────────────────────────────── */}
       <div className="mb-3 flex items-baseline justify-between">
-        <h2 className="flex items-center gap-2 text-sm font-semibold text-ink">
+        <h2 className="flex items-center gap-2 text-[15px] leading-5 font-semibold text-ink">
           Audit requests
           {receivedCount > 0 ? (
             <span className="border border-warn/40 bg-warn/10 px-1.5 py-px text-xs font-medium text-warn">
@@ -138,7 +138,7 @@ export default async function CommercialPage() {
 
       {/* ── Pipeline ─────────────────────────────────────────────────── */}
       <div className="mt-10 mb-3 flex items-baseline justify-between">
-        <h2 className="text-sm font-semibold text-ink">Pipeline</h2>
+        <h2 className="text-[15px] leading-5 font-semibold text-ink">Pipeline</h2>
         <p className="text-xs text-mute">
           <span className="font-medium text-warn">Estimated</span> — values and probabilities are
           operator-entered
@@ -257,10 +257,10 @@ export default async function CommercialPage() {
       ) : null}
 
       {/* ── Clients & projects ───────────────────────────────────────── */}
-      <h2 className="mt-10 mb-3 text-sm font-semibold text-ink">Clients &amp; projects</h2>
+      <h2 className="mt-10 mb-3 text-[15px] leading-5 font-semibold text-ink">Clients &amp; projects</h2>
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="border border-fog bg-surface p-5">
-          <h3 className="text-sm font-semibold text-ink">Clients ({clients.length})</h3>
+          <h3 className="text-[15px] leading-5 font-semibold text-ink">Clients ({clients.length})</h3>
           {clients.length === 0 ? (
             <p className="mt-3 text-[13px] text-mute">
               None yet. A client record represents a signed engagement — created here, not
@@ -281,7 +281,7 @@ export default async function CommercialPage() {
         </div>
 
         <div className="border border-fog bg-surface p-5">
-          <h3 className="text-sm font-semibold text-ink">Projects ({projects.length})</h3>
+          <h3 className="text-[15px] leading-5 font-semibold text-ink">Projects ({projects.length})</h3>
           {projects.length === 0 ? (
             <p className="mt-3 text-[13px] text-mute">
               None yet. Projects track delivery from discovery to managed operations.

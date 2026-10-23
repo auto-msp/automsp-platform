@@ -27,7 +27,7 @@ export default async function ReportsPage() {
       <GenerateReportForm canGenerate={canGenerate} />
 
       <div className="mt-6">
-        <h2 className="mb-3 text-sm font-semibold text-ink">Generated reports</h2>
+        <h2 className="mb-3 text-[15px] leading-5 font-semibold text-ink">Generated reports</h2>
         {reports.length === 0 ? (
           <div className="border border-dashed border-fog p-10 text-center">
             <p className="text-sm text-mute">

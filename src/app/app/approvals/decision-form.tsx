@@ -19,13 +19,13 @@ export function DecisionButtons({ approvalId }: { approvalId: string }) {
   const pending = approvePending || rejectPending;
 
   return (
-    <div className="flex flex-wrap items-center justify-end gap-3">
+    <div className="flex flex-wrap items-center gap-2 sm:justify-end sm:gap-3">
       <input
         type="text"
         value={note}
         onChange={(e) => setNote(e.target.value)}
         placeholder="Decision note (required to reject)"
-        className="field w-64"
+        className="field w-full sm:w-64"
       />
       <form action={approveAction}>
         <input type="hidden" name="note" value={note} />
@@ -42,13 +42,13 @@ export function DecisionButtons({ approvalId }: { approvalId: string }) {
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex h-9 items-center border border-risk px-4 text-xs font-medium text-risk transition-colors hover:bg-risk hover:text-paper disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn btn-sm border-risk bg-transparent text-risk hover:bg-risk hover:text-surface"
         >
           {rejectPending ? "Rejecting…" : "Reject"}
         </button>
       </form>
       {approveState?.error || rejectState?.error ? (
-        <p className="w-full text-right text-[13px] text-risk" role="alert">
+        <p className="field-error w-full sm:justify-end" role="alert">
           {approveState?.error ?? rejectState?.error}
         </p>
       ) : null}

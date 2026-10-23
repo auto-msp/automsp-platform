@@ -56,7 +56,7 @@ export function DeleteCaseButton({ suiteId, caseId }: { suiteId: string; caseId:
       onClick={() => {
         if (window.confirm("Delete this case?")) void deleteCaseAction(suiteId, caseId);
       }}
-      className="shrink-0 text-xs font-medium text-risk hover:underline"
+      className="inline-flex min-h-11 items-center shrink-0 text-xs font-medium text-risk hover:underline"
     >
       Delete
     </button>

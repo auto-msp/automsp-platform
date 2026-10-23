@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { toggleSandboxModeAction, type OrgFormState } from "./actions";
 import { Notice } from "@/components/ui/notice";
+import { ShieldCheck, ShieldOff } from "lucide-react";
 
 export function SandboxToggle({ sandboxed }: { sandboxed: boolean }) {
   const [state, formAction, pending] = useActionState<OrgFormState | null, FormData>(
@@ -14,15 +15,16 @@ export function SandboxToggle({ sandboxed }: { sandboxed: boolean }) {
     <div className="border border-fog bg-surface p-5">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="max-w-xl">
-          <h2 className="flex items-center gap-2.5 text-sm font-semibold text-ink">
+          <h2 className="flex items-center gap-2.5 text-[15px] leading-5 font-semibold text-ink">
             Sandbox mode
             <span
               className={
                 sandboxed
-                  ? "border border-ok/40 bg-ok/10 px-2 py-0.5 text-xs font-medium text-ok"
-                  : "border border-risk/40 bg-risk/10 px-2 py-0.5 text-xs font-medium text-risk"
+                  ? "inline-flex items-center gap-1 rounded-(--radius-chip) bg-ok-soft px-2 py-0.5 text-xs font-semibold text-ok"
+                  : "inline-flex items-center gap-1 rounded-(--radius-chip) bg-risk-soft px-2 py-0.5 text-xs font-semibold text-risk"
               }
             >
+              {sandboxed ? <ShieldCheck aria-hidden className="size-3.5" strokeWidth={2} /> : <ShieldOff aria-hidden className="size-3.5" strokeWidth={2} />}
               {sandboxed ? "On" : "Off"}
             </span>
           </h2>
@@ -40,8 +42,8 @@ export function SandboxToggle({ sandboxed }: { sandboxed: boolean }) {
             disabled={pending}
             className={
               sandboxed
-                ? "btn btn-primary btn-sm"
-                : "inline-flex h-9 items-center border border-risk px-4 text-xs font-medium text-risk transition-colors hover:bg-risk hover:text-paper disabled:opacity-60"
+                ? "btn btn-sm border-risk bg-transparent text-risk hover:bg-risk hover:text-surface"
+                : "btn btn-secondary btn-sm"
             }
           >
             {pending ? "Saving…" : sandboxed ? "Take live" : "Re-enable sandbox"}

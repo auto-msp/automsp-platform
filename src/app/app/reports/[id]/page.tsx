@@ -52,7 +52,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
 
       {payload.sections.map((section, i) => (
         <section key={i} className="mb-6 border border-fog bg-surface p-5">
-          <h2 className="text-sm font-semibold text-ink">{section.title}</h2>
+          <h2 className="text-[15px] leading-5 font-semibold text-ink">{section.title}</h2>
           {section.narrative ? (
             <p className="mt-2 text-[13px] leading-relaxed text-slate">{section.narrative}</p>
           ) : null}

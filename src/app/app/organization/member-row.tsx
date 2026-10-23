@@ -76,7 +76,7 @@ export function MemberRow({
               <button
                 type="submit"
                 disabled={removePending}
-                className="text-[13px] text-risk hover:underline disabled:opacity-60"
+                className="inline-flex min-h-11 items-center text-[13px] text-risk hover:underline disabled:opacity-60"
               >
                 {removePending ? "Removing…" : "Remove"}
               </button>

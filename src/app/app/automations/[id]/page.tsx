@@ -106,7 +106,7 @@ export default async function AutomationDetailPage({
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div>
-          <h2 className="mb-3 text-sm font-semibold text-ink">
+          <h2 className="mb-3 text-[15px] leading-5 font-semibold text-ink">
             Steps — v{current?.version.version ?? 0}
           </h2>
           {current && current.definition.nodes.length > 0 ? (
@@ -151,7 +151,7 @@ export default async function AutomationDetailPage({
           />
 
           <div>
-            <h2 className="mb-3 text-sm font-semibold text-ink">Recent runs</h2>
+            <h2 className="mb-3 text-[15px] leading-5 font-semibold text-ink">Recent runs</h2>
             {runs.length === 0 ? (
               <p className="empty-note">
                 No runs yet.

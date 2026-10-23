@@ -22,7 +22,7 @@ export function RunForm({
   if (!canRun) {
     return (
       <div className="border border-fog bg-haze p-5">
-        <h2 className="text-sm font-semibold text-ink">Run manually</h2>
+        <h2 className="text-[15px] leading-5 font-semibold text-ink">Run manually</h2>
         <p className="mt-2 text-[13px] text-slate">Your role cannot start runs.</p>
       </div>
     );
@@ -31,7 +31,7 @@ export function RunForm({
   if (status === "archived") {
     return (
       <div className="border border-fog bg-haze p-5">
-        <h2 className="text-sm font-semibold text-ink">Run manually</h2>
+        <h2 className="text-[15px] leading-5 font-semibold text-ink">Run manually</h2>
         <p className="mt-2 text-[13px] text-slate">This automation is archived.</p>
       </div>
     );
@@ -39,7 +39,7 @@ export function RunForm({
 
   return (
     <div className="border border-fog bg-surface p-5">
-      <h2 className="text-sm font-semibold text-ink">Run manually</h2>
+      <h2 className="text-[15px] leading-5 font-semibold text-ink">Run manually</h2>
       <p className="mt-1.5 text-[13px] text-slate">
         Provide test input as a JSON object. Scheduled triggers are not configured in this
         environment.

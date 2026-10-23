@@ -59,7 +59,7 @@ export default async function OrganizationPage() {
       </div>
 
       <div className="mt-8">
-        <h2 className="mb-3 text-sm font-semibold text-ink">Members ({members.length})</h2>
+        <h2 className="mb-3 text-[15px] leading-5 font-semibold text-ink">Members ({members.length})</h2>
         <div className="table-wrap">
           <table className="app-table">
             <thead>
@@ -91,7 +91,7 @@ export default async function OrganizationPage() {
 
       {canManageMembers ? (
         <div className="mt-8 max-w-xl">
-          <h2 className="mb-1.5 text-sm font-semibold text-ink">Add a member</h2>
+          <h2 className="mb-1.5 text-[15px] leading-5 font-semibold text-ink">Add a member</h2>
           <p className="mb-4 text-[13px] text-slate">
             Email invitations are not configured in this environment — members join by signing up
             first, then being added here by email.

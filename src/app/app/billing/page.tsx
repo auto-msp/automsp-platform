@@ -41,7 +41,7 @@ export default async function BillingPage() {
       {/* Usage — always real */}
       <div className="border border-fog bg-surface p-5">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold text-ink">Metered usage · this period</h2>
+          <h2 className="text-[15px] leading-5 font-semibold text-ink">Metered usage · this period</h2>
           <p className="text-xs text-mute">
             <span className="font-medium text-ok">Actual</span> — {periodLabel}
           </p>
@@ -71,7 +71,7 @@ export default async function BillingPage() {
       {/* Plan */}
       <div className="mt-6 border border-fog bg-surface p-5">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold text-ink">Plan</h2>
+          <h2 className="text-[15px] leading-5 font-semibold text-ink">Plan</h2>
           {!overview.configured ? (
             <span className="border border-fog bg-haze px-2 py-1 text-xs font-medium text-slate">
               Not configured
@@ -132,7 +132,7 @@ export default async function BillingPage() {
       {/* Invoices */}
       <div className="mt-6">
         <div className="mb-3 flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold text-ink">Invoices</h2>
+          <h2 className="text-[15px] leading-5 font-semibold text-ink">Invoices</h2>
           <p className="text-xs text-mute">
             <span className="font-medium text-ok">Actual</span> — from the payment provider
           </p>

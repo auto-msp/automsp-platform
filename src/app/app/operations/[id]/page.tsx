@@ -60,8 +60,8 @@ export default async function ExecutionInspectorPage({
       ) : null}
 
       {pendingApproval ? (
-        <div className="mb-6 border border-warn/40 bg-warn/5 px-5 py-4">
-          <p className="text-sm font-medium text-ink">
+        <Notice tone="warn" className="mb-6">
+          <p className="font-semibold text-ink">
             Waiting on approval — {pendingApproval.action}
           </p>
           <p className="mt-1 text-[13px] text-slate">{pendingApproval.rationale}</p>
@@ -71,12 +71,12 @@ export default async function ExecutionInspectorPage({
           >
             Decide in Approvals
           </Link>
-        </div>
+        </Notice>
       ) : null}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div>
-          <h2 className="mb-3 text-sm font-semibold text-ink">Steps</h2>
+          <h2 className="mb-3 text-[15px] leading-5 font-semibold text-ink">Steps</h2>
           <ol className="space-y-2">
             {sortedSteps.map((step) => (
               <li key={step.id} className="border border-fog bg-surface px-4 py-3">
@@ -99,14 +99,14 @@ export default async function ExecutionInspectorPage({
             ))}
           </ol>
 
-          <h2 className="mt-6 mb-3 text-sm font-semibold text-ink">Input</h2>
+          <h2 className="mt-6 mb-3 text-[15px] leading-5 font-semibold text-ink">Input</h2>
           <pre className="tnum overflow-auto border border-fog bg-surface p-4 text-xs leading-relaxed text-graphite">
             {JSON.stringify(execution.input, null, 2)}
           </pre>
 
           {execution.output !== undefined ? (
             <>
-              <h2 className="mt-6 mb-3 text-sm font-semibold text-ink">Output</h2>
+              <h2 className="mt-6 mb-3 text-[15px] leading-5 font-semibold text-ink">Output</h2>
               <pre className="tnum overflow-auto border border-fog bg-surface p-4 text-xs leading-relaxed text-graphite">
                 {JSON.stringify(execution.output, null, 2)}
               </pre>
@@ -115,7 +115,7 @@ export default async function ExecutionInspectorPage({
         </div>
 
         <div>
-          <h2 className="mb-3 text-sm font-semibold text-ink">Run log</h2>
+          <h2 className="mb-3 text-[15px] leading-5 font-semibold text-ink">Run log</h2>
           <div className="border border-fog bg-night p-4">
             {sortedLogs.length === 0 ? (
               <p className="text-[13px] text-trail">No log lines.</p>

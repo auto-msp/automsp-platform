@@ -6,16 +6,17 @@ import { formatDateTime } from "@/lib/format";
 import { can, getSessionContext } from "@/server/auth/session";
 import { store } from "@/server/db/store";
 import { DecisionButtons } from "./decision-form";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CircleCheck, OctagonAlert, TriangleAlert, type LucideIcon } from "lucide-react";
 
 export const metadata: Metadata = { title: "Approvals" };
 
 export const dynamic = "force-dynamic";
 
-const RISK_CLS: Record<string, string> = {
-  low: "border-ok/40 bg-ok/10 text-ok",
-  medium: "border-warn/40 bg-warn/10 text-warn",
-  high: "border-risk/40 bg-risk/10 text-risk",
+// Risk is shown with an icon and a word, never colour alone.
+const RISK: Record<string, { cls: string; icon: LucideIcon }> = {
+  low: { cls: "bg-ok-soft text-ok", icon: CircleCheck },
+  medium: { cls: "bg-warn-soft text-warn", icon: TriangleAlert },
+  high: { cls: "bg-risk-soft text-risk", icon: OctagonAlert },
 };
 
 export default async function ApprovalsPage() {
@@ -46,7 +47,7 @@ export default async function ApprovalsPage() {
         description="Consequential actions pause here until a person decides. Nothing runs without a recorded decision."
       />
 
-      <h2 className="mb-3 text-sm font-semibold text-ink">Pending ({pending.length})</h2>
+      <h2 className="mb-3 text-[15px] leading-5 font-semibold text-ink">Pending ({pending.length})</h2>
       {pending.length === 0 ? (
         <p className="empty-note">
           Nothing waiting on a decision.
@@ -54,15 +55,22 @@ export default async function ApprovalsPage() {
       ) : (
         <div className="space-y-3">
           {pending.map((approval) => (
-            <div key={approval.id} className="border border-fog bg-surface p-5">
+            <div key={approval.id} className="border border-fog border-l-4 border-l-brand bg-surface p-4 sm:p-5">
               <div className="flex flex-wrap items-center gap-3">
                 <p className="text-sm font-medium text-ink">{approval.action}</p>
-                <span
-                  className={`border px-1.5 py-px text-[11px] font-medium tracking-[0.08em] uppercase ${RISK_CLS[approval.riskLevel]}`}
-                >
-                  {approval.riskLevel} risk
-                </span>
-                <span className="border border-fog bg-haze px-1.5 py-px text-xs font-medium text-slate">
+                {(() => {
+                  const risk = RISK[approval.riskLevel] ?? RISK.medium;
+                  const RiskIcon = risk.icon;
+                  return (
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-(--radius-chip) px-2 py-0.5 text-xs font-semibold capitalize ${risk.cls}`}
+                    >
+                      <RiskIcon aria-hidden className="size-3.5" strokeWidth={2} />
+                      {approval.riskLevel} risk
+                    </span>
+                  );
+                })()}
+                <span className="rounded-(--radius-chip) bg-haze px-2 py-0.5 text-xs font-medium text-graphite">
                   {approval.kind === "agent_tool" ? "agent tool" : "workflow"}
                 </span>
                 <span className="tnum ml-auto text-xs text-mute">
@@ -75,12 +83,12 @@ export default async function ApprovalsPage() {
                   {JSON.stringify(approval.payload, null, 2)}
                 </pre>
               ) : null}
-              <div className="mt-3 flex items-center justify-between gap-4">
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                 {approval.kind === "agent_tool" ? (
                   typeof approval.payload.agentId === "string" ? (
                     <Link
                       href={`/app/agents/${approval.payload.agentId}`}
-                      className="text-[13px] text-slate hover:text-ink"
+                      className="inline-flex min-h-11 items-center text-[13px] font-medium text-accent hover:underline"
                     >
                       Open agent<ArrowRight aria-hidden className="ml-1 inline size-4 align-[-0.2em]" strokeWidth={2} />
                     </Link>
@@ -90,7 +98,7 @@ export default async function ApprovalsPage() {
                 ) : (
                   <Link
                     href={`/app/operations/${approval.executionId}`}
-                    className="text-[13px] text-slate hover:text-ink"
+                    className="inline-flex min-h-11 items-center text-[13px] font-medium text-accent hover:underline"
                   >
                     Open execution<ArrowRight aria-hidden className="ml-1 inline size-4 align-[-0.2em]" strokeWidth={2} />
                   </Link>
@@ -106,7 +114,7 @@ export default async function ApprovalsPage() {
         </div>
       )}
 
-      <h2 className="mt-10 mb-3 text-sm font-semibold text-ink">Decided</h2>
+      <h2 className="mt-10 mb-3 text-[15px] leading-5 font-semibold text-ink">Decided</h2>
       {decided.length === 0 ? (
         <p className="empty-note">
           No decisions recorded yet.

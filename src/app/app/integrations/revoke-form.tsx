@@ -27,7 +27,7 @@ export function RevokeButton({ integrationId, name }: { integrationId: string; n
       <button
         type="submit"
         disabled={pending}
-        className="text-[13px] text-risk underline-offset-2 hover:underline disabled:opacity-50"
+        className="inline-flex min-h-11 items-center text-[13px] text-risk underline-offset-2 hover:underline disabled:opacity-50"
       >
         {pending ? "Revoking…" : "Revoke"}
       </button>

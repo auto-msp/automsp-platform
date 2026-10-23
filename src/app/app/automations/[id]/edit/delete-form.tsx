@@ -35,7 +35,7 @@ export function DeleteAutomationForm({
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-10 items-center border border-risk px-4 text-[13px] font-medium text-risk transition-colors hover:bg-risk hover:text-paper disabled:opacity-60"
+        className="btn border-risk bg-transparent text-risk hover:bg-risk hover:text-surface"
       >
         {pending ? "Deleting…" : "Delete automation"}
       </button>

@@ -19,7 +19,7 @@ export function NewOpportunityForm() {
   );
   return (
     <form action={formAction} className="border border-fog bg-surface p-4">
-      <h3 className="text-sm font-semibold text-ink">Add an opportunity</h3>
+      <h3 className="text-[15px] leading-5 font-semibold text-ink">Add an opportunity</h3>
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
         <div>
           <label className={LABEL} htmlFor="opp-company">Company</label>
@@ -69,7 +69,7 @@ export function NewClientForm() {
   );
   return (
     <form action={formAction} className="border border-fog bg-surface p-4">
-      <h3 className="text-sm font-semibold text-ink">Add a client</h3>
+      <h3 className="text-[15px] leading-5 font-semibold text-ink">Add a client</h3>
       <div className="mt-3 grid gap-3 sm:grid-cols-3">
         <div>
           <label className={LABEL} htmlFor="cl-name">Name</label>
@@ -103,7 +103,7 @@ export function NewProjectForm({ clients }: { clients: { id: string; name: strin
   );
   return (
     <form action={formAction} className="border border-fog bg-surface p-4">
-      <h3 className="text-sm font-semibold text-ink">Add a project</h3>
+      <h3 className="text-[15px] leading-5 font-semibold text-ink">Add a project</h3>
       <div className="mt-3 grid gap-3 sm:grid-cols-3">
         <div>
           <label className={LABEL} htmlFor="pj-name">Name</label>

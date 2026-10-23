@@ -29,7 +29,7 @@ export function GenerateReportForm({ canGenerate }: { canGenerate: boolean }) {
 
   return (
     <div className="border border-fog bg-surface p-5">
-      <h2 className="text-sm font-semibold text-ink">Generate a report</h2>
+      <h2 className="text-[15px] leading-5 font-semibold text-ink">Generate a report</h2>
       <p className="mt-1 text-[13px] text-slate">
         Snapshots your current operational data into a shareable document. Every derived number
         carries its basis and calculation method.

@@ -96,7 +96,7 @@ export default async function AnalyticsPage() {
       {/* ROI panel */}
       <div className="mt-6 border border-fog bg-surface p-5">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold text-ink">Return on automation · last 30 days</h2>
+          <h2 className="text-[15px] leading-5 font-semibold text-ink">Return on automation · last 30 days</h2>
           <p className="text-xs text-mute">
             All figures <BasisTag basis="estimated" /> — planning numbers, not booked savings
           </p>
@@ -145,17 +145,24 @@ export default async function AnalyticsPage() {
       {/* Runs per day */}
       <div className="mt-6 border border-fog bg-surface p-5">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold text-ink">Runs per day · last 14 days</h2>
+          <h2 className="text-[15px] leading-5 font-semibold text-ink">Runs per day · last 14 days</h2>
           <p className="text-xs text-mute">
             <BasisTag basis="actual" /> — counted from execution records
           </p>
         </div>
-        <div className="mt-4 flex h-32 items-end gap-1.5">
+        {days.every((d) => d.count === 0) ? (
+          <p className="mt-3 text-[13px] text-slate">No runs in the last 14 days.</p>
+        ) : null}
+        <div
+          role="img"
+          aria-label={`Runs per day over the last 14 days, ${days.reduce((n, d) => n + d.count, 0)} in total`}
+          className="mt-4 flex h-32 items-end gap-1.5"
+        >
           {days.map((d) => (
             <div key={d.label} className="flex flex-1 flex-col items-center gap-1.5">
               <span className="tnum text-xs text-slate">{d.count > 0 ? d.count : ""}</span>
               <div
-                className={`w-full ${d.count > 0 ? "bg-accent" : "bg-haze"}`}
+                className={`w-full ${d.count > 0 ? "bg-data-2" : "bg-fog"}`}
                 style={{ height: `${Math.max(4, (d.count / maxCount) * 100)}%` }}
               />
               <span className="hidden text-xs text-mute sm:block">{d.label}</span>
@@ -167,7 +174,7 @@ export default async function AnalyticsPage() {
       {/* Automation performance */}
       <div className="mt-6">
         <div className="mb-3 flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold text-ink">Automation performance · last 30 days</h2>
+          <h2 className="text-[15px] leading-5 font-semibold text-ink">Automation performance · last 30 days</h2>
           <p className="text-xs text-mute">
             Counts <BasisTag basis="actual" /> · time avoided <BasisTag basis="estimated" />
           </p>
@@ -233,7 +240,7 @@ export default async function AnalyticsPage() {
       <div className="mt-6 grid gap-6 sm:grid-cols-2">
         <div className="border border-fog bg-surface p-5">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold text-ink">Approval responsiveness</h2>
+            <h2 className="text-[15px] leading-5 font-semibold text-ink">Approval responsiveness</h2>
             <p className="text-xs text-mute">
               <BasisTag basis="actual" />
             </p>
@@ -263,7 +270,7 @@ export default async function AnalyticsPage() {
 
         <div className="border border-fog bg-surface p-5">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold text-ink">Incidents</h2>
+            <h2 className="text-[15px] leading-5 font-semibold text-ink">Incidents</h2>
             <p className="text-xs text-mute">
               <BasisTag basis="actual" />
             </p>
@@ -292,7 +299,7 @@ export default async function AnalyticsPage() {
       {/* AI usage & cost */}
       <div className="mt-6 border border-fog bg-surface p-5">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold text-ink">AI usage &amp; cost · last 30 days</h2>
+          <h2 className="text-[15px] leading-5 font-semibold text-ink">AI usage &amp; cost · last 30 days</h2>
           <p className="text-xs text-mute">
             Calls/tokens <BasisTag basis="actual" /> (provider-reported) · USD{" "}
             <BasisTag basis="estimated" /> (list price × tokens)

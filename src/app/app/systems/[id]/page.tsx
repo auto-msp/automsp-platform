@@ -70,7 +70,7 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
 
       <div className="mt-8">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-ink">Automations</h2>
+          <h2 className="text-[15px] leading-5 font-semibold text-ink">Automations</h2>
           {can(ctx, "automations.manage") ? (
             <Link
               href={`/app/automations/new?system=${system.id}`}
@@ -126,7 +126,7 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
       </div>
 
       <div className="mt-8">
-        <h2 className="mb-3 text-sm font-semibold text-ink">Recent executions</h2>
+        <h2 className="mb-3 text-[15px] leading-5 font-semibold text-ink">Recent executions</h2>
         {systemExecutions.length === 0 ? (
           <p className="empty-note">
             No executions recorded for this system yet.
