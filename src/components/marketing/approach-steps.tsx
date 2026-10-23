@@ -41,7 +41,7 @@ export function ApproachSteps() {
             </h2>
             <Link
               href="/approach"
-              className="mt-8 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.08em] text-ink uppercase underline-offset-4 hover:underline"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent underline-offset-4 hover:underline"
             >
               More about our approach
               <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden />
@@ -51,7 +51,7 @@ export function ApproachSteps() {
           <ol className="grid gap-px bg-fog sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s) => (
               <li key={s.n} className="flex flex-col bg-paper p-6 sm:p-7">
-                <span className="tnum text-xs font-medium tracking-[0.2em] text-mute">{s.n}</span>
+                <span className="tnum text-sm font-semibold tracking-[0.12em] text-accent">{s.n}</span>
                 <h3 className="mt-6 text-lg font-semibold tracking-tight text-ink">{s.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-slate">{s.body}</p>
                 <p className="mt-4 border-t border-fog pt-3 text-xs leading-snug text-graphite">

@@ -14,7 +14,7 @@ const assurances = [
 
 export function SecuritySection() {
   return (
-    <Section className="bg-night text-paper">
+    <Section className="on-dark bg-night text-paper">
       <Shell>
         <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_1fr_1fr] lg:gap-16">
           <div>
@@ -22,29 +22,27 @@ export function SecuritySection() {
             <h2 className="font-display mt-6 text-4xl leading-[1.08] tracking-tight sm:text-5xl">
               Control is part of the architecture.
             </h2>
-            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/70">
+            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-night-mute">
               AI systems should operate within defined boundaries. AutoMSP designs deployments
               around your security, privacy, and operational requirements.
             </p>
-          </div>
-
-          <ul className="space-y-4">
-            {assurances.map((a) => (
-              <li key={a} className="flex items-center gap-3 text-sm text-white/85">
-                <Check className="size-4 shrink-0 text-trail" strokeWidth={2} aria-hidden />
-                {a}
-              </li>
-            ))}
-          </ul>
-          <div className="lg:col-span-2">
             <Link
               href="/security"
-              className="inline-flex items-center gap-2 border-b border-white/30 pb-1 text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:border-paper"
+              className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-trail underline underline-offset-4 transition-colors hover:text-night-text"
             >
               Review our security approach
               <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden />
             </Link>
           </div>
+
+          <ul className="space-y-4">
+            {assurances.map((a) => (
+              <li key={a} className="flex items-center gap-3 text-sm text-night-text">
+                <Check className="size-4 shrink-0 text-trail" strokeWidth={2} aria-hidden />
+                {a}
+              </li>
+            ))}
+          </ul>
 
           {/* Governance diagram — dotted technical frame with lock */}
           <div aria-hidden className="relative hidden aspect-square lg:block">

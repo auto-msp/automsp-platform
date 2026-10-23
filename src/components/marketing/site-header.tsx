@@ -55,10 +55,10 @@ export function SiteHeader() {
   }, [mobileOpen]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-fog bg-paper/90 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-fog bg-paper">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-60 focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-60 focus:rounded-(--radius-control) focus:bg-ink focus:px-4 focus:py-3 focus:text-paper"
       >
         Skip to content
       </a>
@@ -68,7 +68,7 @@ export function SiteHeader() {
         className="mx-auto flex h-[68px] w-full max-w-[76rem] items-center justify-between px-5 sm:px-8"
       >
         {/* Logo mark — replaces the text wordmark */}
-        <Link href="/" aria-label="AutoMSP — home" className="flex shrink-0 items-center">
+        <Link href="/" aria-label="AutoMSP — home" className="flex size-11 shrink-0 items-center justify-center">
           <Image
             src="/brand/logo-gravatar.png"
             alt=""
@@ -90,8 +90,8 @@ export function SiteHeader() {
                   href={item.href}
                   onClick={closeAll}
                   className={cn(
-                    "px-4 py-2 text-[13px] font-medium uppercase tracking-[0.06em] transition-colors",
-                    active ? "text-ink" : "text-slate hover:text-ink",
+                    "flex min-h-11 items-center px-3.5 text-sm font-medium transition-colors",
+                    active ? "text-ink underline decoration-brand decoration-2 underline-offset-[10px]" : "text-slate hover:text-ink",
                   )}
                 >
                   {item.label}
@@ -108,7 +108,7 @@ export function SiteHeader() {
                   onClick={() => setOpenMenu(open ? null : item.label)}
                   onMouseEnter={() => setOpenMenu(item.label)}
                   className={cn(
-                    "flex items-center gap-1.5 px-4 py-2 text-[13px] font-medium uppercase tracking-[0.06em] transition-colors",
+                    "flex min-h-11 items-center gap-1.5 px-3.5 text-sm font-medium transition-colors",
                     active || open ? "text-ink" : "text-slate hover:text-ink",
                   )}
                 >
@@ -129,7 +129,7 @@ export function SiteHeader() {
                     open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
                   )}
                 >
-                  <div className="min-w-80 border border-fog bg-paper p-2 shadow-lg shadow-ink/5">
+                  <div className="min-w-80 border border-fog bg-surface p-2 shadow-(--shadow-float)">
                     {item.children.map((child) => (
                       <Link
                         key={child.href + child.label}
@@ -166,14 +166,14 @@ export function SiteHeader() {
             onClick={closeAll}
             className="btn btn-primary"
           >
-            Book Audit
+            Book audit
             <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={1.75} aria-hidden />
           </Link>
         </div>
 
         <button
           type="button"
-          className="inline-flex size-10 items-center justify-center text-ink lg:hidden"
+          className="-mr-2 inline-flex size-11 items-center justify-center rounded-(--radius-control) text-ink hover:bg-haze lg:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav"
@@ -209,7 +209,7 @@ export function SiteHeader() {
                   type="button"
                   aria-expanded={mobileGroup === item.label}
                   onClick={() => setMobileGroup(mobileGroup === item.label ? null : item.label)}
-                  className="flex w-full items-baseline justify-between py-4 text-2xl font-medium tracking-tight text-ink"
+                  className="flex min-h-14 w-full items-center justify-between py-4 text-2xl font-medium tracking-tight text-ink"
                 >
                   {item.label}
                   <ChevronDown
@@ -227,7 +227,7 @@ export function SiteHeader() {
                       key={child.href + child.label}
                       href={child.href}
                       onClick={closeAll}
-                      className="block py-2 pl-4 text-base text-slate first:pt-0 hover:text-ink"
+                      className="flex min-h-11 items-center pl-4 text-base text-slate hover:text-ink"
                     >
                       {child.label}
                     </Link>
@@ -239,9 +239,9 @@ export function SiteHeader() {
           <Link
             href="/book-audit"
             onClick={closeAll}
-            className="mt-8 inline-flex h-12 items-center justify-center gap-2 bg-ink text-[13px] font-medium uppercase tracking-[0.08em] text-paper"
+            className="btn btn-primary btn-lg mt-8 w-full"
           >
-            Book a Free AI Opportunity Audit
+            Book a free AI opportunity audit
             <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden />
           </Link>
         </nav>

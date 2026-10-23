@@ -133,7 +133,7 @@ export default function AgentsPage() {
         </Shell>
       </Section>
 
-      <Section className="bg-night text-paper">
+      <Section className="on-dark bg-night text-paper">
         <Shell>
           <Eyebrow tone="dark">How we keep it safe</Eyebrow>
           <div className="mt-12 grid gap-12 lg:grid-cols-3">

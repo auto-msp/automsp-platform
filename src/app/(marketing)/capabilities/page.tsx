@@ -131,7 +131,7 @@ export default function CapabilitiesPage() {
                   </ul>
                   <a
                     href="/book-audit"
-                    className="mt-6 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.08em] text-ink uppercase underline-offset-4 hover:underline"
+                    className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent underline-offset-4 hover:underline"
                   >
                     Discuss this capability
                     <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden />

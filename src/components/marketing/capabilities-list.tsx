@@ -70,7 +70,7 @@ export function CapabilitiesList() {
             </h2>
             <Link
               href="/capabilities"
-              className="mt-8 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.08em] text-ink uppercase underline-offset-4 hover:underline"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent underline-offset-4 hover:underline"
             >
               Explore all capabilities
               <ArrowUpRight className="size-4" strokeWidth={1.75} aria-hidden />

@@ -13,7 +13,7 @@ export function PageHeader({
   dark?: boolean;
 }) {
   return (
-    <div className={cn("hairline-b", dark ? "bg-night text-paper" : "bg-paper")}>
+    <div className={cn("hairline-b", dark ? "on-dark bg-night text-paper" : "bg-paper")}>
       <Shell className="py-16 sm:py-24">
         <Eyebrow tone={dark ? "dark" : "light"}>{eyebrow}</Eyebrow>
         <h1

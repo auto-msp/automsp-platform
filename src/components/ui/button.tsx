@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type ButtonVariant = "primary" | "secondary" | "quiet" | "accent" | "danger" | "ghost" | "inverse";
+export type ButtonVariant = "primary" | "secondary" | "quiet" | "accent" | "danger" | "ghost" | "inverse" | "dark";
 export type ButtonSize = "sm" | "md" | "lg";
 
 const variantClass: Record<ButtonVariant, string> = {
@@ -14,6 +14,8 @@ const variantClass: Record<ButtonVariant, string> = {
   ghost: "btn-ghost",
   // On charcoal bands: light fill, ink label
   inverse: "bg-paper text-ink hover:bg-surface",
+  // On orange bands: ink fill, paper label
+  dark: "bg-ink text-paper hover:bg-graphite",
 };
 
 const sizeClass: Record<ButtonSize, string> = {

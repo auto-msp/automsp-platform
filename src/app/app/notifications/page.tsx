@@ -38,7 +38,7 @@ export default async function NotificationsPage() {
           <form action={markAllReadAction}>
             <button
               type="submit"
-              className="border border-fog px-3 py-1.5 text-[13px] text-slate transition-colors hover:border-ink hover:text-ink"
+              className="btn btn-quiet btn-sm"
             >
               Mark all as read
             </button>
@@ -52,17 +52,17 @@ export default async function NotificationsPage() {
           description="Notifications appear here when runs complete or fail, approvals are requested, or credentials change."
         />
       ) : (
-        <div className="border border-fog">
+        <div className="border border-fog bg-surface">
           {rows.map((n) => (
             <div
               key={n.id}
-              className={`flex items-start gap-4 border-b border-fog px-5 py-4 last:border-0 ${
-                n.readAt === null ? "bg-accent/[0.04]" : ""
+              className={`flex items-start gap-3 border-b border-fog px-4 py-3 last:border-0 sm:gap-4 sm:px-5 ${
+                n.readAt === null ? "bg-accent-soft/50" : ""
               }`}
             >
               <span
                 aria-hidden
-                className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${
+                className={`mt-1.5 size-2.5 shrink-0 rounded-full ${
                   n.readAt === null ? "bg-accent" : "bg-fog"
                 }`}
               />
@@ -76,10 +76,10 @@ export default async function NotificationsPage() {
                   </span>
                 </div>
                 <p className="mt-1 text-[13px] leading-relaxed text-slate">{n.body}</p>
-                <div className="mt-1.5 flex items-center gap-4 text-xs text-mute">
+                <div className="mt-1 flex flex-wrap items-center gap-x-4 text-xs text-mute">
                   <span className="tnum">{formatDateTime(n.createdAt)}</span>
                   {n.href ? (
-                    <Link href={n.href} className="text-accent hover:underline underline-offset-2">
+                    <Link href={n.href} className="inline-flex min-h-11 items-center font-medium text-accent hover:underline underline-offset-2">
                       Open<ArrowRight aria-hidden className="ml-1 inline size-4 align-[-0.2em]" strokeWidth={2} />
                     </Link>
                   ) : null}
@@ -89,7 +89,7 @@ export default async function NotificationsPage() {
                 <form action={markReadAction.bind(null, n.id)} className="shrink-0">
                   <button
                     type="submit"
-                    className="text-xs text-slate hover:text-ink underline-offset-2 hover:underline"
+                    className="inline-flex min-h-11 items-center px-1 text-xs font-medium text-slate underline-offset-2 hover:text-ink hover:underline"
                   >
                     Mark read
                   </button>

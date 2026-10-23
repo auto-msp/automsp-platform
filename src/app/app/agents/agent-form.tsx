@@ -127,7 +127,7 @@ export function AgentForm({
                   name="scope"
                   value={tool.scope}
                   defaultChecked={checked}
-                  className="mt-0.5 h-4 w-4 accent-current"
+                  className="mt-0.5 size-5 shrink-0 accent-accent"
                 />
                 <span className="min-w-0">
                   <span className="flex flex-wrap items-center gap-2 text-[13px] font-medium text-ink">

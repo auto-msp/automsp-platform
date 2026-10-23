@@ -58,7 +58,7 @@ export default async function IndustryPage({
         <Shell>
           <Link
             href="/industries"
-            className="mb-10 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.08em] text-slate uppercase hover:text-ink"
+            className="mb-10 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-slate hover:text-ink"
           >
             <ArrowLeft className="size-4" strokeWidth={1.75} aria-hidden />
             All industries

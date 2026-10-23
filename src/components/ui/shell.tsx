@@ -46,8 +46,8 @@ export function Eyebrow({
   return (
     <p
       className={cn(
-        "flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.18em]",
-        tone === "light" ? "text-slate" : "text-white/60",
+        "flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.18em]",
+        tone === "light" ? "text-graphite" : "text-night-mute",
         className,
       )}
     >
@@ -55,7 +55,7 @@ export function Eyebrow({
         aria-hidden
         className={cn(
           "inline-block size-[5px]",
-          tone === "light" ? "bg-ink" : "bg-trail",
+          tone === "light" ? "bg-brand" : "bg-trail",
         )}
       />
       {children}

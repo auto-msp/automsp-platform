@@ -74,7 +74,7 @@ export default function HowItWorksPage() {
         </Shell>
       </Section>
 
-      <Section className="bg-night text-paper">
+      <Section className="on-dark bg-night text-paper">
         <Shell>
           <Eyebrow tone="dark">Day one</Eyebrow>
           <h2 className="font-display mt-6 max-w-2xl text-4xl leading-[1.1] tracking-tight sm:text-5xl">

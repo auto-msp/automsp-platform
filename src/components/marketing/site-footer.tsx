@@ -12,11 +12,11 @@ function Column({ title, items }: { title: string; items: readonly { label: stri
         the footer) without skipping a level. Styling is class-driven, so the
         element change is invisible.
       */}
-      <h2 className="text-xs font-medium uppercase tracking-[0.18em] text-mute">{title}</h2>
-      <ul className="mt-5 space-y-3">
+      <h2 className="text-[13px] font-semibold text-night-mute">{title}</h2>
+      <ul className="mt-3">
         {items.map((item) => (
           <li key={item.label}>
-            <Link href={item.href} className="text-sm text-graphite transition-colors hover:text-ink">
+            <Link href={item.href} className="flex min-h-11 items-center text-sm text-night-text transition-colors hover:text-trail">
               {item.label}
             </Link>
           </li>
@@ -28,7 +28,7 @@ function Column({ title, items }: { title: string; items: readonly { label: stri
 
 export function SiteFooter() {
   return (
-    <footer className="hairline-t bg-paper">
+    <footer className="on-dark bg-night text-night-text">
       <div className="mx-auto w-full max-w-[76rem] px-5 py-14 sm:px-8 sm:py-20">
         <div className="grid gap-12 md:grid-cols-[1.4fr_repeat(4,1fr)]">
           <div>
@@ -39,15 +39,15 @@ export function SiteFooter() {
               alt=""
               width={64}
               height={64}
-              className="size-14 rounded-full"
+              className="size-14 rounded-full ring-1 ring-nline"
             />
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-slate">
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-night-mute">
               {site.name} is your Managed AI Systems Partner — designing, building, and operating
               the AI layer that powers your business.
             </p>
             <a
               href={`mailto:${site.email}`}
-              className="mt-5 inline-block text-sm font-medium text-ink underline-offset-4 hover:underline"
+              className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-trail underline underline-offset-4 hover:text-night-text"
             >
               {site.email}
             </a>
@@ -58,11 +58,11 @@ export function SiteFooter() {
           <Column title="Legal" items={footerNav.legal} />
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-fog pt-7 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-mute">
+        <div className="mt-14 flex flex-col gap-3 border-t border-nline pt-7 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-night-mute">
             © {new Date().getFullYear()} {site.name}. All rights reserved.
           </p>
-          <p className="text-xs text-mute">
+          <p className="text-xs text-night-mute">
             Managed AI Systems Partner — {site.domain}
           </p>
         </div>

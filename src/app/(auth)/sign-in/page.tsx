@@ -17,14 +17,14 @@ export const metadata: Metadata = pageMetadata({
 export default function SignInPage() {
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight text-ink">Sign in to AutoMSP</h1>
+      <h1 className="font-display text-4xl leading-tight tracking-tight text-ink">Sign in to AutoMSP</h1>
       <p className="mt-2 text-sm text-slate">Access your organization&rsquo;s automation control plane.</p>
       <div className="mt-8">
         <SignInForm />
       </div>
       <p className="mt-6 text-sm text-slate">
         No account yet?{" "}
-        <Link href="/sign-up" className="font-medium text-ink underline-offset-4 hover:underline">
+        <Link href="/sign-up" className="inline-flex min-h-11 items-center font-semibold text-accent underline underline-offset-4 hover:text-accent-hover">
           Create one
         </Link>
       </p>

@@ -39,7 +39,7 @@ export function CaseStudySection() {
               { value: "60+", label: "Staff hours saved per month" },
             ].map((m) => (
               <div key={m.label} className="bg-surface p-7">
-                <p className="tnum font-display text-3xl text-ink">{m.value}</p>
+                <p className="tnum font-display text-4xl text-brand-text">{m.value}</p>
                 <p className="mt-1.5 text-[13px] leading-snug text-slate">{m.label}</p>
               </div>
             ))}
