@@ -19,7 +19,7 @@ export function DeleteDocumentButton({
           void deleteDocumentAction(sourceId, documentId);
         }
       }}
-      className="text-xs font-medium text-risk hover:underline"
+      className="btn btn-danger btn-sm"
     >
       Delete
     </button>

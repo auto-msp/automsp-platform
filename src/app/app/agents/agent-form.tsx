@@ -119,14 +119,14 @@ export function AgentForm({
             return (
               <label
                 key={tool.scope}
-                className="card flex cursor-pointer items-start gap-3 px-3 py-2.5"
+                className="card flex min-h-11 cursor-pointer items-start gap-3 px-3 py-2.5"
               >
                 <input
                   type="checkbox"
                   name="scope"
                   value={tool.scope}
                   defaultChecked={checked}
-                  className="mt-0.5 h-4 w-4 accent-current"
+                  className="mt-0.5 size-5 shrink-0 accent-accent"
                 />
                 <span className="min-w-0">
                   <span className="flex flex-wrap items-center gap-2 text-[13px] font-medium text-ink">

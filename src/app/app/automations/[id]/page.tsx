@@ -64,7 +64,7 @@ export default async function AutomationDetailPage({
           <dt className="text-xs font-medium text-mute">System</dt>
           <dd className="mt-1.5 text-sm text-ink">
             {system && system.organizationId === orgId ? (
-              <Link href={`/app/systems/${system.id}`} className="hover:underline">
+              <Link href={`/app/systems/${system.id}`} className="-my-3 inline-flex min-h-11 items-center hover:underline">
                 {system.name}
               </Link>
             ) : (

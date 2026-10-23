@@ -79,7 +79,7 @@ export default async function IntegrationsPage() {
                 <th>Status</th>
                 <th>Last used</th>
                 <th>Id</th>
-                <th className="px-4 py-2.5" />
+                <th><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
             <tbody>

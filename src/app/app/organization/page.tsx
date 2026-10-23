@@ -68,7 +68,7 @@ export default async function OrganizationPage() {
                 <th>Email</th>
                 <th>Role</th>
                 <th>Joined</th>
-                {canManageMembers ? <th className="px-4 py-2.5" /> : null}
+                {canManageMembers ? <th><span className="sr-only">Actions</span></th> : null}
               </tr>
             </thead>
             <tbody>

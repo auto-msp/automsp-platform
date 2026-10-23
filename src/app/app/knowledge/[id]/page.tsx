@@ -60,7 +60,7 @@ export default async function KnowledgeSourcePage({ params }: { params: Promise<
                     <th>Status</th>
                     <th>Chunks</th>
                     <th>Added</th>
-                    <th className="px-4 py-2.5" />
+                    <th><span className="sr-only">Actions</span></th>
                   </tr>
                 </thead>
                 <tbody>
