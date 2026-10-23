@@ -1,0 +1,3229 @@
+[
+  {
+    "route": "/",
+    "vp": "1440",
+    "status": 200,
+    "url": "/",
+    "overflowX": 0,
+    "small": 11,
+    "total": 51,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 8566,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 22
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/about",
+    "vp": "1440",
+    "status": 200,
+    "url": "/about",
+    "overflowX": 0,
+    "small": 8,
+    "total": 34,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2582,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/aeo-services",
+    "vp": "1440",
+    "status": 200,
+    "url": "/aeo-services",
+    "overflowX": 0,
+    "small": 9,
+    "total": 35,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2893,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/agents",
+    "vp": "1440",
+    "status": 200,
+    "url": "/agents",
+    "overflowX": 0,
+    "small": 8,
+    "total": 34,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2777,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 24
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/ai-agents",
+    "vp": "1440",
+    "status": 200,
+    "url": "/ai-agents",
+    "overflowX": 0,
+    "small": 8,
+    "total": 35,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 3159,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 10
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/ai-infrastructure",
+    "vp": "1440",
+    "status": 200,
+    "url": "/ai-infrastructure",
+    "overflowX": 0,
+    "small": 8,
+    "total": 35,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2984,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/approach",
+    "vp": "1440",
+    "status": 200,
+    "url": "/approach",
+    "overflowX": 0,
+    "small": 8,
+    "total": 34,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2688,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 14
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/book-audit",
+    "vp": "1440",
+    "status": 200,
+    "url": "/book-audit",
+    "overflowX": 0,
+    "small": 9,
+    "total": 47,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2171,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      },
+      {
+        "id": "landmark-complementary-is-top-level",
+        "impact": "moderate",
+        "nodes": 1
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/capabilities",
+    "vp": "1440",
+    "status": 200,
+    "url": "/capabilities",
+    "overflowX": 0,
+    "small": 13,
+    "total": 39,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 3427,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 11
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/contact",
+    "vp": "1440",
+    "status": 200,
+    "url": "/contact",
+    "overflowX": 0,
+    "small": 10,
+    "total": 35,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 1406,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/how-it-works",
+    "vp": "1440",
+    "status": 200,
+    "url": "/how-it-works",
+    "overflowX": 0,
+    "small": 8,
+    "total": 34,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2650,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 10
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/industries",
+    "vp": "1440",
+    "status": 200,
+    "url": "/industries",
+    "overflowX": 0,
+    "small": 8,
+    "total": 40,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2249,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/industries/manufacturing",
+    "vp": "1440",
+    "status": 200,
+    "url": "/industries/manufacturing",
+    "overflowX": 0,
+    "small": 9,
+    "total": 37,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 1801,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/managed-ai-operations",
+    "vp": "1440",
+    "status": 200,
+    "url": "/managed-ai-operations",
+    "overflowX": 0,
+    "small": 8,
+    "total": 35,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2926,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/pricing",
+    "vp": "1440",
+    "status": 200,
+    "url": "/pricing",
+    "overflowX": 0,
+    "small": 13,
+    "total": 42,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 3115,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/privacy",
+    "vp": "1440",
+    "status": 200,
+    "url": "/privacy",
+    "overflowX": 0,
+    "small": 63,
+    "total": 95,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 18634,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/resources",
+    "vp": "1440",
+    "status": 200,
+    "url": "/resources",
+    "overflowX": 0,
+    "small": 8,
+    "total": 37,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2275,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 15
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/resources/ai-opportunity-guide",
+    "vp": "1440",
+    "status": 200,
+    "url": "/resources/ai-opportunity-guide",
+    "overflowX": 0,
+    "small": 9,
+    "total": 35,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2442,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/results",
+    "vp": "1440",
+    "status": 200,
+    "url": "/results",
+    "overflowX": 0,
+    "small": 8,
+    "total": 34,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2694,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 11
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/security",
+    "vp": "1440",
+    "status": 200,
+    "url": "/security",
+    "overflowX": 0,
+    "small": 9,
+    "total": 35,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2456,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/solutions",
+    "vp": "1440",
+    "status": 200,
+    "url": "/solutions",
+    "overflowX": 0,
+    "small": 8,
+    "total": 38,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2116,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 14
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/solutions/back-office-automation",
+    "vp": "1440",
+    "status": 200,
+    "url": "/solutions/back-office-automation",
+    "overflowX": 0,
+    "small": 9,
+    "total": 37,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 2543,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/terms",
+    "vp": "1440",
+    "status": 200,
+    "url": "/terms",
+    "overflowX": 0,
+    "small": 8,
+    "total": 33,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Platform\" 128x36",
+      "button \"Solutions\" 135x36",
+      "a \"Pricing\" 90x36"
+    ],
+    "height": 1807,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/nonexistent-page",
+    "vp": "1440",
+    "status": 404,
+    "url": "/nonexistent-page",
+    "overflowX": 0,
+    "small": 1,
+    "total": 2,
+    "smallSamples": [
+      "a \"Book a free AI opportuni\" 213x20"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "landmark-one-main",
+        "impact": "moderate",
+        "nodes": 1
+      },
+      {
+        "id": "region",
+        "impact": "moderate",
+        "nodes": 1
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ]
+  },
+  {
+    "route": "/sign-in",
+    "vp": "1440",
+    "status": 200,
+    "url": "/sign-in",
+    "overflowX": 0,
+    "small": 2,
+    "total": 6,
+    "smallSamples": [
+      "a \"AutoMSP\" 78x28",
+      "a \"Book an audit\" 117x20"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 2
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/sign-up",
+    "vp": "1440",
+    "status": 200,
+    "url": "/sign-up",
+    "overflowX": 0,
+    "small": 2,
+    "total": 8,
+    "smallSamples": [
+      "a \"AutoMSP\" 78x28",
+      "a \"Book an audit\" 117x20"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 3
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/dashboard",
+    "overflowX": 0,
+    "small": 28,
+    "total": 28,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 944,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 27
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/dashboard",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/dashboard",
+    "overflowX": 0,
+    "small": 28,
+    "total": 28,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 944,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 27
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/onboarding",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/onboarding",
+    "overflowX": 0,
+    "small": 20,
+    "total": 20,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 948,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 10
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/systems",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/systems",
+    "overflowX": 0,
+    "small": 26,
+    "total": 26,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 15
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/systems/04533ab697fb12d9",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/systems/04533ab697fb12d9",
+    "overflowX": 0,
+    "small": 33,
+    "total": 33,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1058,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 25
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/systems/new",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/systems/new",
+    "overflowX": 0,
+    "small": 19,
+    "total": 24,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/systems/04533ab697fb12d9/edit",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/systems/04533ab697fb12d9/edit",
+    "overflowX": 0,
+    "small": 20,
+    "total": 26,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 957,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      },
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "nodes": 1
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/automations",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/automations",
+    "overflowX": 0,
+    "small": 28,
+    "total": 28,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 19
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/automations/4c494001f8e90ad9",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/automations/4c494001f8e90ad9",
+    "overflowX": 0,
+    "small": 32,
+    "total": 35,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1406,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 31
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/automations/4c494001f8e90ad9/build",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/automations/4c494001f8e90ad9/build",
+    "overflowX": 0,
+    "small": 47,
+    "total": 51,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1638,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 19
+      },
+      {
+        "id": "label",
+        "impact": "critical",
+        "nodes": 8
+      },
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "nodes": 4
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/automations/4c494001f8e90ad9/edit",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/automations/4c494001f8e90ad9/edit",
+    "overflowX": 0,
+    "small": 21,
+    "total": 27,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 972,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      },
+      {
+        "id": "label",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "nodes": 2
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/automations/new",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/automations/new",
+    "overflowX": 0,
+    "small": 19,
+    "total": 24,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      },
+      {
+        "id": "label",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "nodes": 1
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/agents",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/agents",
+    "overflowX": 0,
+    "small": 24,
+    "total": 24,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 16
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/agents/b67a882747cf5327",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/agents/b67a882747cf5327",
+    "overflowX": 0,
+    "small": 28,
+    "total": 31,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1474,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 23
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/agents/new",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/agents/new",
+    "overflowX": 0,
+    "small": 26,
+    "total": 28,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1195,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 15
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/knowledge",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/knowledge",
+    "overflowX": 0,
+    "small": 22,
+    "total": 22,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 12
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/knowledge/8b1990f82d64a86f",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/knowledge/8b1990f82d64a86f",
+    "overflowX": 0,
+    "small": 27,
+    "total": 28,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 929,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 17
+      },
+      {
+        "id": "empty-table-header",
+        "impact": "minor",
+        "nodes": 1
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/knowledge/new",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/knowledge/new",
+    "overflowX": 0,
+    "small": 21,
+    "total": 21,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/growth",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/growth",
+    "overflowX": 0,
+    "small": 22,
+    "total": 24,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1139,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/evals",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/evals",
+    "overflowX": 0,
+    "small": 21,
+    "total": 21,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 13
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/evals/1e185a744683292e",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/evals/1e185a744683292e",
+    "overflowX": 0,
+    "small": 25,
+    "total": 29,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1173,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 11
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/evals/new",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/evals/new",
+    "overflowX": 0,
+    "small": 23,
+    "total": 24,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/integrations",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/integrations",
+    "overflowX": 0,
+    "small": 22,
+    "total": 22,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 19
+      },
+      {
+        "id": "empty-table-header",
+        "impact": "minor",
+        "nodes": 1
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/integrations/new",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/integrations/new",
+    "overflowX": 0,
+    "small": 23,
+    "total": 24,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 8
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/operations",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/operations",
+    "overflowX": 0,
+    "small": 86,
+    "total": 86,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 3294,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 59
+      },
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "nodes": 2
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/operations/3d39abf831a7b542",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/operations/3d39abf831a7b542",
+    "overflowX": 0,
+    "small": 21,
+    "total": 21,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1202,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 16
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/approvals",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/approvals",
+    "overflowX": 0,
+    "small": 30,
+    "total": 30,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1263,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 18
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/notifications",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/notifications",
+    "overflowX": 0,
+    "small": 30,
+    "total": 30,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 18
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/analytics",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/analytics",
+    "overflowX": 0,
+    "small": 27,
+    "total": 29,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1819,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 46
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/reports",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/reports",
+    "overflowX": 0,
+    "small": 20,
+    "total": 26,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 16
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/organization",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/organization",
+    "overflowX": 0,
+    "small": 23,
+    "total": 23,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 16
+      },
+      {
+        "id": "empty-table-header",
+        "impact": "minor",
+        "nodes": 1
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/billing",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/billing",
+    "overflowX": 0,
+    "small": 19,
+    "total": 19,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1017,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 20
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/commercial",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/commercial",
+    "overflowX": 0,
+    "small": 19,
+    "total": 19,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/reports/D-ADz4LsSLrvHIXr",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/reports/D-ADz4LsSLrvHIXr",
+    "overflowX": 0,
+    "small": 20,
+    "total": 20,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 2199,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 45
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "(operator) /app/commercial",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/commercial",
+    "overflowX": 0,
+    "small": 46,
+    "total": 46,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 2544,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 53
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "(operator) /app/dashboard",
+    "vp": "1440",
+    "status": 200,
+    "url": "/app/dashboard",
+    "overflowX": 0,
+    "small": 20,
+    "total": 20,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 900,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 19
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/",
+    "vp": "390",
+    "status": 200,
+    "url": "/",
+    "overflowX": 0,
+    "small": 7,
+    "total": 38,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"Explore all capabilities\" 225x20",
+      "a \"More about our approach\" 242x20"
+    ],
+    "height": 13765,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 21
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/about",
+    "vp": "390",
+    "status": 200,
+    "url": "/about",
+    "overflowX": 0,
+    "small": 4,
+    "total": 21,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 4748,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/aeo-services",
+    "vp": "390",
+    "status": 200,
+    "url": "/aeo-services",
+    "overflowX": 0,
+    "small": 5,
+    "total": 22,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"Or explore all capabilit\" 226x20",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 4926,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/agents",
+    "vp": "390",
+    "status": 200,
+    "url": "/agents",
+    "overflowX": 0,
+    "small": 4,
+    "total": 21,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 5506,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 24
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/ai-agents",
+    "vp": "390",
+    "status": 200,
+    "url": "/ai-agents",
+    "overflowX": 0,
+    "small": 4,
+    "total": 22,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 4959,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 10
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/ai-infrastructure",
+    "vp": "390",
+    "status": 200,
+    "url": "/ai-infrastructure",
+    "overflowX": 0,
+    "small": 4,
+    "total": 22,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 4704,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/approach",
+    "vp": "390",
+    "status": 200,
+    "url": "/approach",
+    "overflowX": 0,
+    "small": 4,
+    "total": 21,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 4739,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 14
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/book-audit",
+    "vp": "390",
+    "status": 200,
+    "url": "/book-audit",
+    "overflowX": 0,
+    "small": 5,
+    "total": 34,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "input \"\" 234x24",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 3737,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      },
+      {
+        "id": "landmark-complementary-is-top-level",
+        "impact": "moderate",
+        "nodes": 1
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/capabilities",
+    "vp": "390",
+    "status": 200,
+    "url": "/capabilities",
+    "overflowX": 0,
+    "small": 9,
+    "total": 26,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"Discuss this capability\" 218x20",
+      "a \"Discuss this capability\" 218x20"
+    ],
+    "height": 6228,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 11
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/contact",
+    "vp": "390",
+    "status": 200,
+    "url": "/contact",
+    "overflowX": 0,
+    "small": 6,
+    "total": 22,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"Book an audit\" 141x20",
+      "a \"hello@automsp.cloud\" 188x20"
+    ],
+    "height": 2572,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/how-it-works",
+    "vp": "390",
+    "status": 200,
+    "url": "/how-it-works",
+    "overflowX": 0,
+    "small": 4,
+    "total": 21,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 4535,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 10
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/industries",
+    "vp": "390",
+    "status": 200,
+    "url": "/industries",
+    "overflowX": 0,
+    "small": 4,
+    "total": 27,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 3851,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/industries/manufacturing",
+    "vp": "390",
+    "status": 200,
+    "url": "/industries/manufacturing",
+    "overflowX": 0,
+    "small": 5,
+    "total": 24,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"All industries\" 143x20",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 2962,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/managed-ai-operations",
+    "vp": "390",
+    "status": 200,
+    "url": "/managed-ai-operations",
+    "overflowX": 0,
+    "small": 4,
+    "total": 22,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 4790,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/pricing",
+    "vp": "390",
+    "status": 200,
+    "url": "/pricing",
+    "overflowX": 0,
+    "small": 7,
+    "total": 29,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "summary \"What is excluded from pi\" 350x27",
+      "summary \"Do I need my own API key\" 350x27"
+    ],
+    "height": 5371,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/privacy",
+    "vp": "390",
+    "status": 200,
+    "url": "/privacy",
+    "overflowX": 0,
+    "small": 57,
+    "total": 82,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"info@automsp.cloud\" 128x16",
+      "a \"table of contents\" 112x16"
+    ],
+    "height": 29645,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      },
+      {
+        "id": "link-in-text-block",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/resources",
+    "vp": "390",
+    "status": 200,
+    "url": "/resources",
+    "overflowX": 0,
+    "small": 4,
+    "total": 24,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 3627,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 15
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/resources/ai-opportunity-guide",
+    "vp": "390",
+    "status": 200,
+    "url": "/resources/ai-opportunity-guide",
+    "overflowX": 0,
+    "small": 5,
+    "total": 22,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"All resources\" 143x20",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 3847,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/results",
+    "vp": "390",
+    "status": 200,
+    "url": "/results",
+    "overflowX": 0,
+    "small": 4,
+    "total": 21,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 4473,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 11
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/security",
+    "vp": "390",
+    "status": 200,
+    "url": "/security",
+    "overflowX": 0,
+    "small": 5,
+    "total": 22,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"Request security documen\" 279x20",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 4422,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/solutions",
+    "vp": "390",
+    "status": 200,
+    "url": "/solutions",
+    "overflowX": 0,
+    "small": 4,
+    "total": 25,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 3370,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 14
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/solutions/back-office-automation",
+    "vp": "390",
+    "status": 200,
+    "url": "/solutions/back-office-automation",
+    "overflowX": 0,
+    "small": 5,
+    "total": 24,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"All solutions\" 140x20",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 3864,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/terms",
+    "vp": "390",
+    "status": 200,
+    "url": "/terms",
+    "overflowX": 0,
+    "small": 4,
+    "total": 20,
+    "smallSamples": [
+      "a \"Skip to content\" 1x1",
+      "a \"AutoMSP — home\" 40x40",
+      "button \"Open menu\" 40x40",
+      "a \"hello@automsp.cloud\" 145x20"
+    ],
+    "height": 2701,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/nonexistent-page",
+    "vp": "390",
+    "status": 404,
+    "url": "/nonexistent-page",
+    "overflowX": 0,
+    "small": 1,
+    "total": 2,
+    "smallSamples": [
+      "a \"Book a free AI opportuni\" 213x20"
+    ],
+    "height": 844,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "landmark-one-main",
+        "impact": "moderate",
+        "nodes": 1
+      },
+      {
+        "id": "region",
+        "impact": "moderate",
+        "nodes": 1
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ]
+  },
+  {
+    "route": "/sign-in",
+    "vp": "390",
+    "status": 200,
+    "url": "/sign-in",
+    "overflowX": 0,
+    "small": 2,
+    "total": 6,
+    "smallSamples": [
+      "a \"AutoMSP\" 78x28",
+      "a \"Book an audit\" 117x20"
+    ],
+    "height": 844,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 2
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/sign-up",
+    "vp": "390",
+    "status": 200,
+    "url": "/sign-up",
+    "overflowX": 0,
+    "small": 2,
+    "total": 8,
+    "smallSamples": [
+      "a \"AutoMSP\" 78x28",
+      "a \"Book an audit\" 117x20"
+    ],
+    "height": 902,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 3
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/dashboard",
+    "overflowX": 50,
+    "small": 27,
+    "total": 28,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 2235,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 18
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/dashboard",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/dashboard",
+    "overflowX": 50,
+    "small": 27,
+    "total": 28,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 2235,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 18
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/onboarding",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/onboarding",
+    "overflowX": 76,
+    "small": 19,
+    "total": 20,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 3785,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 5
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/systems",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/systems",
+    "overflowX": 32,
+    "small": 24,
+    "total": 26,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 966,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/systems/04533ab697fb12d9",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/systems/04533ab697fb12d9",
+    "overflowX": 32,
+    "small": 19,
+    "total": 33,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 2165,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 11
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/systems/new",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/systems/new",
+    "overflowX": 32,
+    "small": 18,
+    "total": 24,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 933,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/systems/04533ab697fb12d9/edit",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/systems/04533ab697fb12d9/edit",
+    "overflowX": 32,
+    "small": 19,
+    "total": 26,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1246,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      },
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "nodes": 1
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/automations",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/automations",
+    "overflowX": 32,
+    "small": 21,
+    "total": 28,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1295,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/automations/4c494001f8e90ad9",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/automations/4c494001f8e90ad9",
+    "overflowX": 136,
+    "small": 31,
+    "total": 35,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 2959,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 28
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/automations/4c494001f8e90ad9/build",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/automations/4c494001f8e90ad9/build",
+    "overflowX": 298,
+    "small": 46,
+    "total": 51,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 3361,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 16
+      },
+      {
+        "id": "label",
+        "impact": "critical",
+        "nodes": 8
+      },
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "nodes": 4
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/automations/4c494001f8e90ad9/edit",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/automations/4c494001f8e90ad9/edit",
+    "overflowX": 32,
+    "small": 20,
+    "total": 27,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1483,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      },
+      {
+        "id": "label",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "nodes": 2
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/automations/new",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/automations/new",
+    "overflowX": 32,
+    "small": 18,
+    "total": 24,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 999,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      },
+      {
+        "id": "label",
+        "impact": "critical",
+        "nodes": 1
+      },
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "nodes": 1
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/agents",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/agents",
+    "overflowX": 403,
+    "small": 23,
+    "total": 24,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1712,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 15
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/agents/b67a882747cf5327",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/agents/b67a882747cf5327",
+    "overflowX": 72,
+    "small": 27,
+    "total": 31,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 4323,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 17
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/agents/new",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/agents/new",
+    "overflowX": 72,
+    "small": 25,
+    "total": 28,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 2663,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 13
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/knowledge",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/knowledge",
+    "overflowX": 390,
+    "small": 21,
+    "total": 22,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1406,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 11
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/knowledge/8b1990f82d64a86f",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/knowledge/8b1990f82d64a86f",
+    "overflowX": 404,
+    "small": 26,
+    "total": 28,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1721,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 16
+      },
+      {
+        "id": "empty-table-header",
+        "impact": "minor",
+        "nodes": 1
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/knowledge/new",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/knowledge/new",
+    "overflowX": 32,
+    "small": 20,
+    "total": 21,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 844,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 5
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/growth",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/growth",
+    "overflowX": 133,
+    "small": 21,
+    "total": 24,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 2972,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 5
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/evals",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/evals",
+    "overflowX": 314,
+    "small": 19,
+    "total": 21,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1092,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 12
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/evals/1e185a744683292e",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/evals/1e185a744683292e",
+    "overflowX": 32,
+    "small": 24,
+    "total": 29,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 2465,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/evals/new",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/evals/new",
+    "overflowX": 32,
+    "small": 22,
+    "total": 24,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 964,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 5
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/integrations",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/integrations",
+    "overflowX": 536,
+    "small": 21,
+    "total": 22,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1564,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 18
+      },
+      {
+        "id": "empty-table-header",
+        "impact": "minor",
+        "nodes": 1
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/integrations/new",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/integrations/new",
+    "overflowX": 32,
+    "small": 22,
+    "total": 24,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1273,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 7
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/operations",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/operations",
+    "overflowX": 145,
+    "small": 85,
+    "total": 86,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 6022,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      },
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "nodes": 2
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/operations/3d39abf831a7b542",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/operations/3d39abf831a7b542",
+    "overflowX": 88,
+    "small": 20,
+    "total": 21,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1898,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 13
+      },
+      {
+        "id": "scrollable-region-focusable",
+        "impact": "serious",
+        "nodes": 5
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/approvals",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/approvals",
+    "overflowX": 227,
+    "small": 27,
+    "total": 30,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 2342,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 11
+      },
+      {
+        "id": "scrollable-region-focusable",
+        "impact": "serious",
+        "nodes": 3
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/notifications",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/notifications",
+    "overflowX": 63,
+    "small": 28,
+    "total": 30,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 2463,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 12
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/analytics",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/analytics",
+    "overflowX": 64,
+    "small": 20,
+    "total": 29,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 5419,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 18
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/reports",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/reports",
+    "overflowX": 32,
+    "small": 18,
+    "total": 26,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 2011,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 8
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/organization",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/organization",
+    "overflowX": 98,
+    "small": 22,
+    "total": 23,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 1903,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 12
+      },
+      {
+        "id": "empty-table-header",
+        "impact": "minor",
+        "nodes": 1
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/billing",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/billing",
+    "overflowX": 50,
+    "small": 18,
+    "total": 19,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 3808,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 11
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/commercial",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/commercial",
+    "overflowX": 32,
+    "small": 18,
+    "total": 19,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 844,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "/app/reports/D-ADz4LsSLrvHIXr",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/reports/D-ADz4LsSLrvHIXr",
+    "overflowX": 60,
+    "small": 19,
+    "total": 20,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 8395,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 15
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "(operator) /app/commercial",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/commercial",
+    "overflowX": 89,
+    "small": 42,
+    "total": 46,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 6298,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 37
+      }
+    ],
+    "errors": []
+  },
+  {
+    "route": "(operator) /app/dashboard",
+    "vp": "390",
+    "status": 200,
+    "url": "/app/dashboard",
+    "overflowX": 50,
+    "small": 19,
+    "total": 20,
+    "smallSamples": [
+      "a \"AutoMSP\" 65x23",
+      "a \"Dashboard\" 223x36",
+      "a \"Systems\" 223x36",
+      "a \"Automations\" 223x36",
+      "a \"Agents\" 223x36"
+    ],
+    "height": 2393,
+    "axe": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 17
+      }
+    ],
+    "errors": []
+  }
+]
