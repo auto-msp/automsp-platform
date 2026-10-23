@@ -212,7 +212,7 @@ export default function PricingPage() {
           <div className="mt-8 max-w-3xl divide-y divide-fog border-y border-fog">
             {faqs.map((faq) => (
               <details key={faq.q} className="group py-6">
-                <summary className="flex cursor-pointer items-baseline justify-between gap-4 text-[16px] font-medium text-ink marker:content-none">
+                <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-4 text-[16px] font-medium text-ink marker:content-none">
                   {faq.q}
                   <span
                     aria-hidden

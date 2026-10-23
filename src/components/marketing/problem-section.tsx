@@ -25,7 +25,7 @@ export function ProblemSection() {
       <Shell>
         <div className="max-w-3xl">
           <Eyebrow>The gap</Eyebrow>
-          <h2 className="font-display mt-6 text-4xl leading-[1.08] tracking-tight text-ink sm:text-5xl">
+          <h2 className="font-display mt-6 text-balance text-4xl leading-[1.08] tracking-tight text-ink sm:text-5xl">
             AI initiatives often stall between prototype and production.
           </h2>
           <p className="mt-6 max-w-2xl text-[17px] leading-relaxed text-slate">
@@ -36,14 +36,21 @@ export function ProblemSection() {
           </p>
         </div>
 
-        <ul className="mt-14 grid gap-px border border-fog bg-fog sm:grid-cols-2 lg:grid-cols-4">
-          {problems.map((p) => (
-            <li key={p.title} className="bg-paper p-7">
-              <h3 className="text-[15px] font-semibold tracking-tight text-ink">{p.title}</h3>
-              <p className="mt-2.5 text-sm leading-relaxed text-slate">{p.body}</p>
-            </li>
+        {/* Definition rows: the problem on the left, the answer on the right. */}
+        <dl className="mt-14 border-t border-ink">
+          {problems.map((p, i) => (
+            <div
+              key={p.title}
+              className="grid gap-2 border-b border-fog py-6 sm:grid-cols-[2.5rem_1fr_1.4fr] sm:gap-8 sm:py-7"
+            >
+              <span aria-hidden className="tnum hidden pt-1 text-xs font-medium text-mute sm:block">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <dt className="font-display text-2xl leading-snug tracking-tight text-ink">{p.title}</dt>
+              <dd className="text-[15px] leading-relaxed text-slate">{p.body}</dd>
+            </div>
           ))}
-        </ul>
+        </dl>
       </Shell>
     </Section>
   );

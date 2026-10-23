@@ -1,124 +1,82 @@
+import { CircleCheck, CircleDot, Clock, Hand, ShieldAlert } from "lucide-react";
+
 /**
- * HeroVisual — abstract AI infrastructure stack.
- * Layered architectural planes representing: data foundation → retrieval →
- * orchestration → agents → human control. Monochrome Swiss aesthetic with a
- * single indigo accent plane. Pure CSS/SVG, no imagery dependencies.
+ * HeroVisual — the product's central idea, drawn with the product's own parts:
+ * an automated workflow that pauses at a human approval gate before anything
+ * consequential happens. It is an illustration (labelled as such), built from
+ * real UI primitives so it stays crisp at any size and never implies customer
+ * data. No gradients, no stock imagery.
  */
+const steps = [
+  { icon: CircleCheck, state: "done", title: "Trigger", detail: "Overdue invoice detected" },
+  { icon: CircleCheck, state: "done", title: "Draft", detail: "Reminder prepared from the CRM record" },
+  { icon: Hand, state: "current", title: "Human approval", detail: "Waiting for a reviewer" },
+  { icon: Clock, state: "next", title: "Send", detail: "Runs only after a recorded decision" },
+] as const;
+
 export function HeroVisual() {
   return (
-    <div
-      aria-hidden
-      className="relative hidden aspect-[5/6] w-full select-none lg:block"
-    >
-      {/* Vertical caption, editorial margin note */}
-      <div className="absolute top-1/2 -right-2 hidden -translate-y-1/2 rotate-90 items-center gap-3 xl:flex">
-        <span className="size-1.5 rounded-full bg-accent" />
-        <span className="text-[11px] font-medium tracking-[0.28em] text-slate uppercase">
-          AI Systems. Managed.
-        </span>
-      </div>
+    <figure className="relative w-full max-w-lg select-none justify-self-center lg:justify-self-end">
+      {/* offset hairline plate — gives the card depth without a shadow or gradient */}
+      <div aria-hidden className="absolute inset-0 translate-x-3 translate-y-3 border border-line" />
 
-      {/* Substrate grid */}
-      <svg
-        className="absolute inset-0 h-full w-full"
-        viewBox="0 0 500 600"
-        fill="none"
-        preserveAspectRatio="xMidYMid slice"
-      >
-        <defs>
-          <linearGradient id="pane" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#ffffff" />
-            <stop offset="100%" stopColor="#ededE8" />
-          </linearGradient>
-          <linearGradient id="paneAccent" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#4f46e5" />
-            <stop offset="100%" stopColor="#4338ca" />
-          </linearGradient>
-          <linearGradient id="glassDark" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#1e2126" stopOpacity="0.06" />
-            <stop offset="100%" stopColor="#1e2126" stopOpacity="0.14" />
-          </linearGradient>
-        </defs>
-
-        {/* Hairline grid */}
-        {Array.from({ length: 9 }).map((_, i) => (
-          <line key={`v${i}`} x1={50 + i * 50} y1="0" x2={50 + i * 50} y2="600" stroke="#e7e7e2" strokeWidth="1" />
-        ))}
-        {Array.from({ length: 11 }).map((_, i) => (
-          <line key={`h${i}`} x1="0" y1={60 + i * 48} x2="500" y2={60 + i * 48} stroke="#e7e7e2" strokeWidth="1" />
-        ))}
-
-        {/* Flow connectors between layers */}
-        <path d="M120 430 C 190 400, 210 360, 250 330" stroke="#c9c9c2" strokeWidth="1.25" strokeDasharray="3 4" />
-        <path d="M250 330 C 290 300, 300 260, 330 230" stroke="#c9c9c2" strokeWidth="1.25" strokeDasharray="3 4" />
-        <circle cx="250" cy="330" r="3.5" fill="#4338ca" />
-        <circle cx="120" cy="430" r="3" fill="#8a8f97" />
-        <circle cx="330" cy="230" r="3" fill="#8a8f97" />
-        <circle cx="392" cy="150" r="3" fill="#8a8f97" />
-        <path d="M330 230 C 355 205, 370 180, 392 150" stroke="#c9c9c2" strokeWidth="1.25" strokeDasharray="3 4" />
-      </svg>
-
-      {/* Layer 1 — Data foundation */}
-      <figure className="absolute bottom-[6%] left-[2%] w-[46%] border border-fog bg-surface shadow-[0_18px_50px_-20px_rgba(11,12,14,0.25)]">
-        <div className="border-b border-fog px-4 py-2.5">
-          <span className="tnum text-[10px] font-medium tracking-[0.2em] text-mute uppercase">01 — Data</span>
-        </div>
-        <div className="space-y-2 px-4 py-4">
-          <div className="h-2 w-11/12 bg-haze" />
-          <div className="h-2 w-8/12 bg-haze" />
-          <div className="h-2 w-9/12 bg-haze" />
-        </div>
-      </figure>
-
-      {/* Layer 2 — Orchestration plane */}
-      <figure className="absolute top-[26%] left-[26%] w-[48%] border border-ink/10 bg-[url(#pane)] bg-surface shadow-[0_28px_70px_-24px_rgba(11,12,14,0.35)]">
-        <div className="flex items-center justify-between border-b border-fog px-4 py-2.5">
-          <span className="tnum text-[10px] font-medium tracking-[0.2em] text-mute uppercase">02 — Orchestration</span>
-          <span className="flex gap-1.5">
-            <i className="size-1.5 rounded-full bg-fog" />
-            <i className="size-1.5 rounded-full bg-fog" />
-            <i className="size-1.5 rounded-full bg-ink/70" />
+      <div className="relative border border-ink bg-surface">
+        <div className="flex items-center justify-between gap-3 border-b border-fog px-5 py-3">
+          <p className="font-mono text-xs text-mute">workflow run · invoice-follow-up</p>
+          <span className="inline-flex items-center gap-1 bg-warn-soft px-2 py-0.5 text-xs font-semibold text-warn">
+            <CircleDot aria-hidden className="size-3" strokeWidth={2} />
+            Waiting
           </span>
         </div>
-        <div className="grid grid-cols-3 gap-2 px-4 py-4">
-          <div className="aspect-square border border-fog bg-haze/60" />
-          <div className="aspect-square border border-fog bg-haze/60" />
-          <div className="aspect-square border border-accent/50 bg-accent-soft" />
-          <div className="aspect-square border border-fog bg-haze/60" />
-          <div className="aspect-square border border-fog bg-haze/60" />
-          <div className="aspect-square border border-fog bg-haze/60" />
-        </div>
-      </figure>
 
-      {/* Layer 3 — Agents / accent plane */}
-      <figure className="absolute top-[9%] right-[4%] w-[38%] shadow-[0_28px_70px_-24px_rgba(67,56,202,0.45)]">
-        <div className="border border-accent/30 bg-linear-to-br from-[#4f46e5] to-[#4338ca] px-4 py-3">
-          <span className="tnum text-[10px] font-medium tracking-[0.2em] text-white/80 uppercase">03 — Agents</span>
-        </div>
-        <div className="border border-t-0 border-fog bg-surface px-4 py-4">
-          <div className="flex items-center gap-2">
-            <span className="size-2 rounded-full bg-ok" />
-            <span className="text-xs text-graphite">Approver in the loop</span>
-          </div>
-          <div className="mt-3 h-1.5 w-full bg-haze">
-            <div className="h-full w-2/3 bg-ink/80" />
-          </div>
-        </div>
-      </figure>
+        <ol className="px-5 py-5">
+          {steps.map((s, i) => {
+            const Icon = s.icon;
+            const current = s.state === "current";
+            return (
+              <li key={s.title} className="relative flex gap-4 pb-6 last:pb-0">
+                {i < steps.length - 1 ? (
+                  <span aria-hidden className="absolute top-8 bottom-0 left-4 w-px bg-line" />
+                ) : null}
+                <span
+                  className={
+                    "relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full " +
+                    (current
+                      ? "bg-accent text-white ring-4 ring-accent-soft"
+                      : s.state === "done"
+                        ? "bg-ok-soft text-ok"
+                        : "border border-line bg-surface text-mute")
+                  }
+                >
+                  <Icon aria-hidden className="size-4" strokeWidth={2} />
+                </span>
+                <div className="min-w-0 pt-0.5">
+                  <p className="text-sm font-semibold text-ink">{s.title}</p>
+                  <p className="text-[13px] leading-snug text-slate">{s.detail}</p>
+                  {current ? (
+                    <div aria-hidden className="mt-3 flex flex-wrap items-center gap-2">
+                      <span className="inline-flex items-center gap-1 bg-warn-soft px-2 py-0.5 text-xs font-semibold text-warn">
+                        <ShieldAlert className="size-3" strokeWidth={2} />
+                        Medium risk
+                      </span>
+                      <span className="bg-ink px-3 py-1.5 text-xs font-medium text-paper">Approve</span>
+                      <span className="border border-line px-3 py-1.5 text-xs font-medium text-ink">Reject</span>
+                    </div>
+                  ) : null}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
 
-      {/* Human control node */}
-      <figure className="absolute bottom-[16%] right-[10%] flex items-center gap-3 border border-fog bg-surface px-4 py-3 shadow-[0_18px_50px_-20px_rgba(11,12,14,0.25)]">
-        <span className="flex size-8 items-center justify-center rounded-full border border-ink/15">
-          <svg viewBox="0 0 24 24" className="size-4 text-ink" fill="none" stroke="currentColor" strokeWidth="1.6">
-            <path d="M20 13.5A8.5 8.5 0 1 1 10.5 4" strokeLinecap="round" />
-            <path d="M20 4v5h-5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </span>
-        <div>
-          <p className="text-[11px] font-medium tracking-[0.14em] text-ink uppercase">Human-in-the-loop</p>
-          <p className="text-xs text-slate">Approvals &amp; escalation</p>
+        <div className="border-t border-fog bg-haze px-5 py-3 text-xs text-slate">
+          Every step is logged. Every figure says whether it is actual, estimated, or projected.
         </div>
-      </figure>
-    </div>
+      </div>
+
+      <figcaption className="relative mt-8 text-xs text-mute">
+        Illustration: a workflow pauses for a person before anything is sent.
+      </figcaption>
+    </figure>
   );
 }

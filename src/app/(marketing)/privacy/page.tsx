@@ -39,7 +39,7 @@ export default function PrivacyPage() {
       <Section>
         <Shell>
           <div
-            className="mx-auto max-w-2xl"
+            className="mx-auto max-w-2xl [&_a]:underline [&_a]:underline-offset-2"
             dangerouslySetInnerHTML={{ __html: POLICY_HTML }}
           />
         </Shell>

@@ -49,16 +49,22 @@ export function SiteHeader() {
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
+    if (!mobileOpen) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setMobileOpen(false);
+    }
+    document.addEventListener("keydown", onKeyDown);
     return () => {
+      document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-fog bg-paper/90 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-fog bg-paper">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-60 focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-60 focus:bg-ink focus:px-4 focus:py-3 focus:text-paper"
       >
         Skip to content
       </a>
@@ -68,7 +74,7 @@ export function SiteHeader() {
         className="mx-auto flex h-[68px] w-full max-w-[76rem] items-center justify-between px-5 sm:px-8"
       >
         {/* Logo mark — replaces the text wordmark */}
-        <Link href="/" aria-label="AutoMSP — home" className="flex shrink-0 items-center">
+        <Link href="/" aria-label="AutoMSP — home" className="-ml-0.5 flex size-11 shrink-0 items-center justify-center">
           <Image
             src="/brand/logo-gravatar.png"
             alt=""
@@ -89,9 +95,12 @@ export function SiteHeader() {
                   key={item.label}
                   href={item.href}
                   onClick={closeAll}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
-                    "px-4 py-2 text-[13px] font-medium uppercase tracking-[0.06em] transition-colors",
-                    active ? "text-ink" : "text-slate hover:text-ink",
+                    "relative flex min-h-11 min-w-11 items-center justify-center px-3 text-sm font-medium transition-colors",
+                    active
+                      ? "text-ink after:absolute after:inset-x-3 after:bottom-1.5 after:h-0.5 after:bg-ink"
+                      : "text-slate hover:text-ink",
                   )}
                 >
                   {item.label}
@@ -108,8 +117,9 @@ export function SiteHeader() {
                   onClick={() => setOpenMenu(open ? null : item.label)}
                   onMouseEnter={() => setOpenMenu(item.label)}
                   className={cn(
-                    "flex items-center gap-1.5 px-4 py-2 text-[13px] font-medium uppercase tracking-[0.06em] transition-colors",
+                    "relative flex min-h-11 items-center gap-1.5 px-3 text-sm font-medium transition-colors",
                     active || open ? "text-ink" : "text-slate hover:text-ink",
+                    active && "after:absolute after:inset-x-3 after:bottom-1.5 after:h-0.5 after:bg-ink",
                   )}
                 >
                   {item.label}
@@ -126,17 +136,17 @@ export function SiteHeader() {
                 <div
                   className={cn(
                     "absolute top-full left-0 pt-2 transition-opacity duration-150",
-                    open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
+                    open ? "visible opacity-100" : "invisible opacity-0",
                   )}
                 >
-                  <div className="min-w-80 border border-fog bg-paper p-2 shadow-lg shadow-ink/5">
+                  <div className="min-w-80 border border-ink bg-paper p-2 shadow-pop">
                     {item.children.map((child) => (
                       <Link
                         key={child.href + child.label}
                         href={child.href}
                         onClick={closeAll}
                         className={cn(
-                          "group block px-4 py-3 transition-colors hover:bg-haze",
+                          "group block min-h-11 px-4 py-3 transition-colors hover:bg-haze",
                           pathname === child.href && "bg-haze",
                         )}
                       >
@@ -148,7 +158,7 @@ export function SiteHeader() {
                             aria-hidden
                           />
                         </span>
-                        <span className="mt-0.5 block text-[12.5px] leading-snug text-slate">
+                        <span className="mt-0.5 block text-[13px] leading-snug text-slate">
                           {child.description}
                         </span>
                       </Link>
@@ -164,7 +174,7 @@ export function SiteHeader() {
           <Link
             href="/book-audit"
             onClick={closeAll}
-            className="group inline-flex h-10 items-center gap-2 bg-ink px-5 text-[13px] font-medium uppercase tracking-[0.08em] text-paper transition-colors hover:bg-graphite"
+            className="group inline-flex min-h-11 items-center gap-2 bg-ink px-5 text-sm font-medium text-paper transition-colors hover:bg-graphite"
           >
             Book Audit
             <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={1.75} aria-hidden />
@@ -173,7 +183,7 @@ export function SiteHeader() {
 
         <button
           type="button"
-          className="inline-flex size-10 items-center justify-center text-ink lg:hidden"
+          className="-mr-2 inline-flex size-11 items-center justify-center text-ink lg:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav"
@@ -198,7 +208,7 @@ export function SiteHeader() {
                 key={item.label}
                 href={item.href}
                 onClick={closeAll}
-                className="flex items-baseline justify-between border-b border-fog py-4 text-2xl font-medium tracking-tight text-ink"
+                className="flex min-h-14 items-baseline justify-between border-b border-fog py-4 text-2xl font-medium tracking-tight text-ink"
               >
                 {item.label}
                 <span className="tnum text-xs text-mute">0{i + 1}</span>
@@ -209,7 +219,7 @@ export function SiteHeader() {
                   type="button"
                   aria-expanded={mobileGroup === item.label}
                   onClick={() => setMobileGroup(mobileGroup === item.label ? null : item.label)}
-                  className="flex w-full items-baseline justify-between py-4 text-2xl font-medium tracking-tight text-ink"
+                  className="flex min-h-14 w-full items-baseline justify-between py-4 text-2xl font-medium tracking-tight text-ink"
                 >
                   {item.label}
                   <ChevronDown
@@ -227,7 +237,7 @@ export function SiteHeader() {
                       key={child.href + child.label}
                       href={child.href}
                       onClick={closeAll}
-                      className="block py-2 pl-4 text-base text-slate first:pt-0 hover:text-ink"
+                      className="flex min-h-11 items-center pl-4 text-base text-slate hover:text-ink"
                     >
                       {child.label}
                     </Link>
@@ -239,7 +249,7 @@ export function SiteHeader() {
           <Link
             href="/book-audit"
             onClick={closeAll}
-            className="mt-8 inline-flex h-12 items-center justify-center gap-2 bg-ink text-[13px] font-medium uppercase tracking-[0.08em] text-paper"
+            className="mt-8 inline-flex min-h-14 items-center justify-center gap-2 bg-ink px-4 text-center text-[15px] font-medium text-paper"
           >
             Book a Free AI Opportunity Audit
             <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden />

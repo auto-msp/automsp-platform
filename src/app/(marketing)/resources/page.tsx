@@ -30,8 +30,8 @@ export default function ResourcesPage() {
                   href={`/resources/${r.slug}`}
                   className="group grid gap-2 py-8 transition-colors hover:bg-surface/70 sm:grid-cols-[4rem_6rem_1fr_auto] sm:items-baseline sm:gap-8"
                 >
-                  <span className="tnum text-xs font-medium tracking-[0.2em] text-mute">0{i + 1}</span>
-                  <span className="text-[11px] font-medium tracking-[0.18em] text-mute uppercase">
+                  <span className="tnum text-xs font-medium tracking-[0.14em] text-mute">0{i + 1}</span>
+                  <span className="text-xs font-medium tracking-[0.14em] text-mute uppercase">
                     {r.type}
                   </span>
                   <span>

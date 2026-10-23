@@ -100,7 +100,7 @@ export default function CapabilitiesPage() {
                 <div>
                   <div className="flex items-center gap-4">
                     <c.icon className="size-7 text-graphite" strokeWidth={1.4} aria-hidden />
-                    <span className="tnum text-xs font-medium tracking-[0.2em] text-mute">
+                    <span className="tnum text-xs font-medium tracking-[0.14em] text-mute">
                       0{i + 1}
                     </span>
                   </div>
@@ -131,7 +131,7 @@ export default function CapabilitiesPage() {
                   </ul>
                   <a
                     href="/book-audit"
-                    className="mt-6 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.08em] text-ink uppercase underline-offset-4 hover:underline"
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-ink underline-offset-4 hover:underline min-h-11 underline"
                   >
                     Discuss this capability
                     <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden />

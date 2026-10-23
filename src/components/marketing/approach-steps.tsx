@@ -33,29 +33,34 @@ export function ApproachSteps() {
   return (
     <Section className="hairline-t">
       <Shell>
-        <div className="grid gap-10 lg:grid-cols-[1fr_2fr] lg:gap-20">
+        <div>
           <div>
             <Eyebrow>Process</Eyebrow>
-            <h2 className="font-display mt-6 text-4xl leading-[1.08] tracking-tight text-ink sm:text-5xl">
+            <h2 className="font-display mt-6 max-w-2xl text-balance text-4xl leading-[1.08] tracking-tight text-ink sm:text-5xl">
               A controlled path from opportunity to production.
             </h2>
             <Link
               href="/approach"
-              className="mt-8 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.08em] text-ink uppercase underline-offset-4 hover:underline"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-ink underline underline-offset-4 hover:text-accent"
             >
               More about our approach
               <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden />
             </Link>
           </div>
 
-          <ol className="grid gap-px bg-fog sm:grid-cols-2 lg:grid-cols-4">
+          {/* Timeline: a rule with a node per step; stacks to a vertical rail on small screens. */}
+          <ol className="relative mt-14 grid gap-10 border-l border-line pl-8 sm:grid-cols-2 sm:gap-x-10 lg:grid-cols-4 lg:border-l-0 lg:border-t lg:pl-0 lg:pt-8">
             {steps.map((s) => (
-              <li key={s.n} className="flex flex-col bg-paper p-6 sm:p-7">
-                <span className="tnum text-xs font-medium tracking-[0.2em] text-mute">{s.n}</span>
-                <h3 className="mt-6 text-lg font-semibold tracking-tight text-ink">{s.title}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-slate">{s.body}</p>
-                <p className="mt-4 border-t border-fog pt-3 text-[12px] leading-snug text-graphite">
-                  <span className="font-medium tracking-[0.08em] text-mute uppercase">Deliverable</span>
+              <li key={s.n} className="relative flex flex-col">
+                <span
+                  aria-hidden
+                  className="absolute top-1.5 -left-[2.4rem] size-3 rounded-full border-2 border-ink bg-paper lg:-top-[2.1rem] lg:left-0"
+                />
+                <span className="tnum text-xs font-medium tracking-[0.14em] text-mute">{s.n}</span>
+                <h3 className="font-display mt-2 text-3xl tracking-tight text-ink">{s.title}</h3>
+                <p className="mt-2 flex-1 text-[15px] leading-relaxed text-slate">{s.body}</p>
+                <p className="mt-4 border-t border-fog pt-3 text-[13px] leading-snug text-graphite">
+                  <span className="text-xs font-medium tracking-[0.1em] text-mute uppercase">Deliverable</span>
                   <br />
                   {s.deliverable}
                 </p>

@@ -18,22 +18,21 @@ type Size = "md" | "lg" | "sm";
  * being clipped by a fixed height.
  */
 const base =
-  "group/btn inline-flex max-w-full items-center justify-center gap-2.5 text-center font-medium transition-colors duration-200 select-none";
+  "group/btn inline-flex max-w-full items-center justify-center gap-2.5 text-center text-[15px] font-medium leading-snug transition-colors duration-200 select-none";
 
 const variants: Record<Variant, string> = {
   // Swiss primary: solid ink block, squared corners, tracked label
-  primary: "bg-ink text-paper hover:bg-graphite text-[13px] uppercase tracking-[0.08em]",
-  secondary:
-    "border border-ink/25 bg-transparent text-ink hover:border-ink hover:bg-ink hover:text-paper text-[13px] uppercase tracking-[0.08em]",
-  ghost: "text-ink hover:text-slate normal-case text-sm",
-  inverse: "bg-paper text-ink hover:bg-white text-[13px] uppercase tracking-[0.08em]",
+  primary: "bg-ink text-paper hover:bg-graphite",
+  secondary: "border border-line bg-transparent text-ink hover:border-ink hover:bg-ink hover:text-paper",
+  ghost: "text-ink underline-offset-4 hover:underline",
+  inverse: "bg-paper text-ink hover:bg-white",
 };
 
 const sizes: Record<Size, string> = {
-  md: "min-h-11 px-6",
+  md: "min-h-12 px-6",
   // Tighter gutters on phones so the long CTA labels wrap less often.
-  lg: "min-h-[52px] px-6 sm:px-8",
-  sm: "h-9 px-4 text-xs",
+  lg: "min-h-14 px-6 sm:px-8",
+  sm: "min-h-11 px-4 text-sm",
 };
 
 export function ButtonLink({

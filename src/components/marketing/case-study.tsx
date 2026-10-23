@@ -19,7 +19,7 @@ export function CaseStudySection() {
 
         <div className="mt-12 border border-fog bg-paper">
           <div className="border-b border-fog p-8 sm:p-10">
-            <p className="text-[12px] font-medium tracking-[0.22em] text-mute uppercase">
+            <p className="text-xs font-medium tracking-[0.14em] text-mute uppercase">
               Logistics operations
             </p>
             <h3 className="font-display mt-3 text-2xl tracking-tight text-ink sm:text-3xl">
@@ -39,8 +39,8 @@ export function CaseStudySection() {
               { value: "60+", label: "Staff hours saved per month" },
             ].map((m) => (
               <div key={m.label} className="bg-surface p-7">
-                <p className="tnum font-display text-3xl text-ink">{m.value}</p>
-                <p className="mt-1.5 text-[13px] leading-snug text-slate">{m.label}</p>
+                <p className="tnum font-display text-5xl leading-none text-ink">{m.value}</p>
+                <p className="mt-3 text-sm leading-snug text-slate">{m.label}</p>
               </div>
             ))}
           </div>

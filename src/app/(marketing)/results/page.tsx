@@ -34,7 +34,7 @@ export default function ResultsPage() {
               <div key={b.label} className="bg-surface p-8 sm:p-10">
                 <Kpi value={b.value} label={b.label} />
                 <div className="mt-6 border-t border-fog pt-4">
-                  <p className="text-[11px] font-medium tracking-[0.18em] text-mute uppercase">
+                  <p className="text-xs font-medium tracking-[0.14em] text-mute uppercase">
                     How this is calculated
                   </p>
                   <p className="mt-2 text-sm leading-relaxed text-slate">{b.method}</p>

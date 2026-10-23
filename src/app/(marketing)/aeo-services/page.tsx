@@ -148,7 +148,7 @@ export default function AeoServicesPage() {
             </ButtonLink>
             <Link
               href="/capabilities"
-              className="text-[13px] font-medium tracking-[0.08em] text-ink uppercase underline-offset-4 hover:underline"
+              className="inline-flex text-sm font-medium text-ink underline-offset-4 hover:underline items-center min-h-11 underline"
             >
               Or explore all capabilities
             </Link>

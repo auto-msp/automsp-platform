@@ -9,17 +9,15 @@ import {
   industries,
   roles,
 } from "@/lib/validation";
-import { cn } from "@/lib/utils";
+import { Field as SharedField } from "@/components/ui/field";
 
 type FieldErrors = Partial<Record<string, string[]>>;
 
 const inputCls =
-  "w-full border border-fog bg-surface px-4 py-3 text-sm text-ink placeholder:text-mute transition-colors focus:border-ink focus:outline-none";
-const labelCls = "mb-2 block text-[13px] font-medium text-graphite";
+  "field";
 
 function Field({
   label,
-  name,
   error,
   children,
 }: {
@@ -29,17 +27,9 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <label htmlFor={name} className={labelCls}>
-        {label}
-      </label>
+    <SharedField label={label} error={error?.[0]}>
       {children}
-      {error?.[0] ? (
-        <p className="mt-1.5 text-xs text-risk" role="alert">
-          {error[0]}
-        </p>
-      ) : null}
-    </div>
+    </SharedField>
   );
 }
 
@@ -115,7 +105,7 @@ export function AuditForm() {
           <input id="phone" name="phone" type="tel" className={inputCls} autoComplete="tel" />
         </Field>
         <Field label="Your role *" name="role" error={fieldErrors.role}>
-          <select id="role" name="role" className={cn(inputCls, "bg-surface")} defaultValue="">
+          <select id="role" name="role" className={inputCls} defaultValue="">
             <option value="" disabled>
               Select role
             </option>
@@ -214,7 +204,7 @@ export function AuditForm() {
       </div>
 
       {formError ? (
-        <p className="mt-6 border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <p className="form-alert mt-6" role="alert">
           {formError}
         </p>
       ) : null}
@@ -222,10 +212,10 @@ export function AuditForm() {
       <button
         type="submit"
         disabled={pending}
-        className="group mt-8 inline-flex h-[52px] w-full items-center justify-center gap-3 bg-ink px-8 text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        className="btn btn-primary mt-8 min-h-14 w-full text-[15px]"
       >
         {pending ? "Submitting…" : "Submit audit request"}
-        <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.75} aria-hidden />
+        <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden />
       </button>
     </form>
   );

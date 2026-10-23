@@ -60,7 +60,7 @@ export default async function SolutionPage({
         <Shell>
           <Link
             href="/solutions"
-            className="mb-10 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.08em] text-slate uppercase hover:text-ink"
+            className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-slate hover:text-ink min-h-11"
           >
             <ArrowLeft className="size-4" strokeWidth={1.75} aria-hidden />
             All solutions
@@ -101,7 +101,7 @@ export default async function SolutionPage({
             {solution.exampleWorkflow.map((step, i, arr) => (
               <div key={step}>
                 <div className="flex items-center gap-5 border border-nline bg-night-2 px-5 py-4">
-                  <span className="tnum text-xs font-medium tracking-[0.2em] text-white/50">
+                  <span className="tnum text-xs font-medium tracking-[0.14em] text-white/50">
                     0{i + 1}
                   </span>
                   <span className="text-sm text-white/90">{step}</span>
