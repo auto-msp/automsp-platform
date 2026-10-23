@@ -31,7 +31,10 @@
   --color-nline: #232833;
   --color-trail: #6d7cff;        /* 5.5:1 on night */
   --color-trail-light: #8f9bff;  /* 7.7:1 on night — text and focus on dark */
-  --color-trail-warm: #ffb454;
+  --color-trail-warm: #ffb454;      /* 11.0:1 on night */
+  --color-night-text: #c9cede;      /* 12.4:1 on night */
+  --color-night-mute: #a3a9bd;      /*  8.3:1 */
+  --color-night-risk: #ff8f87;      /*  8.8:1 */
 
   /* Status: text colour + solid tint it sits on (each pair >= 6:1) */
   --color-ok: #14633a;
@@ -225,13 +228,19 @@ body {
   .card-pad-sm { padding: 1rem; }
 
   /* Tables — scroll inside their own region on narrow screens */
+  /* Edge shadows appear only on the side that has more content to scroll to. */
   .table-wrap {
     overflow-x: auto;
     border: 1px solid var(--color-fog);
     border-radius: var(--radius-lg);
-    background: var(--color-surface);
+    background:
+      linear-gradient(to right, var(--color-surface) 30%, transparent) left center / 24px 100% no-repeat local,
+      linear-gradient(to left, var(--color-surface) 30%, transparent) right center / 24px 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%, rgb(11 12 14 / 0.16), transparent) left center / 10px 100% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%, rgb(11 12 14 / 0.16), transparent) right center / 10px 100% no-repeat scroll,
+      var(--color-surface);
   }
-  .data-table { width: 100%; min-width: 36rem; border-collapse: collapse; text-align: left; font-size: 0.875rem; }
+  .data-table { width: 100%; min-width: 32rem; border-collapse: collapse; text-align: left; font-size: 0.875rem; }
   .data-table th {
     background: var(--color-haze);
     padding: 0.625rem 1rem;
@@ -246,7 +255,29 @@ body {
   .data-table .num { text-align: right; font-variant-numeric: tabular-nums; }
   .data-table .id { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-mute); }
   .data-table a:not(.btn) { display: inline-flex; min-height: 2.75rem; align-items: center; }
+  /* cells whose link already provides the 44px hit area need no extra padding */
+  .data-table td:has(> a:not(.btn)) { padding-block: 0; }
 
   /* Small caps-free section label used above groups of fields/cards */
   .section-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; color: var(--color-mute); text-transform: uppercase; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slide-in {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+/* Skeleton block for loading.tsx — static under reduced motion (see rule above) */
+.skeleton {
+  border-radius: var(--radius-md);
+  background: linear-gradient(90deg, var(--color-haze) 25%, var(--color-fog) 50%, var(--color-haze) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
 }
