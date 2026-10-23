@@ -37,14 +37,14 @@ export default async function IntegrationsPage() {
         {canManage ? (
           <Link
             href="/app/integrations/new"
-            className="inline-flex h-10 items-center bg-ink px-4 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite"
+            className="btn btn-primary btn-sm"
           >
             Add credential
           </Link>
         ) : null}
       </AppPageHeader>
 
-      <div className="mb-6 border border-fog bg-haze px-4 py-3">
+      <div className="mb-6 border border-fog bg-haze px-4 py-3 rounded-lg">
         <p className="text-[13px] text-slate">
           {devKey ? (
             <>
@@ -69,39 +69,39 @@ export default async function IntegrationsPage() {
           action={canManage ? { href: "/app/integrations/new", label: "Add the first credential" } : undefined}
         />
       ) : (
-        <div className="border border-fog">
-          <table className="w-full text-left text-sm">
+        <div className="table-wrap" tabIndex={0}>
+          <table className="data-table">
             <thead>
-              <tr className="border-b border-fog text-[11px] tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5 font-medium">Name</th>
-                <th className="px-4 py-2.5 font-medium">Provider</th>
-                <th className="px-4 py-2.5 font-medium">Secret</th>
-                <th className="px-4 py-2.5 font-medium">Status</th>
-                <th className="px-4 py-2.5 font-medium">Last used</th>
-                <th className="px-4 py-2.5 font-medium">Id</th>
+              <tr>
+                <th>Name</th>
+                <th>Provider</th>
+                <th>Secret</th>
+                <th>Status</th>
+                <th>Last used</th>
+                <th>Id</th>
                 <th className="px-4 py-2.5" />
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => (
                 <tr key={row.id} className="border-b border-fog last:border-0">
-                  <td className="px-4 py-3 font-medium text-ink">{row.name}</td>
-                  <td className="px-4 py-3 text-slate">
+                  <td className="font-medium text-ink">{row.name}</td>
+                  <td className="text-slate">
                     {providerByKey(row.providerKey)?.name ?? row.providerKey}
                   </td>
-                  <td className="px-4 py-3">
+                  <td>
                     <span className="tnum text-slate">
                       {row.secretPreview ? `••••${row.secretPreview}` : "—"}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
+                  <td>
                     <StatusPill status={row.status} />
                   </td>
-                  <td className="tnum px-4 py-3 text-slate">
+                  <td className="tnum text-slate">
                     {row.lastUsedAt ? formatDateTime(row.lastUsedAt) : "Never"}
                   </td>
-                  <td className="tnum px-4 py-3 text-mute">{truncateId(row.id)}</td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="tnum text-mute">{truncateId(row.id)}</td>
+                  <td className="num">
                     {canManage && row.status === "active" ? (
                       <RevokeButton integrationId={row.id} name={row.name} />
                     ) : null}
@@ -113,7 +113,7 @@ export default async function IntegrationsPage() {
         </div>
       )}
 
-      <p className="mt-4 text-[12px] leading-relaxed text-mute">
+      <p className="mt-4 text-xs leading-relaxed text-mute">
         Revoking a credential destroys the sealed material. Managed connectors (OAuth sign-in flows,
         automatic sync) are not configured in this environment — credentials work with HTTP workflow
         steps only.

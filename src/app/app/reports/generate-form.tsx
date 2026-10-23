@@ -28,7 +28,7 @@ export function GenerateReportForm({ canGenerate }: { canGenerate: boolean }) {
   if (!canGenerate) return null;
 
   return (
-    <div className="border border-fog bg-surface p-5">
+    <div className="card card-pad">
       <h2 className="text-sm font-semibold text-ink">Generate a report</h2>
       <p className="mt-1 text-[13px] text-slate">
         Snapshots your current operational data into a shareable document. Every derived number
@@ -42,10 +42,10 @@ export function GenerateReportForm({ canGenerate }: { canGenerate: boolean }) {
             name="type"
             value={t.value}
             disabled={pending}
-            className="border border-fog p-3 text-left transition-colors hover:border-ink disabled:opacity-50"
+            className="card card-pad-sm text-left transition-colors hover:border-ink disabled:opacity-50"
           >
             <p className="text-[13px] font-medium text-ink">{t.label}</p>
-            <p className="mt-0.5 text-[12px] leading-snug text-mute">{t.blurb}</p>
+            <p className="mt-0.5 text-xs leading-snug text-mute">{t.blurb}</p>
           </button>
         ))}
       </form>

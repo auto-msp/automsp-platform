@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppPageHeader } from "@/components/app/page-header";
 import { can, getSessionContext } from "@/server/auth/session";
@@ -32,14 +31,10 @@ export default async function AutomationEditPage({
 
   return (
     <div>
-      <AppPageHeader title={`Settings — ${automation.name}`}>
-        <Link
-          href={`/app/automations/${automation.id}`}
-          className="text-[13px] text-slate hover:text-ink"
-        >
-          ← Back to automation
-        </Link>
-      </AppPageHeader>
+      <AppPageHeader
+        title={`Settings — ${automation.name}`}
+        back={{ href: `/app/automations/${automation.id}`, label: "Back to automation" }}
+      />
 
       <div className="max-w-xl space-y-10">
         <AutomationSettingsForm

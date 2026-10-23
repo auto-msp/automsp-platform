@@ -2,9 +2,10 @@
 
 import { useActionState } from "react";
 import type { AutomationFormState } from "./actions";
+import { Field } from "@/components/ui/field";
 
 const inputCls =
-  "w-full border border-fog bg-surface px-4 py-3 text-sm text-ink placeholder:text-mute transition-colors focus:border-ink focus:outline-none";
+  "field";
 
 type BoundAction = (prev: AutomationFormState | null, data: FormData) => Promise<AutomationFormState>;
 
@@ -75,7 +76,7 @@ export function AutomationSettingsForm({
           defaultValue={defaultValues?.estMinutesPerRun ?? 0}
           className={inputCls}
         />
-        <p className="mt-1.5 text-xs text-mute">
+        <p className="hint">
           Your estimate of human time avoided per completed run. Shown as an estimate wherever it is
           reported.
         </p>
@@ -93,7 +94,7 @@ export function AutomationSettingsForm({
       ) : null}
 
       {state?.error ? (
-        <p className="border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <p className="form-alert" role="alert">
           {state.error}
         </p>
       ) : null}
@@ -101,7 +102,7 @@ export function AutomationSettingsForm({
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-11 items-center bg-ink px-6 text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:cursor-not-allowed disabled:opacity-60"
+        className="btn btn-primary"
       >
         {pending ? "Saving…" : submitLabel}
       </button>
@@ -109,20 +110,3 @@ export function AutomationSettingsForm({
   );
 }
 
-function Field({
-  label,
-  error,
-  children,
-}: {
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <label className="mb-2 block text-[13px] font-medium text-graphite">{label}</label>
-      {children}
-      {error ? <p className="mt-1.5 text-xs text-risk">{error}</p> : null}
-    </div>
-  );
-}

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { EmptyState } from "@/components/app/empty-state";
+import { Metric } from "@/components/app/metric";
 import { AppPageHeader } from "@/components/app/page-header";
 import { StatusPill } from "@/components/app/status-pill";
 import { formatDateTime, truncateId } from "@/lib/format";
@@ -10,31 +12,6 @@ import { getDashboardMetrics } from "@/server/dashboard";
 export const metadata: Metadata = { title: "Dashboard" };
 
 export const dynamic = "force-dynamic";
-
-function Stat({
-  label,
-  value,
-  method,
-  basis,
-}: {
-  label: string;
-  value: string;
-  method: string;
-  basis: "Actual" | "Estimated";
-}) {
-  return (
-    <div className="border border-fog bg-surface p-5">
-      <p className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">{label}</p>
-      <p className="tnum mt-2 text-3xl font-semibold text-ink">{value}</p>
-      <p className="mt-2 text-[11px] leading-relaxed text-mute">
-        <span className={basis === "Actual" ? "font-medium text-ok" : "font-medium text-warn"}>
-          {basis}
-        </span>{" "}
-        — {method}
-      </p>
-    </div>
-  );
-}
 
 export default async function DashboardPage() {
   const ctx = await getSessionContext();
@@ -50,61 +27,54 @@ export default async function DashboardPage() {
         description={`Operational overview for ${ctx.organization.name}.`}
       />
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat
-          label="Systems connected"
-          value={String(m.systemsTotal)}
-          method="counted from your system registry"
-          basis="Actual"
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Metric
+          size="lg"
+          label="Run success rate · 30 days"
+          value={m.successRate30d === null ? "—" : `${Math.round(m.successRate30d * 100)}%`}
+          basis="actual"
+          method={
+            m.successRate30d === null
+              ? "no completed or failed runs yet"
+              : "completed runs ÷ (completed + failed runs)"
+          }
         />
-        <Stat
-          label="Active automations"
-          value={String(m.automationsActive)}
-          method={`${m.automationsTotal} defined in total`}
-          basis="Actual"
-        />
-        <Stat
-          label="Executions · 30 days"
-          value={String(m.executions30d)}
-          method="counted from execution records"
-          basis="Actual"
-        />
-        <Stat
-          label="Pending approvals"
-          value={String(m.pendingApprovals)}
-          method="runs paused awaiting a decision"
-          basis="Actual"
+        <Metric
+          size="lg"
+          label="Estimated hours saved · 30 days"
+          value={m.estHoursSaved30d === 0 ? "—" : m.estHoursSaved30d.toFixed(1)}
+          basis="estimated"
+          method={`completed runs × the minutes-saved estimate you set per automation${
+            m.executionsWithEstimate === 0 ? "; no runs carry an estimate yet" : ""
+          }`}
         />
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <div className="border border-fog bg-surface p-5">
-          <p className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">
-            Run success rate · 30 days
-          </p>
-          <p className="tnum mt-2 text-3xl font-semibold text-ink">
-            {m.successRate30d === null ? "—" : `${Math.round(m.successRate30d * 100)}%`}
-          </p>
-          <p className="mt-2 text-[11px] leading-relaxed text-mute">
-            <span className="font-medium text-ok">Actual</span> —{" "}
-            {m.successRate30d === null
-              ? "no completed or failed runs yet"
-              : "completed runs ÷ (completed + failed runs)"}
-          </p>
-        </div>
-        <div className="border border-fog bg-surface p-5">
-          <p className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">
-            Estimated hours saved · 30 days
-          </p>
-          <p className="tnum mt-2 text-3xl font-semibold text-ink">
-            {m.estHoursSaved30d === 0 ? "—" : m.estHoursSaved30d.toFixed(1)}
-          </p>
-          <p className="mt-2 text-[11px] leading-relaxed text-mute">
-            <span className="font-medium text-warn">Estimated</span> — completed runs × the
-            minutes-saved estimate you set per automation
-            {m.executionsWithEstimate === 0 ? "; no runs carry an estimate yet" : ""}
-          </p>
-        </div>
+      <div className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Metric
+          label="Executions · 30 days"
+          value={String(m.executions30d)}
+          basis="actual"
+          method="counted from execution records"
+        />
+        <Metric
+          label="Pending approvals"
+          value={String(m.pendingApprovals)}
+          basis="actual"
+          method="runs paused awaiting a decision"
+        />
+        <Metric
+          label="Active automations"
+          value={String(m.automationsActive)}
+          basis="actual"
+          method={`${m.automationsTotal} defined in total`}
+        />
+        <Metric
+          label="Systems connected"
+          value={String(m.systemsTotal)}
+          basis="actual"
+          method="counted from your system registry"
+        />
       </div>
 
       {isEmpty ? (
@@ -119,8 +89,9 @@ export default async function DashboardPage() {
         <div className="mt-8">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-ink">Recent executions</h2>
-            <Link href="/app/operations" className="text-[13px] text-slate hover:text-ink">
-              View all →
+            <Link href="/app/operations" className="btn btn-ghost btn-sm -mr-3">
+              View all
+              <ArrowRight aria-hidden strokeWidth={1.75} className="size-4" />
             </Link>
           </div>
           {m.recentExecutions.length === 0 ? (
@@ -130,29 +101,29 @@ export default async function DashboardPage() {
               action={{ href: "/app/automations", label: "Open automations" }}
             />
           ) : (
-            <div className="overflow-hidden border border-fog">
-              <table className="w-full text-sm">
+            <div className="table-wrap" tabIndex={0}>
+              <table className="data-table">
                 <thead>
-                  <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                    <th className="px-4 py-2.5">Execution</th>
-                    <th className="px-4 py-2.5">Automation</th>
-                    <th className="px-4 py-2.5">Status</th>
-                    <th className="px-4 py-2.5">Started</th>
+                  <tr>
+                    <th className="hidden sm:table-cell">Execution</th>
+                    <th>Automation</th>
+                    <th>Status</th>
+                    <th>Started</th>
                   </tr>
                 </thead>
                 <tbody>
                   {m.recentExecutions.map((run) => (
-                    <tr key={run.id} className="border-b border-fog last:border-0">
-                      <td className="tnum px-4 py-2.5 text-slate">
+                    <tr key={run.id}>
+                      <td className="id hidden sm:table-cell">
                         <Link href={`/app/operations/${run.id}`} className="hover:text-ink hover:underline">
                           {truncateId(run.id)}
                         </Link>
                       </td>
-                      <td className="px-4 py-2.5 text-ink">{run.automationName}</td>
-                      <td className="px-4 py-2.5">
+                      <td className="text-ink">{run.automationName}</td>
+                      <td>
                         <StatusPill status={run.status} />
                       </td>
-                      <td className="tnum px-4 py-2.5 text-slate">{formatDateTime(run.startedAt)}</td>
+                      <td className="tnum text-slate">{formatDateTime(run.startedAt)}</td>
                     </tr>
                   ))}
                 </tbody>

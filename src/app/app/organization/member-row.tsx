@@ -38,7 +38,7 @@ export function MemberRow({
     <tr className="border-b border-fog last:border-0">
       <td className="px-4 py-3 font-medium text-ink">
         {name}
-        {isSelf ? <span className="ml-2 text-[11px] text-mute">(you)</span> : null}
+        {isSelf ? <span className="ml-2 text-xs text-mute">(you)</span> : null}
       </td>
       <td className="px-4 py-3 text-slate">{email}</td>
       <td className="px-4 py-3">
@@ -49,7 +49,7 @@ export function MemberRow({
               defaultValue={role}
               disabled={changePending}
               onChange={(e) => e.currentTarget.form?.requestSubmit()}
-              className="border border-fog bg-surface px-2 py-1 text-[13px] text-ink focus:border-ink focus:outline-none"
+              className="field"
               aria-label={`Role for ${name}`}
             >
               <option value="customer_owner">Owner</option>
@@ -61,7 +61,7 @@ export function MemberRow({
         ) : (
           <span className="text-slate">{formatRole(role)}</span>
         )}
-        {changeState?.error ? <p className="mt-1 text-xs text-risk">{changeState.error}</p> : null}
+        {changeState?.error ? <p className="field-error">{changeState.error}</p> : null}
       </td>
       <td className="tnum px-4 py-3 text-slate">{formatDate(createdAt)}</td>
       {canManage ? (
@@ -76,12 +76,12 @@ export function MemberRow({
               <button
                 type="submit"
                 disabled={removePending}
-                className="text-[13px] text-risk hover:underline disabled:opacity-60"
+                className="btn btn-danger btn-sm"
               >
                 {removePending ? "Removing…" : "Remove"}
               </button>
               {removeState?.error ? (
-                <p className="mt-1 text-xs text-risk">{removeState.error}</p>
+                <p className="field-error">{removeState.error}</p>
               ) : null}
             </form>
           ) : null}

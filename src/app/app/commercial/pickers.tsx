@@ -5,8 +5,7 @@ import { useEffect, useState, useTransition } from "react";
 import type { AuditStatus, OpportunityStage } from "@/server/db/types";
 import { updateAuditStatusAction, updateOpportunityStageAction } from "./actions";
 
-const SELECT =
-  "border border-fog bg-paper px-2 py-1 text-[12px] text-ink focus:border-ink focus:outline-none disabled:opacity-60";
+const SELECT = "field w-auto min-w-32 py-1 text-[13px]";
 
 /** Stage picker that persists immediately on change. */
 export function StagePicker({
@@ -45,7 +44,7 @@ export function StagePicker({
           </option>
         ))}
       </select>
-      {error ? <span className="text-[11px] text-risk">{error}</span> : null}
+      {error ? <span className="text-xs text-risk">{error}</span> : null}
     </span>
   );
 }
@@ -87,7 +86,7 @@ export function AuditStatusPicker({
           </option>
         ))}
       </select>
-      {error ? <span className="text-[11px] text-risk">{error}</span> : null}
+      {error ? <span className="text-xs text-risk">{error}</span> : null}
     </span>
   );
 }
@@ -102,7 +101,7 @@ export function ExpandableText({ text, limit = 140 }: { text: string; limit?: nu
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="font-medium text-accent hover:text-ink"
+        className="inline-flex min-h-6 items-center font-medium text-accent underline underline-offset-2 hover:text-accent-strong"
       >
         {open ? "less" : "more"}
       </button>

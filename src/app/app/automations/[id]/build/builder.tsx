@@ -3,6 +3,8 @@
 import { useState, useActionState } from "react";
 import type { NodeType, WorkflowNodeRecord } from "@/server/db/types";
 import { saveDefinitionAction, type AutomationFormState } from "../../actions";
+import { ArrowDown, ArrowUp, X } from "lucide-react";
+import { Field } from "@/components/ui/field";
 
 interface DraftStep {
   key: string;
@@ -42,7 +44,7 @@ function defaultConfig(type: NodeType): Record<string, unknown> {
 }
 
 const inputCls =
-  "w-full border border-fog bg-paper px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none";
+  "field";
 
 export function Builder({
   automationId,
@@ -105,12 +107,12 @@ export function Builder({
 
       <div className="space-y-3">
         {steps.map((step, i) => (
-          <div key={i} className="border border-fog bg-surface">
-            <div className="flex items-center gap-3 border-b border-fog px-4 py-2.5">
-              <span className="tnum text-[11px] font-medium text-mute">
+          <div key={i} className="card">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-fog px-4 py-2">
+              <span className="tnum text-xs font-medium text-mute">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <span className="text-[11px] font-medium tracking-[0.1em] text-slate uppercase">
+              <span className="text-xs font-medium text-slate">
                 {step.type}
               </span>
               {step.type === "trigger" ? (
@@ -124,20 +126,20 @@ export function Builder({
                   aria-label="Step key"
                   value={step.key}
                   onChange={(e) => updateStep(i, { key: e.target.value })}
-                  className="w-48 border border-transparent bg-transparent px-1 py-0.5 text-sm text-ink focus:border-fog focus:outline-none"
+                  className="field min-w-0 flex-1 border-transparent bg-transparent px-2 py-1 hover:border-line sm:w-48 sm:flex-none"
                 />
               )}
               <div className="ml-auto flex items-center gap-1">
                 {i > 0 ? (
                   <>
                     <IconButton label="Move up" onClick={() => move(i, -1)} disabled={i <= 1}>
-                      ↑
+                      <ArrowUp aria-hidden strokeWidth={1.75} className="size-4" />
                     </IconButton>
                     <IconButton label="Move down" onClick={() => move(i, 1)} disabled={i === steps.length - 1}>
-                      ↓
+                      <ArrowDown aria-hidden strokeWidth={1.75} className="size-4" />
                     </IconButton>
                     <IconButton label="Remove step" onClick={() => remove(i)}>
-                      ✕
+                      <X aria-hidden strokeWidth={1.75} className="size-4" />
                     </IconButton>
                   </>
                 ) : null}
@@ -150,11 +152,11 @@ export function Builder({
         ))}
       </div>
 
-      <div className="mt-5 flex flex-wrap items-center gap-3 border border-dashed border-fog px-4 py-3">
+      <div className="mt-5 flex flex-wrap items-center gap-3 rounded-lg border border-dashed border-line px-4 py-3">
         <select
           value={addType}
           onChange={(e) => setAddType(e.target.value as NodeType)}
-          className={`${inputCls} w-auto`}
+          className={`${inputCls} w-auto max-w-full`}
           aria-label="Step type to add"
         >
           {ADDABLE.map((a) => (
@@ -166,14 +168,14 @@ export function Builder({
         <button
           type="button"
           onClick={add}
-          className="inline-flex h-9 items-center border border-ink px-4 text-[12px] font-medium tracking-[0.08em] text-ink uppercase transition-colors hover:bg-ink hover:text-paper"
+          className="btn btn-secondary btn-sm"
         >
           Add step
         </button>
       </div>
 
       {state?.errors?.length ? (
-        <div className="mt-5 border border-risk/30 bg-risk/5 px-4 py-3" role="alert">
+        <div className="form-alert mt-5" role="alert">
           <p className="text-sm font-medium text-risk">The definition needs fixes:</p>
           <ul className="mt-1.5 list-disc pl-5 text-sm text-risk">
             {state.errors.map((err) => (
@@ -183,7 +185,7 @@ export function Builder({
         </div>
       ) : null}
       {state?.error ? (
-        <p className="mt-5 border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <p className="form-alert mt-5" role="alert">
           {state.error}
         </p>
       ) : null}
@@ -192,7 +194,7 @@ export function Builder({
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex h-11 items-center bg-ink px-6 text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn btn-primary"
         >
           {pending ? "Saving…" : "Save as new version"}
         </button>
@@ -219,21 +221,16 @@ function IconButton({
       title={label}
       disabled={disabled}
       onClick={onClick}
-      className="flex h-7 w-7 items-center justify-center border border-fog text-slate transition-colors hover:border-ink hover:text-ink disabled:cursor-not-allowed disabled:opacity-30"
+      className="btn btn-secondary btn-sm btn-icon"
     >
       {children}
     </button>
   );
 }
 
-function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
-  return (
-    <div className="mb-4 last:mb-0">
-      <label className="mb-1.5 block text-[12px] font-medium text-graphite">{label}</label>
-      {children}
-      {hint ? <p className="mt-1 text-[11px] text-mute">{hint}</p> : null}
-    </div>
-  );
+
+function StepField(props: React.ComponentProps<typeof Field>) {
+  return <Field {...props} className="mb-4 last:mb-0" />;
 }
 
 function StepConfig({
@@ -255,7 +252,7 @@ function StepConfig({
     case "trigger":
       return (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <Field label="Trigger type">
+          <StepField label="Trigger type">
             <select
               value={String(c.triggerType ?? "manual")}
               onChange={(e) => {
@@ -271,10 +268,10 @@ function StepConfig({
               <option value="manual">manual — started by a person</option>
               <option value="schedule">schedule — runs on an interval</option>
             </select>
-          </Field>
+          </StepField>
           {c.triggerType === "schedule" ? (
             <>
-              <Field label="Every">
+              <StepField label="Every">
                 <input
                   type="number"
                   min={1}
@@ -283,8 +280,8 @@ function StepConfig({
                   onChange={(e) => onChange({ every: Math.max(1, Math.floor(Number(e.target.value) || 1)) })}
                   className={inputCls}
                 />
-              </Field>
-              <Field label="Unit">
+              </StepField>
+              <StepField label="Unit">
                 <select
                   value={String(c.unit ?? "hours")}
                   onChange={(e) => onChange({ unit: e.target.value })}
@@ -294,11 +291,11 @@ function StepConfig({
                   <option value="hours">hours</option>
                   <option value="days">days</option>
                 </select>
-              </Field>
+              </StepField>
             </>
           ) : null}
           {c.triggerType === "schedule" ? (
-            <p className="text-[11px] text-mute sm:col-span-3">
+            <p className="text-xs text-mute sm:col-span-3">
               Scheduled runs only fire while the automation is <span className="text-ink">active</span> and
               this server process is running. A persistent production worker is part of the deployment
               slice.
@@ -309,19 +306,19 @@ function StepConfig({
 
     case "log":
       return (
-        <Field label="Message" hint='e.g. "Prepared digest for {{input.account}}".'>
+        <StepField label="Message" hint='e.g. "Prepared digest for {{input.account}}".'>
           <input
             value={String(c.message ?? "")}
             onChange={(e) => onChange({ message: e.target.value })}
             className={inputCls}
           />
-        </Field>
+        </StepField>
       );
 
     case "template":
     case "output":
       return (
-        <Field
+        <StepField
           label={step.type === "template" ? "Values to set (JSON object)" : "Run output (JSON object)"}
           hint='Strings may contain {{input.*}} placeholders. e.g. { "summary": "Processed {{input.invoiceId}}" }'
         >
@@ -332,20 +329,20 @@ function StepConfig({
             onBlur={(e) => onChange({ values: safeJson(e.target.value) })}
             className={`${inputCls} font-mono text-[13px]`}
           />
-        </Field>
+        </StepField>
       );
 
     case "condition":
       return (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <Field label="Field" hint='Dot path over run input, e.g. "amount".'>
+          <StepField label="Field" hint='Dot path over run input, e.g. "amount".'>
             <input
               value={String(c.field ?? "")}
               onChange={(e) => onChange({ field: e.target.value })}
               className={inputCls}
             />
-          </Field>
-          <Field label="Operator">
+          </StepField>
+          <StepField label="Operator">
             <select
               value={String(c.operator ?? "exists")}
               onChange={(e) => onChange({ operator: e.target.value })}
@@ -356,29 +353,29 @@ function StepConfig({
               <option value="not_equals">not equals</option>
               <option value="contains">contains</option>
             </select>
-          </Field>
-          <Field label="Value" hint="Ignored for exists.">
+          </StepField>
+          <StepField label="Value" hint="Ignored for exists.">
             <input
               value={String(c.value ?? "")}
               onChange={(e) => onChange({ value: e.target.value })}
               className={inputCls}
             />
-          </Field>
+          </StepField>
         </div>
       );
 
     case "approval":
       return (
         <>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <Field label="Action a reviewer approves" hint='e.g. "Send digest to clients".'>
+          <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <StepField label="Action a reviewer approves" hint='e.g. "Send digest to clients".'>
               <input
                 value={String(c.action ?? "")}
                 onChange={(e) => onChange({ action: e.target.value })}
                 className={inputCls}
               />
-            </Field>
-            <Field label="Risk level">
+            </StepField>
+            <StepField label="Risk level">
               <select
                 value={String(c.riskLevel ?? "medium")}
                 onChange={(e) => onChange({ riskLevel: e.target.value })}
@@ -388,16 +385,16 @@ function StepConfig({
                 <option value="medium">Medium</option>
                 <option value="high">High</option>
               </select>
-            </Field>
+            </StepField>
           </div>
-          <Field label="Rationale shown to the reviewer">
+          <StepField label="Rationale shown to the reviewer">
             <input
               value={String(c.rationale ?? "")}
               onChange={(e) => onChange({ rationale: e.target.value })}
               className={inputCls}
             />
-          </Field>
-          <Field label="Payload for review (JSON object)" hint="Interpolated, shown with the approval.">
+          </StepField>
+          <StepField label="Payload for review (JSON object)" hint="Interpolated, shown with the approval.">
             <textarea
               rows={3}
               spellCheck={false}
@@ -405,7 +402,7 @@ function StepConfig({
               onBlur={(e) => onChange({ payload: safeJson(e.target.value) })}
               className={`${inputCls} font-mono text-[13px]`}
             />
-          </Field>
+          </StepField>
         </>
       );
 
@@ -413,15 +410,15 @@ function StepConfig({
       return (
         <>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_8rem]">
-            <Field label="Endpoint URL" hint="Called for real when the run executes. Leave empty to skip.">
+            <StepField label="Endpoint URL" hint="Called for real when the run executes. Leave empty to skip.">
               <input
                 value={String(c.url ?? "")}
                 onChange={(e) => onChange({ url: e.target.value })}
                 placeholder="https://…"
                 className={inputCls}
               />
-            </Field>
-            <Field label="Method">
+            </StepField>
+            <StepField label="Method">
               <select
                 value={String(c.method ?? "GET")}
                 onChange={(e) => onChange({ method: e.target.value })}
@@ -430,10 +427,10 @@ function StepConfig({
                 <option value="GET">GET</option>
                 <option value="POST">POST</option>
               </select>
-            </Field>
+            </StepField>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_10rem_10rem]">
-            <Field
+            <StepField
               label="Vault credential (optional)"
               hint="Injected into the request at run time. The secret never appears in the step config, logs, or output."
             >
@@ -449,30 +446,30 @@ function StepConfig({
                   </option>
                 ))}
               </select>
-            </Field>
+            </StepField>
             {c.credentialId ? (
               <>
-                <Field label="Header name">
+                <StepField label="Header name">
                   <input
                     value={String(c.headerName ?? "Authorization")}
                     onChange={(e) => onChange({ headerName: e.target.value })}
                     placeholder="Authorization"
                     className={inputCls}
                   />
-                </Field>
-                <Field label="Scheme" hint='e.g. "Bearer"; empty = raw secret as the header value.'>
+                </StepField>
+                <StepField label="Scheme" hint='e.g. "Bearer"; empty = raw secret as the header value.'>
                   <input
                     value={String(c.scheme ?? "Bearer")}
                     onChange={(e) => onChange({ scheme: e.target.value })}
                     placeholder="Bearer"
                     className={inputCls}
                   />
-                </Field>
+                </StepField>
               </>
             ) : null}
           </div>
           {c.credentialId && !credentials.some((cred) => cred.id === c.credentialId) ? (
-            <p className="text-[11px] text-warn">
+            <p className="text-xs text-warn">
               This step references a credential that no longer exists — runs will fail at this step.
             </p>
           ) : null}
@@ -483,7 +480,7 @@ function StepConfig({
       return (
         <>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_1fr]">
-            <Field
+            <StepField
               label="Agent (optional)"
               hint="Uses the agent's current model + instructions. Without one, the provider's default model runs this prompt bare."
             >
@@ -499,8 +496,8 @@ function StepConfig({
                   </option>
                 ))}
               </select>
-            </Field>
-            <Field
+            </StepField>
+            <StepField
               label="Knowledge retrieval"
               hint="Top chunks are prepended as context; the run records which method served (semantic or lexical)."
             >
@@ -519,11 +516,11 @@ function StepConfig({
                 />
                 Retrieve context from knowledge
               </label>
-            </Field>
+            </StepField>
           </div>
           {c.useKnowledge === true ? (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_8rem]">
-              <Field label="Source (optional)" hint="Empty = search across all of this organization's knowledge.">
+              <StepField label="Source (optional)" hint="Empty = search across all of this organization's knowledge.">
                 <select
                   value={String(c.knowledgeSourceId ?? "")}
                   onChange={(e) => onChange({ knowledgeSourceId: e.target.value || undefined })}
@@ -536,8 +533,8 @@ function StepConfig({
                     </option>
                   ))}
                 </select>
-              </Field>
-              <Field label="Chunks (top K)">
+              </StepField>
+              <StepField label="Chunks (top K)">
                 <input
                   type="number"
                   min={1}
@@ -548,10 +545,10 @@ function StepConfig({
                   }
                   className={inputCls}
                 />
-              </Field>
+              </StepField>
             </div>
           ) : null}
-          <Field
+          <StepField
             label="Prompt"
             hint="Supports {{input.*}} and {{vars.*}} placeholders. Without a configured AI provider the step records an explicit skip — no fabricated output."
           >
@@ -561,14 +558,14 @@ function StepConfig({
               onChange={(e) => onChange({ prompt: e.target.value })}
               className={inputCls}
             />
-          </Field>
+          </StepField>
           {c.agentId && !agents.some((a) => a.id === c.agentId) ? (
-            <p className="text-[11px] text-warn">
+            <p className="text-xs text-warn">
               This step references an agent that no longer exists — runs will fail at this step.
             </p>
           ) : null}
           {c.knowledgeSourceId && !knowledgeSources.some((s) => s.id === c.knowledgeSourceId) ? (
-            <p className="text-[11px] text-warn">
+            <p className="text-xs text-warn">
               This step references a knowledge source that no longer exists — retrieval returns nothing.
             </p>
           ) : null}

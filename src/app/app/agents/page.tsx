@@ -39,7 +39,7 @@ export default async function AgentsPage() {
           {canManage ? (
             <Link
               href="/app/agents/new"
-              className="inline-flex h-10 items-center bg-ink px-4 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite"
+              className="btn btn-primary btn-sm"
             >
               New agent
             </Link>
@@ -47,7 +47,7 @@ export default async function AgentsPage() {
         </div>
       </AppPageHeader>
 
-      <div className="mb-6 border border-fog bg-haze px-4 py-3">
+      <div className="mb-6 border border-fog bg-haze px-4 py-3 rounded-lg">
         <p className="text-[13px] text-slate">
           {provider.configured ? (
             <>
@@ -73,34 +73,34 @@ export default async function AgentsPage() {
           action={canManage ? { href: "/app/agents/new", label: "Create the first agent" } : undefined}
         />
       ) : (
-        <div className="border border-fog">
-          <table className="w-full text-left text-sm">
+        <div className="table-wrap" tabIndex={0}>
+          <table className="data-table">
             <thead>
-              <tr className="border-b border-fog text-[11px] tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5 font-medium">Name</th>
-                <th className="px-4 py-2.5 font-medium">Model (current version)</th>
-                <th className="px-4 py-2.5 font-medium">Status</th>
-                <th className="px-4 py-2.5 font-medium">Updated</th>
-                <th className="px-4 py-2.5 font-medium">Id</th>
+              <tr>
+                <th>Name</th>
+                <th>Model (current version)</th>
+                <th>Status</th>
+                <th>Updated</th>
+                <th>Id</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => (
                 <tr key={row.id} className="border-b border-fog last:border-0">
-                  <td className="px-4 py-3">
+                  <td>
                     <Link href={`/app/agents/${row.id}`} className="font-medium text-ink hover:underline">
                       {row.name}
                     </Link>
-                    {row.purpose ? <p className="mt-0.5 text-[12px] text-slate">{row.purpose}</p> : null}
+                    {row.purpose ? <p className="mt-0.5 text-xs text-slate">{row.purpose}</p> : null}
                   </td>
-                  <td className="px-4 py-3 text-slate">
+                  <td className="text-slate">
                     {row.currentModel ? (modelInfo(row.currentModel)?.label ?? row.currentModel) : "—"}
                   </td>
-                  <td className="px-4 py-3">
+                  <td>
                     <StatusPill status={row.status} />
                   </td>
-                  <td className="tnum px-4 py-3 text-slate">{formatDateTime(row.updatedAt)}</td>
-                  <td className="tnum px-4 py-3 text-mute">{truncateId(row.id)}</td>
+                  <td className="tnum text-slate">{formatDateTime(row.updatedAt)}</td>
+                  <td className="tnum text-mute">{truncateId(row.id)}</td>
                 </tr>
               ))}
             </tbody>

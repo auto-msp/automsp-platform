@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { inviteMemberAction, type OrgFormState } from "./actions";
 
 const inputCls =
-  "border border-fog bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-mute transition-colors focus:border-ink focus:outline-none";
+  "field";
 
 export function InviteForm() {
   const [state, formAction, pending] = useActionState<OrgFormState | null, FormData>(
@@ -24,7 +24,7 @@ export function InviteForm() {
           aria-label="Email"
         />
         {state?.fieldErrors?.email?.[0] ? (
-          <p className="mt-1.5 text-xs text-risk">{state.fieldErrors.email[0]}</p>
+          <p className="field-error">{state.fieldErrors.email[0]}</p>
         ) : null}
       </div>
       <select name="role" defaultValue="customer_member" className={inputCls} aria-label="Role">
@@ -35,17 +35,17 @@ export function InviteForm() {
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-[42px] items-center bg-ink px-5 text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:cursor-not-allowed disabled:opacity-60"
+        className="btn btn-primary"
       >
         {pending ? "Adding…" : "Add member"}
       </button>
       {state?.error ? (
-        <p className="w-full border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <p className="form-alert w-full" role="alert">
           {state.error}
         </p>
       ) : null}
       {state?.success ? (
-        <p className="w-full border border-ok/30 bg-ok/5 px-4 py-3 text-sm text-ok" role="status">
+        <p className="form-notice w-full" role="status">
           {state.success}
         </p>
       ) : null}

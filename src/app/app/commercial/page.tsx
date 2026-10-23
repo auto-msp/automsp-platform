@@ -72,13 +72,13 @@ export default async function CommercialPage() {
         <h2 className="flex items-center gap-2 text-sm font-semibold text-ink">
           Audit requests
           {receivedCount > 0 ? (
-            <span className="border border-warn/40 bg-warn/10 px-1.5 py-px text-[10px] font-medium tracking-[0.08em] text-warn uppercase">
+            <span className="border border-warn bg-warn-soft px-1.5 py-px text-xs font-medium text-warn">
               {receivedCount} received
             </span>
           ) : null}
           <InboxAutoRefresh />
         </h2>
-        <p className="text-[11px] text-mute">
+        <p className="text-xs text-mute">
           <span className="font-medium text-ok">Actual</span> — submitted through the public form
         </p>
       </div>
@@ -90,23 +90,23 @@ export default async function CommercialPage() {
       ) : (
         <div className="space-y-3">
           {audits.map((a) => (
-            <div key={a.id} className="border border-fog bg-surface p-5">
+            <div key={a.id} className="card card-pad">
               <div className="flex flex-wrap items-center gap-3">
                 <p className="text-sm font-semibold text-ink">{a.company}</p>
                 <span className="text-[13px] text-slate">
                   {a.contactName} · {a.contactEmail}
                   {a.phone ? ` · ${a.phone}` : ""}
                 </span>
-                <span className="tnum ml-auto text-[11px] text-mute">{formatDate(a.createdAt)}</span>
+                <span className="tnum ml-auto text-xs text-mute">{formatDate(a.createdAt)}</span>
                 {canManage ? (
                   <AuditStatusPicker auditId={a.id} status={a.status} options={AUDIT_STATUSES} />
                 ) : (
-                  <span className="border border-fog bg-haze px-2 py-1 text-[11px] font-medium tracking-[0.08em] text-slate uppercase">
+                  <span className="border border-fog bg-haze px-2 py-1 text-xs font-medium text-slate rounded-lg">
                     {AUDIT_STATUSES.find((s) => s.key === a.status)?.label ?? a.status}
                   </span>
                 )}
               </div>
-              <div className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-mute">
+              <div className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-mute">
                 {a.role ? <span>{a.role}</span> : null}
                 {a.industry ? <span>{a.industry}</span> : null}
                 {a.companySize ? <span>{a.companySize}</span> : null}
@@ -139,38 +139,38 @@ export default async function CommercialPage() {
       {/* ── Pipeline ─────────────────────────────────────────────────── */}
       <div className="mt-10 mb-3 flex items-baseline justify-between">
         <h2 className="text-sm font-semibold text-ink">Pipeline</h2>
-        <p className="text-[11px] text-mute">
+        <p className="text-xs text-mute">
           <span className="font-medium text-warn">Estimated</span> — values and probabilities are
           operator-entered
         </p>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        <div className="border border-fog bg-surface p-4">
-          <p className="text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
+        <div className="card card-pad-sm">
+          <p className="text-xs font-medium text-mute">
             Open opportunities
           </p>
           <p className="tnum mt-1.5 text-2xl font-semibold text-ink">{pipeline.openCount}</p>
         </div>
-        <div className="border border-fog bg-surface p-4">
-          <p className="text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
+        <div className="card card-pad-sm">
+          <p className="text-xs font-medium text-mute">
             Pipeline value
           </p>
           <p className="tnum mt-1.5 text-2xl font-semibold text-ink">
             {pipeline.estimatedPipelineUsd !== null ? fmtUsd(pipeline.estimatedPipelineUsd) : "—"}
           </p>
           {pipeline.estimatedPipelineUsd === null ? (
-            <p className="mt-1 text-[11px] text-mute">no values recorded</p>
+            <p className="mt-1 text-xs text-mute">no values recorded</p>
           ) : null}
         </div>
-        <div className="border border-fog bg-surface p-4">
-          <p className="text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
+        <div className="card card-pad-sm">
+          <p className="text-xs font-medium text-mute">
             Probability-weighted
           </p>
           <p className="tnum mt-1.5 text-2xl font-semibold text-ink">
             {pipeline.weightedPipelineUsd !== null ? fmtUsd(pipeline.weightedPipelineUsd) : "—"}
           </p>
-          <p className="mt-1 text-[11px] text-mute">Σ value × probability</p>
+          <p className="mt-1 text-xs text-mute">Σ value × probability</p>
         </div>
       </div>
 
@@ -178,7 +178,7 @@ export default async function CommercialPage() {
         {pipeline.byStage.map((s) => (
           <span
             key={s.stage}
-            className="border border-fog bg-haze px-2 py-1 text-[11px] font-medium tracking-[0.06em] text-slate"
+            className="border border-fog bg-haze px-2 py-1 text-xs font-medium text-slate rounded-lg"
           >
             {s.label} <span className="tnum">{s.count}</span>
           </span>
@@ -191,31 +191,31 @@ export default async function CommercialPage() {
           hand below.
         </p>
       ) : (
-        <div className="mt-4 overflow-x-auto border border-fog">
-          <table className="w-full text-sm">
+        <div className="mt-4 table-wrap" tabIndex={0}>
+          <table className="data-table">
             <thead>
-              <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5">Company</th>
-                <th className="px-4 py-2.5">Stage</th>
-                <th className="px-4 py-2.5">Est. value</th>
-                <th className="px-4 py-2.5">Prob.</th>
-                <th className="px-4 py-2.5">Source</th>
-                <th className="px-4 py-2.5">Next action</th>
-                <th className="px-4 py-2.5">Updated</th>
+              <tr>
+                <th>Company</th>
+                <th>Stage</th>
+                <th>Est. value</th>
+                <th>Prob.</th>
+                <th>Source</th>
+                <th>Next action</th>
+                <th>Updated</th>
               </tr>
             </thead>
             <tbody>
               {opportunities.map((o) => (
                 <tr key={o.id} className="border-b border-fog last:border-0">
-                  <td className="px-4 py-3">
+                  <td>
                     <p className="font-medium text-ink">{o.company}</p>
                     {o.contactName || o.contactEmail ? (
-                      <p className="mt-0.5 text-[12px] text-mute">
+                      <p className="mt-0.5 text-xs text-mute">
                         {[o.contactName, o.contactEmail].filter(Boolean).join(" · ")}
                       </p>
                     ) : null}
                   </td>
-                  <td className="px-4 py-3">
+                  <td>
                     {canManage ? (
                       <StagePicker
                         opportunityId={o.id}
@@ -228,21 +228,21 @@ export default async function CommercialPage() {
                       </span>
                     )}
                   </td>
-                  <td className="tnum px-4 py-3 text-slate">
+                  <td className="tnum text-slate">
                     {o.estimatedValue !== null ? fmtUsd(o.estimatedValue) : "—"}
                   </td>
-                  <td className="tnum px-4 py-3 text-slate">
+                  <td className="tnum text-slate">
                     {o.probability !== null ? `${o.probability}%` : "—"}
                   </td>
-                  <td className="px-4 py-3 text-slate">{o.source ?? "—"}</td>
-                  <td className="max-w-56 px-4 py-3">
+                  <td className="text-slate">{o.source ?? "—"}</td>
+                  <td className="max-w-56">
                     {o.nextAction ? (
                       <ExpandableText text={o.nextAction} limit={80} />
                     ) : (
                       <span className="text-slate">—</span>
                     )}
                   </td>
-                  <td className="tnum px-4 py-3 text-slate">{formatDate(o.updatedAt)}</td>
+                  <td className="tnum text-slate">{formatDate(o.updatedAt)}</td>
                 </tr>
               ))}
             </tbody>
@@ -259,7 +259,7 @@ export default async function CommercialPage() {
       {/* ── Clients & projects ───────────────────────────────────────── */}
       <h2 className="mt-10 mb-3 text-sm font-semibold text-ink">Clients &amp; projects</h2>
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="border border-fog bg-surface p-5">
+        <div className="card card-pad">
           <h3 className="text-sm font-semibold text-ink">Clients ({clients.length})</h3>
           {clients.length === 0 ? (
             <p className="mt-3 text-[13px] text-mute">
@@ -271,7 +271,7 @@ export default async function CommercialPage() {
               {clients.map((c) => (
                 <li key={c.id} className="flex items-baseline justify-between gap-3 py-2.5">
                   <p className="text-sm font-medium text-ink">{c.name}</p>
-                  <p className="text-[12px] text-mute">
+                  <p className="text-xs text-mute">
                     {[c.industry, c.size].filter(Boolean).join(" · ") || "—"}
                   </p>
                 </li>
@@ -280,7 +280,7 @@ export default async function CommercialPage() {
           )}
         </div>
 
-        <div className="border border-fog bg-surface p-5">
+        <div className="card card-pad">
           <h3 className="text-sm font-semibold text-ink">Projects ({projects.length})</h3>
           {projects.length === 0 ? (
             <p className="mt-3 text-[13px] text-mute">
@@ -292,11 +292,11 @@ export default async function CommercialPage() {
                 <li key={p.id} className="flex items-baseline justify-between gap-3 py-2.5">
                   <div>
                     <p className="text-sm font-medium text-ink">{p.name}</p>
-                    <p className="text-[12px] text-mute">
+                    <p className="text-xs text-mute">
                       {p.clientId ? (clientNames.get(p.clientId) ?? "—") : "no client linked"}
                     </p>
                   </div>
-                  <span className="border border-fog bg-haze px-1.5 py-px text-[10px] font-medium tracking-[0.08em] text-slate uppercase">
+                  <span className="border border-fog bg-haze px-1.5 py-px text-xs font-medium text-slate rounded-lg">
                     {PROJECT_STAGES.find((s) => s.key === p.stage)?.label ?? p.stage}
                   </span>
                 </li>
