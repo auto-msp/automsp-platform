@@ -110,7 +110,7 @@ Pairing is unchanged: **Instrument Serif** (display) + **Inter** (UI), with **Je
 | Mono | 13px | 400 | `.code` ids, keys, snippets |
 
 Rules: sentence case for headings, labels and column headers. Uppercase tracking is reserved for marketing eyebrows
-(one per section). KPI numerals use the serif at large size with `tnum` (tabular figures).
+(one per section). App KPI numerals use Inter semibold with `tnum` (tabular figures). Instrument Serif is not used for numbers in the app: its old-style "1" reads as a lowercase L.
 
 ## Spacing, layout, radii, elevation
 
@@ -131,15 +131,20 @@ Decorative icons carry `aria-hidden`; icon-only buttons carry an `aria-label`. N
 
 | Component | Notes |
 | --- | --- |
-| `ButtonLink` / `Button` | `primary` = orange fill, ink label. `secondary` = ink outline. `accent` = blue fill. `danger` = red fill. `ghost`. Min height 44px. |
-| `.field`, `.field-label`, `.field-hint`, `.field-error` | One input style. 44px, 3:1 border, `aria-invalid` turns the border red. Errors have an icon and are tied with `aria-describedby`. |
-| `.panel` | Hairline-bordered surface, square. |
-| `.table-wrap` + `.app-table` | Sentence-case sticky header, 44px rows, hover tint, horizontal scroll on small screens, `num` class for right-aligned tabular numbers, `row-link` for full-height link targets. |
-| `StatusPill` | Icon + word + tint. Never colour alone. |
-| `PageHeader` | Title, description, status slot, actions slot; actions wrap under the title on mobile. |
+| `.btn` + `btn-primary / secondary / quiet / accent / danger / ghost`, `btn-sm`, `btn-lg` | One button shape. Primary = orange fill, ink label. Secondary = ink outline. Quiet = hairline. Destructive actions use a red outline that fills on hover. 44px tall; `btn-sm` is 36px with a mouse and 44px on touch (`pointer-coarse`). |
+| `ButtonLink`, `buttonClass()` (`ui/button.tsx`) | Link or any element styled as a button. `dark` variant for use on the orange band. Labels wrap instead of overflowing. |
+| `.field`, `.field-label`, `.field-hint`, `.field-error` | One input style: 44px, 3:1 border, blue focus ring, `aria-invalid` turns the border red. `.field-error` draws its own alert icon. |
+| `.panel`, `.empty-note` | Hairline-bordered surface; inline empty block. |
+| `.table-wrap` + `.app-table` | Sentence-case sticky header, 44px rows, hover tint, horizontal scroll on small screens, `num` for right-aligned tabular numbers. |
+| `.row-link`, `.row-link-id` | Primary link in a row with a full 44px target; mono variant for ids. |
+| `StatusPill` | Icon + word + tint for every status. |
+| `Notice` (`ui/notice.tsx`) | Info / ok / warn / risk banner with icon and left rule. `alert` adds `role="alert"` for errors that appear after an action. |
+| `AppPageHeader`, `SectionHeader` | Title, description, optional `back` link, wrapping actions slot. |
+| `StatCard` | KPI tile with a colour tab and the Actual / Estimated / Projected basis. Inter numerals. |
 | `EmptyState` | Icon, one sentence on why it is empty, one primary action. |
-| `AppShell` | Sidebar at `lg+`; top bar with menu button and slide-in drawer below `lg`. |
-| `loading.tsx`, `error.tsx`, `not-found.tsx` | Skeletons and recoverable error states for the `/app` segment. |
+| `AppShell`, `MobileNav` | Sidebar at `lg+` (36px rows with a mouse, 44px on touch). Below `lg`: top bar with menu button and a focus-trapped drawer (Escape, backdrop and navigation close it, focus returns to the button). Skip link. |
+| `app/loading.tsx`, `app/error.tsx`, `app/not-found.tsx` | Skeleton, recoverable error (shows a reference, never the error message), and in-shell not-found. |
+| `AuditCta` | The one full-bleed orange band closing each marketing page; charcoal footer follows it. |
 
 ## Motion
 

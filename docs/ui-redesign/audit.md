@@ -78,3 +78,30 @@ operator login or executed runs; they are captured in the Step 5 verification pa
 Dockerfile runs `prisma generate` first. I ran `npx prisma generate` (no schema or migration change)
 and the baseline then builds. Baseline lint: 0 errors, 2 existing warnings in
 `src/app/app/agents/actions.ts`.
+
+---
+
+# Outcome (after the redesign)
+
+Same crawler, same demo data, production build. Before = 126 captures at 6c2c156; after = 128 captures
+(two extra routes: an execution detail and an approval, because the after run has a real waiting run).
+
+| Measure | Before | After |
+| --- | --- | --- |
+| Captures with horizontal page overflow | 30 (every `/app` screen at 390px) | 0 of 128 |
+| Interactive elements under 44px (mouse pointer, all captures) | 2,876 | 861 |
+| Same check under touch emulation, `/app` screens at 390px | not measured | 1–6 per screen: hidden skip link, inline prose links, and notifications actions (since fixed) |
+| `text-mute` contrast on page / on haze | 3.11:1 / 2.87:1 | 5.05:1 / 4.53:1 |
+| Control border contrast | 1.19:1 | 3.29:1 on paper, 3.71:1 on cards |
+| Text under 12px | 140 uses | 0 |
+| `focus:outline-none` on inputs | 30 | 0 (one `.field` focus ring) |
+| Hand-copied input style constants | 11 | 1 (`.field`) |
+| `loading.tsx` / `error.tsx` / `not-found.tsx` in `/app` | 0 / 0 / 0 | 1 / 1 / 1 |
+| Palette | indigo accent, black buttons | beige/grey base, orange primary, blue interactive, red risk; no indigo, purple or teal |
+
+Remaining known gaps, deliberately left:
+- The remaining 861 sub-44px elements are mostly the legal text on `/privacy` (generated HTML in
+  `policy-html.ts`, about 60 inline links) and desktop-density controls (36px nav rows and small buttons)
+  that become 44px on touch devices via `pointer-coarse`.
+- Native `<select>` menus keep browser styling; only the closed control is themed.
+- No dark theme.

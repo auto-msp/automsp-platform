@@ -140,7 +140,7 @@ export function Builder({
               {i < steps.length - 1 ? (
                 <span aria-hidden className="absolute top-12 bottom-0 left-[1.4rem] w-px bg-line/50" />
               ) : null}
-              <div className="border border-fog bg-surface">
+              <div className="relative border border-fog bg-surface">
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-fog px-3 py-2 sm:px-4">
                   <span className={`flex size-9 shrink-0 items-center justify-center rounded-(--radius-control) ${look.badge}`}>
                     <Icon aria-hidden className="size-[18px]" strokeWidth={1.75} />

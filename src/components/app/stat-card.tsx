@@ -20,7 +20,7 @@ export function StatCard({
     <div className="relative border border-fog bg-surface p-4 pt-5 sm:p-5">
       <span aria-hidden className={`absolute top-0 left-0 h-1 w-10 ${bar}`} />
       <p className="text-[13px] font-medium text-slate">{label}</p>
-      <p className="font-display tnum mt-1 text-4xl leading-none text-ink">{value}</p>
+      <p className="tnum mt-1.5 text-3xl leading-none font-semibold tracking-tight text-ink">{value}</p>
       <p className="mt-3 text-xs leading-relaxed text-mute">
         <span className={basis === "Actual" ? "font-semibold text-ok" : "font-semibold text-warn"}>{basis}</span>
         {" · "}
