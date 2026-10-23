@@ -1,64 +1,112 @@
 @import "tailwindcss";
 
 /*
-  AutoMSP — Enterprise Swiss Editorial design tokens
-  Light-first, high-clarity, monochrome foundation with one restrained accent.
-  Dark tech internationalism is reserved for infrastructure/security sections.
+  AutoMSP design tokens — "Paper & Signal".
+  Warm beige and grey neutrals carry the page; three signal colours do the work:
+    orange = the one primary action and brand moments
+    blue   = interactive state (links, focus, selection, data)
+    red    = risk and destructive actions
+  Every foreground/background pair below was measured against WCAG 2.2 AA
+  (4.5:1 text, 3:1 non-text). Ratios are listed in docs/design-system.md.
+  No purple, indigo or teal anywhere in the palette.
 */
 @theme {
-  /* Foundation */
-  --color-paper: #fafaf7;        /* off-white page background */
-  --color-surface: #ffffff;      /* cards, panels */
-  --color-ink: #0b0c0e;          /* near-black text */
-  --color-graphite: #1e2126;     /* strong secondary */
-  --color-slate: #5b6068;        /* body secondary */
-  --color-mute: #8a8f97;         /* captions, metadata */
-  --color-fog: #e7e7e2;          /* hairlines */
-  --color-haze: #f1f1ec;         /* subtle panels, trust band */
+  /* Neutrals — beige paper, warm greys */
+  --color-paper: #f4efe6;        /* page canvas */
+  --color-surface: #fffdf9;      /* cards, panels, inputs */
+  --color-haze: #eae3d5;         /* subtle panels, table headers, hover rows */
+  --color-fog: #d8d0bf;          /* decorative hairlines and dividers */
+  --color-line: #8a8372;         /* control borders (3.3:1 on paper) */
+  --color-ink: #1c1a16;          /* primary text */
+  --color-graphite: #3a372f;     /* strong secondary text */
+  --color-slate: #58534a;        /* body secondary */
+  --color-mute: #6b655a;         /* captions, metadata (4.5:1 on haze) */
 
-  /* Accent — electric indigo, used sparingly */
-  --color-accent: #4338ca;
-  --color-accent-soft: #eef0ff;
+  /* Brand — signal orange. Fill takes ink text, never white (2.8:1). */
+  --color-brand: #ff6a13;
+  --color-brand-hover: #f05a00;
+  --color-brand-soft: #ffe6d3;
+  --color-brand-text: #b33f06;   /* orange for text on light (5.0:1) */
 
-  /* Dark tech internationalism (selective use) */
-  --color-night: #0b0d12;
-  --color-night-2: #11141b;
-  --color-nline: #232833;        /* hairlines on dark */
-  --color-trail: #6d7cff;        /* light-trail stroke */
-  --color-trail-warm: #ffb454;   /* warm trail accent */
+  /* Interactive — cobalt blue (links, focus ring, selection, data) */
+  --color-accent: #1358d6;
+  --color-accent-hover: #0e47b0;
+  --color-accent-soft: #dfe9fb;
 
-  /* Status */
-  --color-ok: #1a7f4b;
-  --color-warn: #b45309;
-  --color-risk: #b3261e;
+  /* Status — text-safe tones plus soft fills; always paired with an icon */
+  --color-ok: #1a7239;
+  --color-ok-soft: #dcefdd;
+  --color-warn: #8f5200;
+  --color-warn-soft: #fbebc4;
+  --color-warn-fill: #f2b01e;
+  --color-risk: #b42318;
+  --color-risk-soft: #fbe0dc;
+  --color-risk-fill: #d92d20;
 
+  /* Warm charcoal for security / infrastructure / high-impact bands */
+  --color-night: #1d1b17;
+  --color-night-2: #27241f;
+  --color-nline: #3e3a31;        /* hairlines on dark */
+  --color-night-text: #f4efe6;
+  --color-night-mute: #b7b0a0;   /* 8.0:1 on night */
+  --color-trail: #ff8a3d;        /* orange accent on dark (7.3:1) */
+  --color-trail-blue: #6fa0ff;   /* blue accent on dark (6.7:1) */
+  --color-trail-warm: #f2b01e;
+
+  /* Data series (3:1+ against surface): orange, blue, grey, red, amber */
+  --color-data-1: #d9540a;
+  --color-data-2: #1358d6;
+  --color-data-3: #6b655a;
+  --color-data-4: #b42318;
+  --color-data-5: #a86a00;
+
+  /* Type — Instrument Serif display, Inter UI, JetBrains Mono for ids and code */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-serif: var(--font-instrument), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Radii — panels stay square (Swiss grid), controls and chips are softened */
+  --radius-chip: 3px;
+  --radius-control: 6px;
+
+  /* Elevation — flat by default, one float level for menus and drawers */
+  --shadow-float: 0 10px 30px -8px rgb(28 26 22 / 0.28), 0 2px 6px rgb(28 26 22 / 0.12);
+
+  /* Layout */
+  --spacing-nav: 15rem;          /* sidebar width at lg+ */
+  --spacing-bar: 3.5rem;         /* top bar height */
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: var(--color-ink);
-  color: var(--color-paper);
+  background: var(--color-brand);
+  color: var(--color-ink);
 }
 
+/* One focus treatment everywhere: 2px cobalt ring, 2px offset. Never removed. */
 :focus-visible {
   outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
+  outline-offset: 2px;
   border-radius: 2px;
+}
+.on-dark :focus-visible {
+  outline-color: var(--color-trail-blue);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -84,4 +132,75 @@ body {
 /* Numeric tabular lining for KPI work */
 .tnum {
   font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+   Shared component classes (app + marketing). Kept as classes so the 11
+   previously hand-copied input styles and the 23 ad hoc tables resolve to one
+   definition.
+--------------------------------------------------------------------------- */
+@layer components {
+  /* Form controls: 44px tall, visible 3:1 border, ring comes from :focus-visible */
+  .field {
+    @apply min-h-11 w-full rounded-(--radius-control) border border-line bg-surface px-3 py-2.5 text-sm text-ink;
+    @apply placeholder:text-mute transition-colors hover:border-graphite;
+  }
+  .field:focus-visible {
+    border-color: var(--color-accent);
+    outline-offset: 1px;
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--color-risk);
+  }
+  textarea.field {
+    @apply min-h-24 leading-relaxed;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-[13px] font-medium text-graphite;
+  }
+  .field-hint {
+    @apply mt-1.5 text-xs text-mute;
+  }
+  .field-error {
+    @apply mt-1.5 flex items-start gap-1.5 text-xs font-medium text-risk;
+  }
+
+  /* Panel: hairline-bordered surface, square corners */
+  .panel {
+    @apply border border-fog bg-surface;
+  }
+
+  /* Data table: sentence-case header, 44px rows, hover tint, scroll on small screens */
+  .table-wrap {
+    @apply overflow-x-auto border border-fog bg-surface;
+  }
+  .app-table {
+    @apply w-full min-w-max border-collapse text-left text-sm;
+  }
+  .app-table thead th {
+    @apply sticky top-0 border-b border-fog bg-haze px-4 py-2.5 text-xs font-semibold whitespace-nowrap text-graphite;
+  }
+  .app-table tbody td {
+    @apply border-b border-fog/70 px-4 py-2.5 align-middle;
+  }
+  .app-table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+  .app-table tbody tr {
+    @apply transition-colors hover:bg-paper/70;
+  }
+  .app-table td.num,
+  .app-table th.num {
+    @apply text-right;
+    font-variant-numeric: tabular-nums;
+  }
+  .app-table td a.row-link {
+    @apply -my-2.5 flex min-h-11 flex-col justify-center py-2.5 font-medium text-ink hover:text-accent;
+  }
+
+  /* Small mono for ids, keys and code snippets */
+  .code {
+    @apply rounded-(--radius-chip) bg-haze px-1 py-px font-mono text-[0.8125em];
+  }
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Instrument_Serif } from "next/font/google";
+import { Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/site";
 import { ScrollManager } from "@/components/scroll-manager";
@@ -16,6 +16,12 @@ const instrument = Instrument_Serif({
   weight: "400",
   style: ["normal", "italic"],
   variable: "--font-instrument",
+  display: "swap",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
   display: "swap",
 });
 
@@ -65,7 +71,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${instrument.variable}`}>
+    <html lang="en" className={`${inter.variable} ${instrument.variable} ${jetbrains.variable}`}>
       <body className="flex min-h-svh flex-col">
         <ScrollManager />
         {children}
