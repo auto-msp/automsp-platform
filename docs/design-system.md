@@ -62,7 +62,9 @@ Status is never colour-only: every pill carries an icon and a label.
 - 4px base grid; app density steps 4/8/12/16/24/32; marketing sections 64/96.
 - Radii: `sm` 4 (chips) · `md` 6 (controls) · `lg` 10 (panels, tables) · `xl` 14 (drawer). Marketing is square.
 - Elevation: flat. `--shadow-card` is a 1px hairline lift; `--shadow-pop` only for floating layers
-  (mobile drawer, menus). No glow, no gradients.
+  (mobile drawer, menus). No glow, no decorative gradients. The only gradients are functional: the
+  loading skeleton shimmer and the table scroll-edge shadows (both static under reduced motion / only
+  visible when content overflows).
 - Z-scale: content 0 · sticky header 20 · drawer scrim 40 · drawer 50.
 
 ## Components (classes in `@layer components`)
