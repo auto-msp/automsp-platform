@@ -3,7 +3,7 @@ export const site = {
   descriptor: "AI Automation Services",
   domain: "automsp.cloud",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://automsp.cloud",
-  email: "hello@automsp.cloud",
+  email: "info@automsp.uk",
   tagline: "An autonomous AI team that runs your business while you sleep.",
   /**
    * The site-wide fallback description, and the text used for the Organization
