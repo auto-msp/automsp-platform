@@ -5,7 +5,7 @@ import { HeroVisual } from "@/components/marketing/hero-visual";
 export function Hero() {
   return (
     <div className="hairline-b">
-      <Shell className="grid gap-14 py-16 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
+      <Shell className="grid gap-14 py-14 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-12">
         <div className="flex flex-col justify-center">
           <Eyebrow>Managed AI systems for mid-market companies</Eyebrow>
 

@@ -1,10 +1,9 @@
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { ButtonLink } from "@/components/ui/button";
 import { Eyebrow, Section, Shell } from "@/components/ui/shell";
 
 export function AuditCta() {
   return (
-    <Section className="bg-ink py-20 text-paper sm:py-28">
+    <Section className="on-dark bg-ink py-20 text-paper sm:py-28">
       <Shell>
         <div className="grid items-end gap-10 lg:grid-cols-[1.6fr_1fr]">
           <div>
@@ -19,17 +18,9 @@ export function AuditCta() {
               opportunities, prioritize them by likely impact and complexity, and recommend the
               best next step. No obligation, no generic AI presentation.
             </p>
-            <Link
-              href="/book-audit"
-              className="group mt-8 inline-flex h-[52px] items-center gap-3 bg-paper px-8 text-[13px] font-medium tracking-[0.08em] text-ink uppercase transition-colors hover:bg-white"
-            >
+            <ButtonLink href="/book-audit" variant="inverse" size="lg" withArrow className="mt-8">
               Book your audit now
-              <ArrowRight
-                className="size-4 transition-transform duration-300 ease-(--ease-out-soft) group-hover:translate-x-1"
-                strokeWidth={1.75}
-                aria-hidden
-              />
-            </Link>
+            </ButtonLink>
           </div>
         </div>
       </Shell>

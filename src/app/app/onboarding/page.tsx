@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AppPageHeader } from "@/components/app/page-header";
 import { getSessionContext } from "@/server/auth/session";
 import { store } from "@/server/db/store";
+import { Check } from "lucide-react";
 
 export const metadata: Metadata = { title: "Setup checklist" };
 
@@ -24,13 +25,14 @@ function Step({
   cta?: string;
 }) {
   return (
-    <div className="flex gap-4 border border-fog bg-surface p-5">
+    <div className="card card-pad flex gap-4">
       <span
-        className={`tnum flex h-7 w-7 shrink-0 items-center justify-center border text-[13px] font-medium ${
-          done ? "border-ok bg-ok/10 text-ok" : "border-fog text-mute"
+        className={`tnum flex size-8 shrink-0 items-center justify-center rounded-full text-[13px] font-semibold ${
+          done ? "bg-ok-soft text-ok" : "border border-line text-slate"
         }`}
       >
-        {done ? "✓" : index}
+        {done ? <Check aria-hidden strokeWidth={2.5} className="size-4" /> : index}
+        {done ? <span className="sr-only">Done</span> : null}
       </span>
       <div className="min-w-0 flex-1">
         <p className={`text-sm font-medium ${done ? "text-mute line-through" : "text-ink"}`}>
@@ -40,7 +42,7 @@ function Step({
         {!done && href && cta ? (
           <Link
             href={href}
-            className="mt-3 inline-flex h-9 items-center border border-ink px-4 text-[12px] font-medium tracking-[0.08em] text-ink uppercase transition-colors hover:bg-ink hover:text-paper"
+            className="btn btn-secondary btn-sm mt-3"
           >
             {cta}
           </Link>
@@ -53,7 +55,7 @@ function Step({
 
 function StatusBadge() {
   return (
-    <span className="shrink-0 text-[11px] font-medium tracking-[0.1em] text-ok uppercase">
+    <span className="shrink-0 text-xs font-medium text-ok">
       Done
     </span>
   );
@@ -126,7 +128,7 @@ export default async function OnboardingPage() {
         ))}
       </div>
 
-      <div className="mt-8 border border-warn/40 bg-warn/5 p-5">
+      <div className="mt-8 rounded-lg border border-warn bg-warn-soft p-5">
         <p className="text-sm font-medium text-ink">Not configured in this environment</p>
         <ul className="mt-2 list-disc space-y-1 pl-5 text-[13px] leading-relaxed text-slate">
           <li>External system integrations (connect CRM, ERP, email)</li>

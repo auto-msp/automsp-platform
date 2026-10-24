@@ -1,21 +1,16 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { AppPageHeader } from "@/components/app/page-header";
 import { StatusPill } from "@/components/app/status-pill";
 import { formatDateTime } from "@/lib/format";
 import { can, getSessionContext } from "@/server/auth/session";
 import { store } from "@/server/db/store";
 import { DecisionButtons } from "./decision-form";
+import { RiskPill, Tag } from "@/components/app/status-pill";
+import { TextLink } from "@/components/app/text-link";
 
 export const metadata: Metadata = { title: "Approvals" };
 
 export const dynamic = "force-dynamic";
-
-const RISK_CLS: Record<string, string> = {
-  low: "border-ok/40 bg-ok/10 text-ok",
-  medium: "border-warn/40 bg-warn/10 text-warn",
-  high: "border-risk/40 bg-risk/10 text-risk",
-};
 
 export default async function ApprovalsPage() {
   const ctx = await getSessionContext();
@@ -53,46 +48,30 @@ export default async function ApprovalsPage() {
       ) : (
         <div className="space-y-3">
           {pending.map((approval) => (
-            <div key={approval.id} className="border border-fog bg-surface p-5">
+            <div key={approval.id} className="card card-pad">
               <div className="flex flex-wrap items-center gap-3">
                 <p className="text-sm font-medium text-ink">{approval.action}</p>
-                <span
-                  className={`border px-1.5 py-px text-[11px] font-medium tracking-[0.08em] uppercase ${RISK_CLS[approval.riskLevel]}`}
-                >
-                  {approval.riskLevel} risk
-                </span>
-                <span className="border border-fog bg-haze px-1.5 py-px text-[11px] font-medium tracking-[0.08em] text-slate uppercase">
-                  {approval.kind === "agent_tool" ? "agent tool" : "workflow"}
-                </span>
-                <span className="tnum ml-auto text-[11px] text-mute">
+                <RiskPill level={approval.riskLevel} />
+                <Tag>{approval.kind === "agent_tool" ? "agent tool" : "workflow"}</Tag>
+                <span className="tnum ml-auto text-xs text-mute">
                   requested {formatDateTime(approval.createdAt)}
                 </span>
               </div>
               <p className="mt-2 text-[13px] leading-relaxed text-slate">{approval.rationale}</p>
               {Object.keys(approval.payload).length > 0 ? (
-                <pre className="tnum mt-3 max-h-40 overflow-auto bg-haze p-3 text-[11px] leading-relaxed text-graphite">
+                <pre className="tnum mt-3 max-h-40 overflow-auto bg-haze p-3 text-xs leading-relaxed text-graphite">
                   {JSON.stringify(approval.payload, null, 2)}
                 </pre>
               ) : null}
               <div className="mt-3 flex items-center justify-between gap-4">
                 {approval.kind === "agent_tool" ? (
                   typeof approval.payload.agentId === "string" ? (
-                    <Link
-                      href={`/app/agents/${approval.payload.agentId}`}
-                      className="text-[13px] text-slate hover:text-ink"
-                    >
-                      Open agent →
-                    </Link>
+                    <TextLink href={`/app/agents/${approval.payload.agentId}`}>Open agent</TextLink>
                   ) : (
                     <span />
                   )
                 ) : (
-                  <Link
-                    href={`/app/operations/${approval.executionId}`}
-                    className="text-[13px] text-slate hover:text-ink"
-                  >
-                    Open execution →
-                  </Link>
+                  <TextLink href={`/app/operations/${approval.executionId}`}>Open execution</TextLink>
                 )}
                 {canDecide ? (
                   <DecisionButtons approvalId={approval.id} />
@@ -111,31 +90,31 @@ export default async function ApprovalsPage() {
           No decisions recorded yet.
         </p>
       ) : (
-        <div className="overflow-hidden border border-fog">
-          <table className="w-full text-sm">
+        <div className="table-wrap" tabIndex={0}>
+          <table className="data-table">
             <thead>
-              <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5">Action</th>
-                <th className="px-4 py-2.5">Decision</th>
-                <th className="px-4 py-2.5">Reviewer</th>
-                <th className="px-4 py-2.5">Note</th>
-                <th className="px-4 py-2.5">Decided</th>
+              <tr>
+                <th>Action</th>
+                <th>Decision</th>
+                <th>Reviewer</th>
+                <th>Note</th>
+                <th>Decided</th>
               </tr>
             </thead>
             <tbody>
               {decided.map((approval) => (
                 <tr key={approval.id} className="border-b border-fog last:border-0">
-                  <td className="px-4 py-3 text-ink">{approval.action}</td>
-                  <td className="px-4 py-3">
+                  <td className="text-ink">{approval.action}</td>
+                  <td>
                     <StatusPill status={approval.status} />
                   </td>
-                  <td className="px-4 py-3 text-slate">
+                  <td className="text-slate">
                     {approval.reviewerId ? (userNames.get(approval.reviewerId) ?? "—") : "—"}
                   </td>
-                  <td className="max-w-56 truncate px-4 py-3 text-slate">
+                  <td className="max-w-56 truncate text-slate">
                     {approval.decisionNote ?? "—"}
                   </td>
-                  <td className="tnum px-4 py-3 text-slate">
+                  <td className="tnum text-slate">
                     {approval.decidedAt ? formatDateTime(approval.decidedAt) : "—"}
                   </td>
                 </tr>

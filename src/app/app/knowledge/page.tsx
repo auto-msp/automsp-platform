@@ -36,14 +36,14 @@ export default async function KnowledgePage() {
         {canManage ? (
           <Link
             href="/app/knowledge/new"
-            className="inline-flex h-10 items-center bg-ink px-4 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite"
+            className="btn btn-primary btn-sm"
           >
             New source
           </Link>
         ) : null}
       </AppPageHeader>
 
-      <div className="mb-6 border border-fog bg-haze px-4 py-3">
+      <div className="mb-6 border border-fog bg-haze px-4 py-3 rounded-lg">
         <p className="text-[13px] text-slate">
           {semantic ? (
             <>
@@ -68,29 +68,29 @@ export default async function KnowledgePage() {
           action={canManage ? { href: "/app/knowledge/new", label: "Create the first source" } : undefined}
         />
       ) : (
-        <div className="border border-fog">
-          <table className="w-full text-left text-sm">
+        <div className="table-wrap" tabIndex={0}>
+          <table className="data-table">
             <thead>
-              <tr className="border-b border-fog text-[11px] tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5 font-medium">Name</th>
-                <th className="px-4 py-2.5 font-medium">Documents</th>
-                <th className="px-4 py-2.5 font-medium">Chunks</th>
-                <th className="px-4 py-2.5 font-medium">Ingestion</th>
-                <th className="px-4 py-2.5 font-medium">Updated</th>
+              <tr>
+                <th>Name</th>
+                <th>Documents</th>
+                <th>Chunks</th>
+                <th>Ingestion</th>
+                <th>Updated</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => (
                 <tr key={row.id} className="border-b border-fog last:border-0">
-                  <td className="px-4 py-3">
+                  <td>
                     <Link href={`/app/knowledge/${row.id}`} className="font-medium text-ink hover:underline">
                       {row.name}
                     </Link>
                   </td>
-                  <td className="tnum px-4 py-3 text-slate">{row.documentCount}</td>
-                  <td className="tnum px-4 py-3 text-slate">{row.chunkCount}</td>
-                  <td className="px-4 py-3 text-slate">pasted text/markdown</td>
-                  <td className="tnum px-4 py-3 text-slate">{formatDateTime(row.updatedAt)}</td>
+                  <td className="tnum text-slate">{row.documentCount}</td>
+                  <td className="tnum text-slate">{row.chunkCount}</td>
+                  <td className="text-slate">pasted text/markdown</td>
+                  <td className="tnum text-slate">{formatDateTime(row.updatedAt)}</td>
                 </tr>
               ))}
             </tbody>

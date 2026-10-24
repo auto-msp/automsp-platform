@@ -12,11 +12,11 @@ function Column({ title, items }: { title: string; items: readonly { label: stri
         the footer) without skipping a level. Styling is class-driven, so the
         element change is invisible.
       */}
-      <h2 className="text-[11px] font-medium uppercase tracking-[0.18em] text-mute">{title}</h2>
-      <ul className="mt-5 space-y-3">
+      <h2 className="text-xs font-medium uppercase tracking-[0.14em] text-mute">{title}</h2>
+      <ul className="mt-3">
         {items.map((item) => (
           <li key={item.label}>
-            <Link href={item.href} className="text-sm text-graphite transition-colors hover:text-ink">
+            <Link href={item.href} className="inline-flex min-h-11 min-w-11 items-center text-sm text-graphite transition-colors hover:text-ink hover:underline underline-offset-4">
               {item.label}
             </Link>
           </li>
@@ -47,7 +47,7 @@ export function SiteFooter() {
             </p>
             <a
               href={`mailto:${site.email}`}
-              className="mt-5 inline-block text-sm font-medium text-ink underline-offset-4 hover:underline"
+              className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-ink underline underline-offset-4 hover:text-accent"
             >
               {site.email}
             </a>

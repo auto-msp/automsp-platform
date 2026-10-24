@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { AppPageHeader } from "@/components/app/page-header";
 import { EmptyState } from "@/components/app/empty-state";
 import { getSessionContext } from "@/server/auth/session";
 import { listNotifications } from "@/server/notifications";
 import { formatDateTime } from "@/lib/format";
 import { markAllReadAction, markReadAction } from "./actions";
+import { TextLink } from "@/components/app/text-link";
 
 export const metadata: Metadata = { title: "Notifications" };
 export const dynamic = "force-dynamic";
@@ -37,7 +37,7 @@ export default async function NotificationsPage() {
           <form action={markAllReadAction}>
             <button
               type="submit"
-              className="border border-fog px-3 py-1.5 text-[13px] text-slate transition-colors hover:border-ink hover:text-ink"
+              className="btn btn-secondary"
             >
               Mark all as read
             </button>
@@ -51,7 +51,7 @@ export default async function NotificationsPage() {
           description="Notifications appear here when runs complete or fail, approvals are requested, or credentials change."
         />
       ) : (
-        <div className="border border-fog">
+        <div className="border border-fog rounded-lg">
           {rows.map((n) => (
             <div
               key={n.id}
@@ -70,17 +70,15 @@ export default async function NotificationsPage() {
                   <p className={`text-sm ${n.readAt === null ? "font-semibold text-ink" : "text-graphite"}`}>
                     {n.title}
                   </p>
-                  <span className="text-[11px] tracking-[0.08em] text-mute uppercase">
+                  <span className="text-xs text-mute">
                     {KIND_LABELS[n.kind] ?? n.kind}
                   </span>
                 </div>
                 <p className="mt-1 text-[13px] leading-relaxed text-slate">{n.body}</p>
-                <div className="mt-1.5 flex items-center gap-4 text-[12px] text-mute">
+                <div className="mt-1.5 flex items-center gap-4 text-xs text-mute">
                   <span className="tnum">{formatDateTime(n.createdAt)}</span>
                   {n.href ? (
-                    <Link href={n.href} className="text-accent hover:underline underline-offset-2">
-                      Open →
-                    </Link>
+                    <TextLink href={n.href} className="-my-2">Open</TextLink>
                   ) : null}
                 </div>
               </div>
@@ -88,7 +86,7 @@ export default async function NotificationsPage() {
                 <form action={markReadAction.bind(null, n.id)} className="shrink-0">
                   <button
                     type="submit"
-                    className="text-[12px] text-slate hover:text-ink underline-offset-2 hover:underline"
+                    className="btn btn-ghost btn-sm"
                   >
                     Mark read
                   </button>

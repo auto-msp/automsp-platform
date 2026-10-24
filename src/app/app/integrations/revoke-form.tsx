@@ -27,11 +27,11 @@ export function RevokeButton({ integrationId, name }: { integrationId: string; n
       <button
         type="submit"
         disabled={pending}
-        className="text-[13px] text-risk underline-offset-2 hover:underline disabled:opacity-50"
+        className="btn btn-danger btn-sm"
       >
         {pending ? "Revoking…" : "Revoke"}
       </button>
-      {state?.error ? <span className="ml-2 text-[12px] text-risk">{state.error}</span> : null}
+      {state?.error ? <span className="ml-2 text-xs text-risk">{state.error}</span> : null}
     </form>
   );
 }

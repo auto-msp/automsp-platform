@@ -59,7 +59,7 @@ export default function HowItWorksPage() {
           <div className="grid gap-x-16 gap-y-14 lg:grid-cols-2">
             {steps.map((step) => (
               <article key={step.n} className="border-t border-fog pt-8">
-                <span className="tnum text-xs font-medium tracking-[0.2em] text-mute">
+                <span className="tnum text-xs font-medium tracking-[0.14em] text-mute">
                   {step.n} — {step.time}
                 </span>
                 <h2 className="font-display mt-4 text-3xl leading-tight tracking-tight text-ink">

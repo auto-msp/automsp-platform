@@ -115,10 +115,10 @@ export default function AgentsPage() {
             {agents.map((agent) => (
               <article key={agent.n} className="border-t border-fog pt-6">
                 <div className="flex items-baseline justify-between">
-                  <span className="tnum text-xs font-medium tracking-[0.2em] text-mute">
+                  <span className="tnum text-xs font-medium tracking-[0.14em] text-mute">
                     {agent.n}
                   </span>
-                  <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-mute">
+                  <span className="text-xs font-medium uppercase tracking-[0.14em] text-mute">
                     {agent.schedule}
                   </span>
                 </div>

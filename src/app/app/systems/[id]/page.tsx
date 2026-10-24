@@ -8,6 +8,7 @@ import { formatDate, formatDateTime } from "@/lib/format";
 import { can, getSessionContext } from "@/server/auth/session";
 import { store } from "@/server/db/store";
 import { getSystem } from "@/server/systems";
+import { TextLink } from "@/components/app/text-link";
 
 export const metadata: Metadata = { title: "System" };
 
@@ -43,26 +44,26 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
         {can(ctx, "systems.manage") ? (
           <Link
             href={`/app/systems/${system.id}/edit`}
-            className="inline-flex h-10 items-center border border-fog px-4 text-[13px] font-medium text-slate transition-colors hover:border-ink hover:text-ink"
+            className="btn btn-secondary"
           >
             Edit
           </Link>
         ) : null}
       </AppPageHeader>
 
-      <dl className="grid grid-cols-1 gap-4 border border-fog bg-surface p-5 sm:grid-cols-3">
+      <dl className="card card-pad grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>
-          <dt className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">
+          <dt className="text-xs font-medium text-mute">
             Business outcome
           </dt>
           <dd className="mt-1.5 text-sm text-ink">{system.businessOutcome || "—"}</dd>
         </div>
         <div>
-          <dt className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">Owner</dt>
+          <dt className="text-xs font-medium text-mute">Owner</dt>
           <dd className="mt-1.5 text-sm text-ink">{system.ownerName || "—"}</dd>
         </div>
         <div>
-          <dt className="text-[11px] font-medium tracking-[0.12em] text-mute uppercase">Created</dt>
+          <dt className="text-xs font-medium text-mute">Created</dt>
           <dd className="tnum mt-1.5 text-sm text-ink">{formatDate(system.createdAt)}</dd>
         </div>
       </dl>
@@ -71,12 +72,7 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-ink">Automations</h2>
           {can(ctx, "automations.manage") ? (
-            <Link
-              href={`/app/automations/new?system=${system.id}`}
-              className="text-[13px] text-slate hover:text-ink"
-            >
-              Add automation →
-            </Link>
+            <TextLink href={`/app/automations/new?system=${system.id}`}>Add automation</TextLink>
           ) : null}
         </div>
         {automations.length === 0 ? (
@@ -90,19 +86,19 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
             }
           />
         ) : (
-          <div className="overflow-hidden border border-fog">
-            <table className="w-full text-sm">
+          <div className="table-wrap" tabIndex={0}>
+            <table className="data-table">
               <thead>
-                <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                  <th className="px-4 py-2.5">Automation</th>
-                  <th className="px-4 py-2.5">Status</th>
-                  <th className="px-4 py-2.5">Est. minutes saved / run</th>
+                <tr>
+                  <th>Automation</th>
+                  <th>Status</th>
+                  <th>Est. minutes saved / run</th>
                 </tr>
               </thead>
               <tbody>
                 {automations.map((automation) => (
                   <tr key={automation.id} className="border-b border-fog last:border-0">
-                    <td className="px-4 py-3">
+                    <td>
                       <Link
                         href={`/app/automations/${automation.id}`}
                         className="font-medium text-ink hover:underline"
@@ -110,10 +106,10 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
                         {automation.name}
                       </Link>
                     </td>
-                    <td className="px-4 py-3">
+                    <td>
                       <StatusPill status={automation.status} />
                     </td>
-                    <td className="tnum px-4 py-3 text-slate">
+                    <td className="tnum text-slate">
                       {automation.estMinutesPerRun > 0 ? automation.estMinutesPerRun : "—"}
                     </td>
                   </tr>
@@ -131,19 +127,19 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
             No executions recorded for this system yet.
           </p>
         ) : (
-          <div className="overflow-hidden border border-fog">
-            <table className="w-full text-sm">
+          <div className="table-wrap" tabIndex={0}>
+            <table className="data-table">
               <thead>
-                <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                  <th className="px-4 py-2.5">Automation</th>
-                  <th className="px-4 py-2.5">Status</th>
-                  <th className="px-4 py-2.5">Started</th>
+                <tr>
+                  <th>Automation</th>
+                  <th>Status</th>
+                  <th>Started</th>
                 </tr>
               </thead>
               <tbody>
                 {systemExecutions.map((run) => (
                   <tr key={run.id} className="border-b border-fog last:border-0">
-                    <td className="px-4 py-3">
+                    <td>
                       <Link
                         href={`/app/operations/${run.id}`}
                         className="text-ink hover:underline"
@@ -151,10 +147,10 @@ export default async function SystemDetailPage({ params }: { params: Promise<{ i
                         {run.automationName}
                       </Link>
                     </td>
-                    <td className="px-4 py-3">
+                    <td>
                       <StatusPill status={run.status} />
                     </td>
-                    <td className="tnum px-4 py-3 text-slate">{formatDateTime(run.startedAt)}</td>
+                    <td className="tnum text-slate">{formatDateTime(run.startedAt)}</td>
                   </tr>
                 ))}
               </tbody>

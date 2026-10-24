@@ -21,14 +21,14 @@ export function DeleteSystemForm({ systemId, systemName }: { systemId: string; s
       }}
     >
       {state?.error ? (
-        <p className="mb-3 border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <p className="form-alert mb-3" role="alert">
           {state.error}
         </p>
       ) : null}
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-10 items-center border border-risk px-4 text-[13px] font-medium text-risk transition-colors hover:bg-risk hover:text-paper disabled:opacity-60"
+        className="btn btn-danger"
       >
         {pending ? "Deleting…" : "Delete system"}
       </button>

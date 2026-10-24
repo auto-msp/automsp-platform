@@ -25,14 +25,14 @@ export function DecisionButtons({ approvalId }: { approvalId: string }) {
         value={note}
         onChange={(e) => setNote(e.target.value)}
         placeholder="Decision note (required to reject)"
-        className="w-64 border border-fog bg-paper px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none"
+        className="field w-full sm:w-64"
       />
       <form action={approveAction}>
         <input type="hidden" name="note" value={note} />
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex h-9 items-center bg-ink px-4 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn btn-primary btn-sm"
         >
           {approvePending ? "Approving…" : "Approve"}
         </button>
@@ -42,7 +42,7 @@ export function DecisionButtons({ approvalId }: { approvalId: string }) {
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex h-9 items-center border border-risk px-4 text-[12px] font-medium tracking-[0.08em] text-risk uppercase transition-colors hover:bg-risk hover:text-paper disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn btn-danger btn-sm"
         >
           {rejectPending ? "Rejecting…" : "Reject"}
         </button>

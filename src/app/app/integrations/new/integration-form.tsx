@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { addIntegrationAction, type IntegrationFormState } from "../actions";
 
 const inputCls =
-  "w-full border border-fog bg-paper px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none";
+  "field";
 
 export function IntegrationForm({
   providers,
@@ -17,9 +17,9 @@ export function IntegrationForm({
   );
 
   return (
-    <form action={formAction} noValidate className="max-w-xl border border-fog bg-surface px-6 py-6">
+    <form action={formAction} noValidate className="card max-w-xl px-6 py-6">
       <div className="mb-5">
-        <label htmlFor="providerKey" className="mb-1.5 block text-[12px] font-medium text-graphite">
+        <label htmlFor="providerKey" className="mb-1.5 block text-xs font-medium text-graphite">
           Provider
         </label>
         <select id="providerKey" name="providerKey" className={inputCls} required>
@@ -30,12 +30,12 @@ export function IntegrationForm({
           ))}
         </select>
         {state?.fieldErrors?.providerKey ? (
-          <p className="mt-1 text-[12px] text-risk">{state.fieldErrors.providerKey[0]}</p>
+          <p className="field-error">{state.fieldErrors.providerKey[0]}</p>
         ) : null}
       </div>
 
       <div className="mb-5">
-        <label htmlFor="name" className="mb-1.5 block text-[12px] font-medium text-graphite">
+        <label htmlFor="name" className="mb-1.5 block text-xs font-medium text-graphite">
           Credential name
         </label>
         <input
@@ -46,16 +46,16 @@ export function IntegrationForm({
           placeholder='e.g. "HubSpot production token"'
           className={inputCls}
         />
-        <p className="mt-1 text-[11px] text-mute">
+        <p className="mt-1 text-xs text-mute">
           Shown to your team when this credential is attached to a workflow step.
         </p>
         {state?.fieldErrors?.name ? (
-          <p className="mt-1 text-[12px] text-risk">{state.fieldErrors.name[0]}</p>
+          <p className="field-error">{state.fieldErrors.name[0]}</p>
         ) : null}
       </div>
 
       <div className="mb-6">
-        <label htmlFor="secret" className="mb-1.5 block text-[12px] font-medium text-graphite">
+        <label htmlFor="secret" className="mb-1.5 block text-xs font-medium text-graphite">
           Secret (API token / bearer key)
         </label>
         <input
@@ -67,17 +67,17 @@ export function IntegrationForm({
           minLength={8}
           className={inputCls}
         />
-        <p className="mt-1 text-[11px] text-mute">
+        <p className="mt-1 text-xs text-mute">
           Sealed with AES-256-GCM before storage. Only the last 4 characters are ever displayed for
           recognition.
         </p>
         {state?.fieldErrors?.secret ? (
-          <p className="mt-1 text-[12px] text-risk">{state.fieldErrors.secret[0]}</p>
+          <p className="field-error">{state.fieldErrors.secret[0]}</p>
         ) : null}
       </div>
 
       {state?.error ? (
-        <p className="mb-5 border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <p className="form-alert mb-5" role="alert">
           {state.error}
         </p>
       ) : null}
@@ -85,7 +85,7 @@ export function IntegrationForm({
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-11 items-center bg-ink px-6 text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:cursor-not-allowed disabled:opacity-60"
+        className="btn btn-primary"
       >
         {pending ? "Sealing…" : "Seal and store"}
       </button>

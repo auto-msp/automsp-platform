@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppPageHeader } from "@/components/app/page-header";
 import { listAgents } from "@/server/ai/agents";
@@ -44,11 +43,11 @@ export default async function AutomationBuildPage({
       <AppPageHeader
         title={`Builder — ${automation.name}`}
         description="Steps run top to bottom. Use {{input.field}} placeholders to reference run input; template steps set {{vars.*}}."
+        back={{ href: `/app/automations/${automation.id}`, label: "Back to automation" }}
       >
-        <span className="tnum text-sm text-slate">Current: v{current?.version.version ?? 0}</span>
-        <Link href={`/app/automations/${automation.id}`} className="text-[13px] text-slate hover:text-ink">
-          ← Back
-        </Link>
+        <span className="tnum rounded-sm bg-haze px-2 py-1 text-xs font-medium text-slate">
+          Current: v{current?.version.version ?? 0}
+        </span>
       </AppPageHeader>
 
       <Builder

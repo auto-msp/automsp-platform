@@ -47,8 +47,9 @@ export default async function OperationsPage({
       <form method="get" className="mb-5 flex flex-wrap items-center gap-3">
         <select
           name="status"
+          aria-label="Filter by status"
           defaultValue={status ?? ""}
-          className="border border-fog bg-surface px-3 py-2 text-sm text-ink focus:border-ink focus:outline-none"
+          className="field w-full sm:w-auto sm:min-w-44"
         >
           <option value="">All statuses</option>
           {["queued", "running", "waiting", "completed", "failed", "cancelled"].map((s) => (
@@ -59,8 +60,9 @@ export default async function OperationsPage({
         </select>
         <select
           name="automation"
+          aria-label="Filter by automation"
           defaultValue={automation ?? ""}
-          className="border border-fog bg-surface px-3 py-2 text-sm text-ink focus:border-ink focus:outline-none"
+          className="field w-full sm:w-auto sm:min-w-56"
         >
           <option value="">All automations</option>
           {automations.map((a) => (
@@ -69,10 +71,7 @@ export default async function OperationsPage({
             </option>
           ))}
         </select>
-        <button
-          type="submit"
-          className="border border-ink px-4 py-2 text-[12px] font-medium tracking-[0.08em] text-ink uppercase transition-colors hover:bg-ink hover:text-paper"
-        >
+        <button type="submit" className="btn btn-secondary">
           Filter
         </button>
       </form>
@@ -84,33 +83,33 @@ export default async function OperationsPage({
           action={{ href: "/app/automations", label: "Open automations" }}
         />
       ) : (
-        <div className="overflow-hidden border border-fog">
-          <table className="w-full text-sm">
+        <div className="table-wrap" tabIndex={0}>
+          <table className="data-table">
             <thead>
-              <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                <th className="px-4 py-2.5">Execution</th>
-                <th className="px-4 py-2.5">Automation</th>
-                <th className="px-4 py-2.5">Status</th>
-                <th className="px-4 py-2.5">Version</th>
-                <th className="px-4 py-2.5">Duration</th>
-                <th className="px-4 py-2.5">Started</th>
+              <tr>
+                <th>Execution</th>
+                <th>Automation</th>
+                <th>Status</th>
+                <th>Version</th>
+                <th>Duration</th>
+                <th>Started</th>
               </tr>
             </thead>
             <tbody>
               {rows.slice(0, 100).map((run) => (
                 <tr key={run.id} className="border-b border-fog last:border-0">
-                  <td className="tnum px-4 py-3 text-slate">
+                  <td className="tnum text-slate">
                     <Link href={`/app/operations/${run.id}`} className="hover:text-ink hover:underline">
                       {truncateId(run.id)}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-ink">{run.automationName}</td>
-                  <td className="px-4 py-3">
+                  <td className="text-ink">{run.automationName}</td>
+                  <td>
                     <StatusPill status={run.status} />
                   </td>
-                  <td className="tnum px-4 py-3 text-slate">v{run.version}</td>
-                  <td className="tnum px-4 py-3 text-slate">{duration(run)}</td>
-                  <td className="tnum px-4 py-3 text-slate">{formatDateTime(run.startedAt)}</td>
+                  <td className="tnum text-slate">v{run.version}</td>
+                  <td className="tnum text-slate">{duration(run)}</td>
+                  <td className="tnum text-slate">{formatDateTime(run.startedAt)}</td>
                 </tr>
               ))}
             </tbody>

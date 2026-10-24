@@ -10,7 +10,7 @@ export function SandboxToggle({ sandboxed }: { sandboxed: boolean }) {
   );
 
   return (
-    <div className="border border-fog bg-surface p-5">
+    <div className="card card-pad">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="max-w-xl">
           <h2 className="flex items-center gap-2.5 text-sm font-semibold text-ink">
@@ -18,8 +18,8 @@ export function SandboxToggle({ sandboxed }: { sandboxed: boolean }) {
             <span
               className={
                 sandboxed
-                  ? "border border-ok/40 bg-ok/10 px-2 py-0.5 text-[11px] font-medium tracking-[0.08em] text-ok uppercase"
-                  : "border border-risk/40 bg-risk/10 px-2 py-0.5 text-[11px] font-medium tracking-[0.08em] text-risk uppercase"
+                  ? "rounded-sm bg-ok-soft px-2 py-0.5 text-xs font-semibold text-ok"
+                  : "rounded-sm bg-risk-soft px-2 py-0.5 text-xs font-semibold text-risk"
               }
             >
               {sandboxed ? "On" : "Off"}
@@ -39,8 +39,8 @@ export function SandboxToggle({ sandboxed }: { sandboxed: boolean }) {
             disabled={pending}
             className={
               sandboxed
-                ? "inline-flex h-9 items-center bg-ink px-4 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:opacity-60"
-                : "inline-flex h-9 items-center border border-risk px-4 text-[12px] font-medium tracking-[0.08em] text-risk uppercase transition-colors hover:bg-risk hover:text-paper disabled:opacity-60"
+                ? "btn btn-primary btn-sm"
+                : "btn btn-danger btn-sm"
             }
           >
             {pending ? "Saving…" : sandboxed ? "Take live" : "Re-enable sandbox"}
@@ -48,12 +48,12 @@ export function SandboxToggle({ sandboxed }: { sandboxed: boolean }) {
         </form>
       </div>
       {state?.error ? (
-        <p className="mt-3 border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <p className="form-alert mt-3" role="alert">
           {state.error}
         </p>
       ) : null}
       {state?.success ? (
-        <p className="mt-3 border border-ok/30 bg-ok/5 px-4 py-3 text-sm text-ok" role="status">
+        <p className="form-notice mt-3" role="status">
           {state.success}
         </p>
       ) : null}

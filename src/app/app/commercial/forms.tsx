@@ -8,9 +8,8 @@ import {
   type ActionState,
 } from "./actions";
 
-const FIELD =
-  "w-full border border-fog bg-paper px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none";
-const LABEL = "mb-1 block text-[11px] font-medium tracking-[0.08em] text-slate uppercase";
+const FIELD = "field";
+const LABEL = "label";
 
 export function NewOpportunityForm() {
   const [state, formAction, pending] = useActionState<ActionState | null, FormData>(
@@ -18,7 +17,7 @@ export function NewOpportunityForm() {
     null,
   );
   return (
-    <form action={formAction} className="border border-fog bg-surface p-4">
+    <form action={formAction} className="card card-pad-sm">
       <h3 className="text-sm font-semibold text-ink">Add an opportunity</h3>
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
         <div>
@@ -50,11 +49,11 @@ export function NewOpportunityForm() {
           <input id="opp-next" name="nextAction" className={FIELD} placeholder="Book discovery call" />
         </div>
       </div>
-      {state?.error ? <p className="mt-2 text-[13px] text-risk">{state.error}</p> : null}
+      {state?.error ? <p className="field-error">{state.error}</p> : null}
       <button
         type="submit"
         disabled={pending}
-        className="mt-3 border border-ink bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink/90 disabled:opacity-50"
+        className="btn btn-primary mt-3"
       >
         {pending ? "Adding…" : "Add opportunity"}
       </button>
@@ -68,7 +67,7 @@ export function NewClientForm() {
     null,
   );
   return (
-    <form action={formAction} className="border border-fog bg-surface p-4">
+    <form action={formAction} className="card card-pad-sm">
       <h3 className="text-sm font-semibold text-ink">Add a client</h3>
       <div className="mt-3 grid gap-3 sm:grid-cols-3">
         <div>
@@ -84,11 +83,11 @@ export function NewClientForm() {
           <input id="cl-size" name="size" className={FIELD} placeholder="200–1,000 employees" />
         </div>
       </div>
-      {state?.error ? <p className="mt-2 text-[13px] text-risk">{state.error}</p> : null}
+      {state?.error ? <p className="field-error">{state.error}</p> : null}
       <button
         type="submit"
         disabled={pending}
-        className="mt-3 border border-ink bg-ink px-4 py-2 text-sm font-medium text-paper hover:bg-ink/90 disabled:opacity-50"
+        className="btn btn-primary mt-3"
       >
         {pending ? "Adding…" : "Add client"}
       </button>
@@ -102,7 +101,7 @@ export function NewProjectForm({ clients }: { clients: { id: string; name: strin
     null,
   );
   return (
-    <form action={formAction} className="border border-fog bg-surface p-4">
+    <form action={formAction} className="card card-pad-sm">
       <h3 className="text-sm font-semibold text-ink">Add a project</h3>
       <div className="mt-3 grid gap-3 sm:grid-cols-3">
         <div>
@@ -133,11 +132,11 @@ export function NewProjectForm({ clients }: { clients: { id: string; name: strin
           </select>
         </div>
       </div>
-      {state?.error ? <p className="mt-2 text-[13px] text-risk">{state.error}</p> : null}
+      {state?.error ? <p className="field-error">{state.error}</p> : null}
       <button
         type="submit"
         disabled={pending}
-        className="mt-3 border border-ink bg-ink px-4 py-2 text-sm font-medium text-paper hover:bg-ink/90 disabled:opacity-50"
+        className="btn btn-primary mt-3"
       >
         {pending ? "Adding…" : "Add project"}
       </button>

@@ -82,7 +82,7 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ id
               }}
             />
           ) : (
-            <div className="border border-fog bg-paper p-6">
+            <div className="border border-fog bg-paper p-6 rounded-lg">
               <p className="text-[13px] font-medium text-ink">System instructions (current version)</p>
               <pre className="mt-2 whitespace-pre-wrap text-[13px] leading-relaxed text-slate">
                 {current?.systemInstructions ?? "—"}
@@ -90,10 +90,10 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ id
             </div>
           )}
 
-          <div className="border border-fog bg-paper p-6">
+          <div className="border border-fog bg-paper p-6 rounded-lg">
             <div className="mb-3 flex items-baseline justify-between">
               <h2 className="text-base font-medium text-ink">Playground</h2>
-              <p className="text-[11px] text-mute">
+              <p className="text-xs text-mute">
                 {provider.configured ? `Calls go to ${provider.provider}.` : "Provider not configured — runs report that honestly."}
               </p>
             </div>
@@ -106,14 +106,14 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ id
         </div>
 
         <div className="space-y-6">
-          <div className="border border-fog bg-paper p-5">
-            <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink uppercase">Versions</h3>
+          <div className="border border-fog bg-paper p-5 rounded-lg">
+            <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink">Versions</h3>
             <ul className="space-y-2">
               {versions.map((v) => (
                 <li key={v.id} className="flex items-baseline justify-between border-b border-fog pb-2 text-[13px] last:border-0">
                   <span className="font-medium text-ink">
                     v{v.version}
-                    {current?.id === v.id ? <span className="ml-2 text-[10px] tracking-[0.1em] text-accent uppercase">current</span> : null}
+                    {current?.id === v.id ? <span className="ml-2 text-xs text-accent">current</span> : null}
                   </span>
                   <span className="text-slate">{modelInfo(v.model)?.label ?? v.model}</span>
                   <span className="tnum text-mute">{formatDateTime(v.createdAt)}</span>
@@ -121,9 +121,9 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ id
               ))}
             </ul>
             <div className="mt-3 border-t border-fog pt-3">
-              <p className="mb-1.5 text-[11px] font-medium tracking-wide text-ink uppercase">Granted scopes (current version)</p>
+              <p className="mb-1.5 text-xs font-medium tracking-wide text-ink">Granted scopes (current version)</p>
               {grantedScopes.length === 0 ? (
-                <p className="text-[12px] text-mute">No tools granted — this version answers with text only.</p>
+                <p className="text-xs text-mute">No tools granted — this version answers with text only.</p>
               ) : (
                 <div className="flex flex-wrap gap-1.5">
                   {grantedScopes.map((scope) => {
@@ -131,7 +131,7 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ id
                     return (
                       <span
                         key={scope}
-                        className="border border-fog bg-haze px-1.5 py-px text-[11px] text-graphite"
+                        className="border border-fog bg-haze px-1.5 py-px text-xs text-graphite rounded-lg"
                         title={tool?.description}
                       >
                         {tool?.name ?? scope}
@@ -141,21 +141,21 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ id
                   })}
                 </div>
               )}
-              <p className="mt-2 text-[11px] leading-relaxed text-mute">
+              <p className="mt-2 text-xs leading-relaxed text-mute">
                 Approval policy: consequential actions (⏸) require human approval — the reviewer sees
                 and authorizes the exact tool arguments.
               </p>
             </div>
           </div>
 
-          <div className="border border-fog bg-paper p-5">
-            <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink uppercase">Agent runs</h3>
+          <div className="border border-fog bg-paper p-5 rounded-lg">
+            <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink">Agent runs</h3>
             {agentRuns.length === 0 ? (
               <p className="text-[13px] text-slate">No tool-enabled runs yet.</p>
             ) : (
               <ul className="space-y-2.5">
                 {agentRuns.map((run) => (
-                  <li key={run.id} className="text-[12px]">
+                  <li key={run.id} className="text-xs">
                     <div className="flex items-baseline justify-between">
                       <span className="font-medium text-ink">
                         {run.source}
@@ -184,14 +184,14 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ id
             )}
           </div>
 
-          <div className="border border-fog bg-paper p-5">
-            <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink uppercase">Recent model runs</h3>
+          <div className="border border-fog bg-paper p-5 rounded-lg">
+            <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink">Recent model runs</h3>
             {runs.length === 0 ? (
               <p className="text-[13px] text-slate">No recorded calls for this agent yet.</p>
             ) : (
               <ul className="space-y-2.5">
                 {runs.map((run) => (
-                  <li key={run.id} className="text-[12px]">
+                  <li key={run.id} className="text-xs">
                     <div className="flex items-baseline justify-between">
                       <span className="font-medium text-ink">
                         {run.source}
@@ -211,7 +211,7 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ id
                 ))}
               </ul>
             )}
-            <p className="mt-3 border-t border-fog pt-3 text-[11px] leading-relaxed text-mute">
+            <p className="mt-3 border-t border-fog pt-3 text-xs leading-relaxed text-mute">
               Tokens are provider-reported (actual). USD is an estimate at list price.
             </p>
           </div>

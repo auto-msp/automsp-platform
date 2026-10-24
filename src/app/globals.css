@@ -1,45 +1,73 @@
 @import "tailwindcss";
 
 /*
-  AutoMSP — Enterprise Swiss Editorial design tokens
-  Light-first, high-clarity, monochrome foundation with one restrained accent.
-  Dark tech internationalism is reserved for infrastructure/security sections.
+  AutoMSP design tokens — "Swiss editorial" for the marketing site, "quiet
+  instrument" for the app. One token set, two densities. Every text/background
+  pair below is measured (WCAG 2.2 relative luminance) — see
+  docs/design-system.md for the table. Do not introduce raw hex in components.
 */
 @theme {
-  /* Foundation */
-  --color-paper: #fafaf7;        /* off-white page background */
-  --color-surface: #ffffff;      /* cards, panels */
-  --color-ink: #0b0c0e;          /* near-black text */
-  --color-graphite: #1e2126;     /* strong secondary */
-  --color-slate: #5b6068;        /* body secondary */
-  --color-mute: #8a8f97;         /* captions, metadata */
-  --color-fog: #e7e7e2;          /* hairlines */
-  --color-haze: #f1f1ec;         /* subtle panels, trust band */
+  /* Surfaces */
+  --color-paper: #f8f8f5;        /* page background */
+  --color-surface: #ffffff;      /* cards, panels, inputs */
+  --color-haze: #f0f0eb;         /* quiet panels, table headers, hover rows */
+  --color-fog: #e4e4de;          /* decorative hairlines only (not for controls) */
+  --color-line: #80858d;         /* control borders — 3.49:1 on paper, 3.71:1 on white */
 
-  /* Accent — electric indigo, used sparingly */
-  --color-accent: #4338ca;
-  --color-accent-soft: #eef0ff;
+  /* Text */
+  --color-ink: #0b0c0e;          /* 18.4:1 on paper */
+  --color-graphite: #1e2126;     /* 15.2:1 */
+  --color-slate: #464b53;        /*  8.3:1 — secondary text */
+  --color-mute: #5c616a;         /*  5.9:1 on paper, 5.5:1 on haze — captions, metadata */
 
-  /* Dark tech internationalism (selective use) */
+  /* Accent — one restrained indigo */
+  --color-accent: #4338ca;       /*  7.4:1 on paper; white on accent 7.9:1 */
+  --color-accent-strong: #352ba8;
+  --color-accent-soft: #eaecff;
+
+  /* Dark "infrastructure" sections (marketing security/CTA only) */
   --color-night: #0b0d12;
   --color-night-2: #11141b;
-  --color-nline: #232833;        /* hairlines on dark */
-  --color-trail: #6d7cff;        /* light-trail stroke */
-  --color-trail-warm: #ffb454;   /* warm trail accent */
+  --color-nline: #232833;
+  --color-trail: #6d7cff;        /* 5.5:1 on night */
+  --color-trail-light: #8f9bff;  /* 7.7:1 on night — text and focus on dark */
+  --color-trail-warm: #ffb454;      /* 11.0:1 on night */
+  --color-night-text: #c9cede;      /* 12.4:1 on night */
+  --color-night-mute: #a3a9bd;      /*  8.3:1 */
+  --color-night-risk: #ff8f87;      /*  8.8:1 */
 
-  /* Status */
-  --color-ok: #1a7f4b;
-  --color-warn: #b45309;
-  --color-risk: #b3261e;
+  /* Status: text colour + solid tint it sits on (each pair >= 6:1) */
+  --color-ok: #14633a;
+  --color-ok-soft: #e4f2ea;
+  --color-warn: #8a4100;
+  --color-warn-soft: #fbeedd;
+  --color-risk: #a01c15;
+  --color-risk-soft: #fbe8e6;
 
+  /* Type */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-serif: var(--font-instrument), Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
 
+  /* Radii: app controls 6px / panels 10px; marketing stays hairline-square */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+
+  /* Elevation: flat by default; only floating layers get a shadow */
+  --shadow-card: 0 1px 0 rgb(11 12 14 / 0.04);
+  --shadow-pop: 0 12px 32px -12px rgb(11 12 14 / 0.28), 0 0 0 1px rgb(11 12 14 / 0.06);
+
+  /* Motion */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -55,10 +83,15 @@ body {
   color: var(--color-paper);
 }
 
+/* Focus: always visible, never removed. Offset keeps it clear of fills. */
 :focus-visible {
   outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
-  border-radius: 2px;
+  outline-offset: 2px;
+}
+.on-dark :focus-visible,
+.bg-night :focus-visible,
+.bg-ink :focus-visible {
+  outline-color: var(--color-trail-light);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -70,18 +103,182 @@ body {
   }
 }
 
-/* Editorial helpers */
+/* Editorial helpers (marketing) */
 .hairline-t { border-top: 1px solid var(--color-fog); }
 .hairline-b { border-bottom: 1px solid var(--color-fog); }
 .hairline-dark-t { border-top: 1px solid var(--color-nline); }
 
-/* Oversized display headline (Instrument Serif) */
 .font-display {
   font-family: var(--font-serif);
   letter-spacing: -0.015em;
 }
 
-/* Numeric tabular lining for KPI work */
-.tnum {
-  font-variant-numeric: tabular-nums;
+.tnum { font-variant-numeric: tabular-nums; }
+
+/*
+  Shared component classes. Screens compose these instead of repeating long
+  utility strings, so a change here restyles every form, button and table.
+*/
+@layer components {
+  /* Buttons — 44px tall, sentence case, no tracking */
+  .btn {
+    display: inline-flex;
+    min-height: 2.75rem;
+    max-width: 100%;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    user-select: none;
+    transition:
+      background-color var(--duration-fast) ease,
+      border-color var(--duration-fast) ease,
+      color var(--duration-fast) ease;
+  }
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .btn-primary { background: var(--color-ink); color: var(--color-paper); }
+  .btn-primary:hover:not(:disabled) { background: var(--color-graphite); }
+  .btn-accent { background: var(--color-accent); color: #fff; }
+  .btn-accent:hover:not(:disabled) { background: var(--color-accent-strong); }
+  .btn-secondary {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    border-color: var(--color-line);
+  }
+  .btn-secondary:hover:not(:disabled) { background: var(--color-haze); border-color: var(--color-ink); }
+  .btn-danger {
+    background: var(--color-surface);
+    color: var(--color-risk);
+    border-color: var(--color-risk);
+  }
+  .btn-danger:hover:not(:disabled) { background: var(--color-risk-soft); }
+  .btn-ghost { color: var(--color-slate); }
+  .btn-ghost:hover:not(:disabled) { background: var(--color-haze); color: var(--color-ink); }
+  /* Compact: 36px with a mouse, full 44px on touch screens */
+  .btn-sm { min-height: 2.25rem; padding: 0.25rem 0.75rem; font-size: 0.8125rem; }
+  @media (pointer: coarse) {
+    .btn-sm { min-height: 2.75rem; }
+  }
+  .btn-icon { width: 2.75rem; padding: 0; }
+  .btn-sm.btn-icon { width: 2.25rem; }
+  @media (pointer: coarse) {
+    .btn-sm.btn-icon { width: 2.75rem; }
+  }
+
+  /* Form controls — 3:1 border, visible label above, error linked below */
+  .field {
+    display: block;
+    width: 100%;
+    min-height: 2.75rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.375rem;
+    color: var(--color-ink);
+    transition: border-color var(--duration-fast) ease;
+  }
+  .field::placeholder { color: var(--color-mute); }
+  .field:hover { border-color: var(--color-slate); }
+  .field:focus-visible { border-color: var(--color-accent); outline-offset: 1px; }
+  .field[aria-invalid="true"] { border-color: var(--color-risk); }
+  .field:disabled { background: var(--color-haze); color: var(--color-mute); cursor: not-allowed; }
+  textarea.field { min-height: 6rem; resize: vertical; }
+  select.field { cursor: pointer; }
+  .label { display: block; margin-bottom: 0.375rem; font-size: 0.8125rem; font-weight: 500; color: var(--color-graphite); }
+  .hint { margin-top: 0.375rem; font-size: 0.75rem; line-height: 1.125rem; color: var(--color-mute); }
+  .field-error { margin-top: 0.375rem; font-size: 0.75rem; line-height: 1.125rem; font-weight: 500; color: var(--color-risk); }
+  .form-alert {
+    border: 1px solid var(--color-risk);
+    border-radius: var(--radius-md);
+    background: var(--color-risk-soft);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: var(--color-risk);
+  }
+  .form-notice {
+    border: 1px solid var(--color-ok);
+    border-radius: var(--radius-md);
+    background: var(--color-ok-soft);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: var(--color-ok);
+  }
+
+  /* Panels */
+  .card {
+    border: 1px solid var(--color-fog);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+  }
+  .card-pad { padding: 1.25rem; }
+  .card-pad-sm { padding: 1rem; }
+
+  /* Tables — scroll inside their own region on narrow screens */
+  /* Edge shadows appear only on the side that has more content to scroll to. */
+  .table-wrap {
+    position: relative; /* contains sr-only cells so they cannot widen the page */
+    overflow-x: auto;
+    border: 1px solid var(--color-fog);
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(to right, var(--color-surface) 30%, transparent) left center / 24px 100% no-repeat local,
+      linear-gradient(to left, var(--color-surface) 30%, transparent) right center / 24px 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%, rgb(11 12 14 / 0.16), transparent) left center / 10px 100% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%, rgb(11 12 14 / 0.16), transparent) right center / 10px 100% no-repeat scroll,
+      var(--color-surface);
+  }
+  .data-table { width: 100%; min-width: 32rem; border-collapse: collapse; text-align: left; font-size: 0.875rem; }
+  .data-table th {
+    background: var(--color-haze);
+    padding: 0.625rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--color-slate);
+    white-space: nowrap;
+  }
+  .data-table td { padding: 0.75rem 1rem; vertical-align: middle; border-top: 1px solid var(--color-fog); }
+  .data-table tbody tr:hover { background: color-mix(in srgb, var(--color-haze) 55%, transparent); }
+  .data-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .data-table .id { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-mute); }
+  .data-table a:not(.btn) { display: inline-flex; min-height: 2.75rem; align-items: center; }
+  /* cells whose link already provides the 44px hit area need no extra padding */
+  .data-table td:has(> a:not(.btn)) { padding-block: 0; }
+
+  /* Small caps-free section label used above groups of fields/cards */
+  .section-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; color: var(--color-mute); text-transform: uppercase; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slide-in {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+/* Skeleton block for loading.tsx — static under reduced motion (see rule above) */
+.skeleton {
+  border-radius: var(--radius-md);
+  background: linear-gradient(90deg, var(--color-haze) 25%, var(--color-fog) 50%, var(--color-haze) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
 }

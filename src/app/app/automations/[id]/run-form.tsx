@@ -20,7 +20,7 @@ export function RunForm({
 
   if (!canRun) {
     return (
-      <div className="border border-fog bg-haze p-5">
+      <div className="border border-fog bg-haze p-5 rounded-lg">
         <h2 className="text-sm font-semibold text-ink">Run manually</h2>
         <p className="mt-2 text-[13px] text-slate">Your role cannot start runs.</p>
       </div>
@@ -29,7 +29,7 @@ export function RunForm({
 
   if (status === "archived") {
     return (
-      <div className="border border-fog bg-haze p-5">
+      <div className="border border-fog bg-haze p-5 rounded-lg">
         <h2 className="text-sm font-semibold text-ink">Run manually</h2>
         <p className="mt-2 text-[13px] text-slate">This automation is archived.</p>
       </div>
@@ -37,7 +37,7 @@ export function RunForm({
   }
 
   return (
-    <div className="border border-fog bg-surface p-5">
+    <div className="card card-pad">
       <h2 className="text-sm font-semibold text-ink">Run manually</h2>
       <p className="mt-1.5 text-[13px] text-slate">
         Provide test input as a JSON object. Scheduled triggers are not configured in this
@@ -45,7 +45,7 @@ export function RunForm({
       </p>
       <form action={formAction} className="mt-4 space-y-4" noValidate>
         <div>
-          <label htmlFor="input" className="mb-2 block text-[13px] font-medium text-graphite">
+          <label htmlFor="input" className="label block">
             Input (JSON)
           </label>
           <textarea
@@ -54,29 +54,29 @@ export function RunForm({
             rows={4}
             spellCheck={false}
             placeholder='{ "invoiceId": "INV-1042", "amount": 12500 }'
-            className="w-full border border-fog bg-paper px-4 py-3 font-mono text-[13px] text-ink placeholder:text-mute focus:border-ink focus:outline-none"
+            className="field w-full font-mono"
           />
           {state?.fieldErrors?.input?.[0] ? (
-            <p className="mt-1.5 text-xs text-risk">{state.fieldErrors.input[0]}</p>
+            <p className="field-error">{state.fieldErrors.input[0]}</p>
           ) : null}
         </div>
         <div>
-          <label htmlFor="idempotencyKey" className="mb-2 block text-[13px] font-medium text-graphite">
+          <label htmlFor="idempotencyKey" className="label block">
             Idempotency key <span className="font-normal text-mute">(optional)</span>
           </label>
           <input
             id="idempotencyKey"
             name="idempotencyKey"
             placeholder='e.g. "inv-1042-run-1"'
-            className="w-full border border-fog bg-paper px-4 py-3 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none"
+            className="field w-full"
           />
-          <p className="mt-1.5 text-xs text-mute">
+          <p className="hint">
             Repeating a key returns the original run instead of starting a duplicate.
           </p>
         </div>
 
         {state?.error ? (
-          <p className="border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+          <p className="form-alert" role="alert">
             {state.error}
           </p>
         ) : null}
@@ -84,7 +84,7 @@ export function RunForm({
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex h-11 w-full items-center justify-center bg-ink text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn btn-primary w-full"
         >
           {pending ? "Running…" : "Run automation"}
         </button>

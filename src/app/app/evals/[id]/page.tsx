@@ -58,7 +58,7 @@ export default async function EvalSuitePage({
       </AppPageHeader>
 
       {!provider.configured ? (
-        <div className="mb-6 border border-fog bg-haze px-4 py-3">
+        <div className="mb-6 border border-fog bg-haze px-4 py-3 rounded-lg">
           <p className="text-[13px] text-slate">
             <span className="font-medium text-warn">Runs are blocked:</span> no AI provider is configured,
             so no answers can be produced to score. Blocked runs record the reason, not zero passes.
@@ -82,7 +82,7 @@ export default async function EvalSuitePage({
           ) : (
             <div className="space-y-3">
               {cases.map((testCase) => (
-                <div key={testCase.id} className="border border-fog bg-paper p-4">
+                <div key={testCase.id} className="border border-fog bg-paper p-4 rounded-lg">
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0 text-[13px]">
                       <p className="font-medium text-ink">Input</p>
@@ -99,8 +99,8 @@ export default async function EvalSuitePage({
         </div>
 
         <div className="space-y-6">
-          <div className="border border-fog bg-paper p-5">
-            <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink uppercase">Runs</h3>
+          <div className="border border-fog bg-paper p-5 rounded-lg">
+            <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink">Runs</h3>
             {runs.length === 0 ? (
               <p className="text-[13px] text-slate">No runs yet.</p>
             ) : (
@@ -138,15 +138,15 @@ export default async function EvalSuitePage({
           </div>
 
           {selectedRun ? (
-            <div className="border border-fog bg-paper p-5">
+            <div className="border border-fog bg-paper p-5 rounded-lg">
               <div className="mb-3 flex items-center justify-between">
-                <h3 className="text-[13px] font-medium tracking-wide text-ink uppercase">Run detail</h3>
+                <h3 className="text-[13px] font-medium tracking-wide text-ink">Run detail</h3>
                 <StatusPill status={selectedRun.status} />
               </div>
               {selectedRun.status === "blocked" ? (
-                <div className="border border-warn/40 bg-warn/10 px-3 py-2.5">
-                  <p className="text-[12px] font-medium text-warn">Blocked</p>
-                  <p className="mt-1 text-[12px] leading-relaxed text-slate">{selectedRun.blockedReason}</p>
+                <div className="border border-warn bg-warn-soft px-3 py-2.5">
+                  <p className="text-xs font-medium text-warn">Blocked</p>
+                  <p className="mt-1 text-xs leading-relaxed text-slate">{selectedRun.blockedReason}</p>
                 </div>
               ) : (
                 <>
@@ -158,7 +158,7 @@ export default async function EvalSuitePage({
                     {results.map((result) => {
                       const testCase = caseMap.get(result.caseId);
                       return (
-                        <li key={result.id} className="border-t border-fog pt-3 text-[12px]">
+                        <li key={result.id} className="border-t border-fog pt-3 text-xs">
                           <div className="flex items-baseline justify-between">
                             <span
                               className={
@@ -187,7 +187,7 @@ export default async function EvalSuitePage({
                     })}
                   </ul>
                   {selectedRun.scorerUsed === "llm_judge" ? (
-                    <p className="mt-3 border-t border-fog pt-2 text-[11px] leading-relaxed text-mute">
+                    <p className="mt-3 border-t border-fog pt-2 text-xs leading-relaxed text-mute">
                       LLM-judge scores are another model&rsquo;s opinion of the answer, not ground truth. Judge
                       tokens are recorded as evaluation AI runs.
                     </p>

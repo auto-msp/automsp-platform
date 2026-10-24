@@ -58,7 +58,7 @@ export default async function IndustryPage({
         <Shell>
           <Link
             href="/industries"
-            className="mb-10 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.08em] text-slate uppercase hover:text-ink"
+            className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-slate hover:text-ink min-h-11"
           >
             <ArrowLeft className="size-4" strokeWidth={1.75} aria-hidden />
             All industries
@@ -80,7 +80,7 @@ export default async function IndustryPage({
                 {industry.systems.map((s) => (
                   <span
                     key={s}
-                    className="border border-fog px-3 py-1.5 text-[11px] font-medium tracking-[0.08em] text-slate uppercase"
+                    className="inline-flex border border-fog px-3 py-1.5 text-xs font-medium text-slate items-center min-h-11"
                   >
                     {s}
                   </span>

@@ -57,7 +57,7 @@ export default function SolutionsPage() {
                   href={`/solutions/${s.slug}`}
                   className="group grid gap-3 py-8 transition-colors hover:bg-surface/70 sm:grid-cols-[4rem_1.5fr_1fr_3rem] sm:items-center sm:gap-8"
                 >
-                  <span className="tnum text-xs font-medium tracking-[0.2em] text-mute">0{i + 1}</span>
+                  <span className="tnum text-xs font-medium tracking-[0.14em] text-mute">0{i + 1}</span>
                   <span>
                     <h2 className="text-xl font-semibold tracking-tight text-ink">{s.title}</h2>
                     <p className="mt-1 max-w-xl text-sm leading-relaxed text-slate">{s.summary}</p>

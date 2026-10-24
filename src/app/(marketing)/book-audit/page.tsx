@@ -30,7 +30,7 @@ export default function BookAuditPage() {
       <Section>
         <Shell>
           <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
-            <aside>
+            <div>
               <Eyebrow>What you receive</Eyebrow>
               <ul className="mt-6 space-y-4">
                 {youGet.map((item) => (
@@ -46,7 +46,7 @@ export default function BookAuditPage() {
                 strategist. We do not claim AI has analyzed your business until we actually do the
                 work.
               </p>
-            </aside>
+            </div>
 
             <AuditForm />
           </div>

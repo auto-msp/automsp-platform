@@ -24,7 +24,7 @@ export default function SignInPage() {
       </div>
       <p className="mt-6 text-sm text-slate">
         No account yet?{" "}
-        <Link href="/sign-up" className="font-medium text-ink underline-offset-4 hover:underline">
+        <Link href="/sign-up" className="inline-flex min-h-11 items-center font-medium text-ink underline underline-offset-4 hover:text-accent">
           Create one
         </Link>
       </p>

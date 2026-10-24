@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { signIn, type AuthFormState } from "@/server/auth/actions";
 
 const inputCls =
-  "w-full border border-fog bg-surface px-4 py-3 text-sm text-ink placeholder:text-mute transition-colors focus:border-ink focus:outline-none";
+  "field";
 
 export function SignInForm() {
   const [state, formAction, pending] = useActionState<AuthFormState, FormData>(signIn, null);
@@ -12,13 +12,13 @@ export function SignInForm() {
   return (
     <form action={formAction} className="space-y-5" noValidate>
       <div>
-        <label htmlFor="email" className="mb-2 block text-[13px] font-medium text-graphite">
+        <label htmlFor="email" className="label block">
           Work email
         </label>
         <input id="email" name="email" type="email" autoComplete="email" required className={inputCls} />
       </div>
       <div>
-        <label htmlFor="password" className="mb-2 block text-[13px] font-medium text-graphite">
+        <label htmlFor="password" className="label block">
           Password
         </label>
         <input
@@ -32,7 +32,7 @@ export function SignInForm() {
       </div>
 
       {state?.error ? (
-        <p className="border border-risk/30 bg-risk/5 px-4 py-3 text-sm text-risk" role="alert">
+        <p className="form-alert" role="alert">
           {state.error}
         </p>
       ) : null}
@@ -40,7 +40,7 @@ export function SignInForm() {
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-11 w-full items-center justify-center bg-ink text-[13px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:cursor-not-allowed disabled:opacity-60"
+        className="btn btn-primary w-full"
       >
         {pending ? "Signing in…" : "Sign in"}
       </button>

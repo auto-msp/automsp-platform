@@ -130,7 +130,7 @@ export default function AiAgentsPage() {
                 },
               ].map((s) => (
                 <li key={s.n} className="flex gap-5 py-5">
-                  <span className="tnum shrink-0 text-xs font-medium tracking-[0.2em] text-mute">
+                  <span className="tnum shrink-0 text-xs font-medium tracking-[0.14em] text-mute">
                     {s.n}
                   </span>
                   <div>

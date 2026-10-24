@@ -36,29 +36,29 @@ export default async function ReportsPage() {
             </p>
           </div>
         ) : (
-          <div className="overflow-hidden border border-fog">
-            <table className="w-full text-sm">
+          <div className="table-wrap" tabIndex={0}>
+            <table className="data-table">
               <thead>
-                <tr className="border-b border-fog bg-haze text-left text-[11px] font-medium tracking-[0.1em] text-mute uppercase">
-                  <th className="px-4 py-2.5">Report</th>
-                  <th className="px-4 py-2.5">Type</th>
-                  <th className="px-4 py-2.5">Period</th>
-                  <th className="px-4 py-2.5">Generated</th>
+                <tr>
+                  <th>Report</th>
+                  <th>Type</th>
+                  <th>Period</th>
+                  <th>Generated</th>
                 </tr>
               </thead>
               <tbody>
                 {reports.map((r) => (
                   <tr key={r.id} className="border-b border-fog last:border-0">
-                    <td className="px-4 py-3">
+                    <td>
                       <Link href={`/app/reports/${r.id}`} className="font-medium text-ink hover:underline">
                         {(r.payload as { title?: string }).title ?? REPORT_TYPE_LABELS[r.type]}
                       </Link>
                     </td>
-                    <td className="px-4 py-3 text-slate">{REPORT_TYPE_LABELS[r.type]}</td>
-                    <td className="tnum px-4 py-3 text-slate">
+                    <td className="text-slate">{REPORT_TYPE_LABELS[r.type]}</td>
+                    <td className="tnum text-slate">
                       {r.periodStart.slice(0, 10)} → {r.periodEnd.slice(0, 10)}
                     </td>
-                    <td className="tnum px-4 py-3 text-slate">
+                    <td className="tnum text-slate">
                       {r.createdAt.slice(0, 16).replace("T", " ")}
                     </td>
                   </tr>

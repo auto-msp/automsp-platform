@@ -13,9 +13,9 @@ export function StrategyForm({ providerConfigured }: { providerConfigured: boole
 
   return (
     <div className="space-y-5">
-      <form action={formAction} className="space-y-5 border border-fog bg-paper p-6">
+      <form action={formAction} className="space-y-5 border border-fog bg-paper p-6 rounded-lg">
         {!providerConfigured ? (
-          <p className="border border-warn/30 bg-warn/5 px-4 py-3 text-[13px] text-warn" role="alert">
+          <p className="rounded-md border border-warn bg-warn-soft px-4 py-3 text-[13px] text-warn" role="alert">
             No AI provider is configured on this environment — set ANTHROPIC_API_KEY,
             OPENAI_API_KEY, or GOOGLE_GENERATIVE_AI_API_KEY server-side to enable generation.
             Nothing will be simulated in the meantime.
@@ -30,7 +30,7 @@ export function StrategyForm({ providerConfigured }: { providerConfigured: boole
               required
               maxLength={120}
               placeholder="e.g. Northbeam Coffee Co."
-              className="w-full border border-fog bg-paper px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none"
+              className="field w-full"
             />
           </label>
           <label className="block">
@@ -40,7 +40,7 @@ export function StrategyForm({ providerConfigured }: { providerConfigured: boole
               type="url"
               maxLength={300}
               placeholder="https://…"
-              className="w-full border border-fog bg-paper px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none"
+              className="field w-full"
             />
           </label>
         </div>
@@ -53,7 +53,7 @@ export function StrategyForm({ providerConfigured }: { providerConfigured: boole
             rows={4}
             maxLength={8_000}
             placeholder="What you sell, who buys it, and why it exists. The more specific, the better every downstream agent performs."
-            className="w-full border border-fog bg-paper px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none"
+            className="field w-full"
           />
         </label>
 
@@ -64,17 +64,17 @@ export function StrategyForm({ providerConfigured }: { providerConfigured: boole
             rows={2}
             maxLength={4_000}
             placeholder="Segments, channels they live on, objections you hear."
-            className="w-full border border-fog bg-paper px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none"
+            className="field w-full"
           />
         </label>
 
         {state?.error ? (
-          <p className="border border-risk/30 bg-risk/5 px-4 py-3 text-[13px] text-risk" role="alert">
+          <p className="form-alert" role="alert">
             {state.error}
           </p>
         ) : null}
         {state?.notice ? (
-          <p className="border border-ok/30 bg-ok/5 px-4 py-3 text-[13px] text-ok" role="status">
+          <p className="form-notice" role="status">
             {state.notice}
           </p>
         ) : null}
@@ -82,15 +82,15 @@ export function StrategyForm({ providerConfigured }: { providerConfigured: boole
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex h-10 items-center bg-ink px-5 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:opacity-50"
+          className="btn btn-primary btn-sm"
         >
           {pending ? "Researching…" : "Generate strategy documents"}
         </button>
       </form>
 
       {docs.length > 0 ? (
-        <div className="border border-fog bg-haze p-4">
-          <p className="mb-2 text-[12px] tracking-[0.08em] text-slate uppercase">Last run</p>
+        <div className="border border-fog bg-haze p-4 rounded-lg">
+          <p className="mb-2 text-xs text-slate">Last run</p>
           <ul className="space-y-1">
             {docs.map((d) => (
               <li key={d.key} className="flex items-center justify-between text-[13px]">

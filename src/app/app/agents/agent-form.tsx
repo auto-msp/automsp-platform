@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { createAgentAction, saveAgentAction, type AgentFormState } from "./actions";
 
 const inputCls =
-  "w-full border border-fog bg-paper px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-ink focus:outline-none";
+  "field";
 
 function Field({
   label,
@@ -21,8 +21,8 @@ function Field({
     <label className="block">
       <span className="mb-1.5 block text-[13px] font-medium text-ink">{label}</span>
       {children}
-      {hint ? <span className="mt-1 block text-[11px] text-mute">{hint}</span> : null}
-      {error?.length ? <span className="mt-1 block text-[12px] text-risk">{error.join(" ")}</span> : null}
+      {hint ? <span className="mt-1 block text-xs text-mute">{hint}</span> : null}
+      {error?.length ? <span className="field-error block">{error.join(" ")}</span> : null}
     </label>
   );
 }
@@ -56,7 +56,7 @@ export function AgentForm({
   const [state, formAction, pending] = useActionState<AgentFormState | null, FormData>(action, null);
 
   return (
-    <form action={formAction} className="space-y-5 border border-fog bg-paper p-6" noValidate={false}>
+    <form action={formAction} className="space-y-5 border border-fog bg-paper p-6 rounded-lg" noValidate={false}>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-[1fr_1fr]">
         <Field label="Name" error={state?.fieldErrors?.name}>
           <input name="name" required maxLength={120} defaultValue={initial?.name ?? ""} className={inputCls} />
@@ -109,7 +109,7 @@ export function AgentForm({
 
       <fieldset>
         <legend className="mb-1.5 block text-[13px] font-medium text-ink">Tool scopes</legend>
-        <p className="mb-3 text-[11px] leading-relaxed text-mute">
+        <p className="mb-3 text-xs leading-relaxed text-mute">
           Grant the least the agent needs. Scopes are enforced server-side on every tool call.
           Consequential tools always pause for human approval with the exact arguments recorded.
         </p>
@@ -119,26 +119,26 @@ export function AgentForm({
             return (
               <label
                 key={tool.scope}
-                className="flex cursor-pointer items-start gap-3 border border-fog bg-surface px-3 py-2.5"
+                className="card flex min-h-11 cursor-pointer items-start gap-3 px-3 py-2.5"
               >
                 <input
                   type="checkbox"
                   name="scope"
                   value={tool.scope}
                   defaultChecked={checked}
-                  className="mt-0.5 h-4 w-4 accent-current"
+                  className="mt-0.5 size-5 shrink-0 accent-accent"
                 />
                 <span className="min-w-0">
                   <span className="flex flex-wrap items-center gap-2 text-[13px] font-medium text-ink">
                     {tool.name}
-                    <code className="tnum text-[11px] text-mute">{tool.scope}</code>
+                    <code className="tnum text-xs text-mute">{tool.scope}</code>
                     {tool.consequential ? (
-                      <span className="border border-warn/40 bg-warn/10 px-1.5 py-px text-[10px] font-medium tracking-[0.08em] text-warn uppercase">
+                      <span className="border border-warn bg-warn-soft px-1.5 py-px text-xs font-medium text-warn">
                         approval required
                       </span>
                     ) : null}
                   </span>
-                  <span className="mt-0.5 block text-[12px] leading-relaxed text-slate">{tool.description}</span>
+                  <span className="mt-0.5 block text-xs leading-relaxed text-slate">{tool.description}</span>
                 </span>
               </label>
             );
@@ -147,7 +147,7 @@ export function AgentForm({
       </fieldset>
 
       {state?.error ? (
-        <p className="border border-risk/30 bg-risk/5 px-4 py-3 text-[13px] text-risk" role="alert">
+        <p className="form-alert" role="alert">
           {state.error}
         </p>
       ) : null}
@@ -156,12 +156,12 @@ export function AgentForm({
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex h-10 items-center bg-ink px-5 text-[12px] font-medium tracking-[0.08em] text-paper uppercase transition-colors hover:bg-graphite disabled:opacity-50"
+          className="btn btn-primary btn-sm"
         >
           {pending ? "Saving…" : agentId ? "Save as new version" : "Create agent"}
         </button>
         {agentId && !state?.error && state !== null ? (
-          <span className="text-[12px] text-ok">Saved.</span>
+          <span className="text-xs text-ok">Saved.</span>
         ) : null}
       </div>
     </form>

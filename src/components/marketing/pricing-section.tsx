@@ -77,7 +77,7 @@ export function PricingSection() {
 
         <ul className="mt-12 grid gap-px border border-fog bg-fog sm:grid-cols-2 xl:grid-cols-4">
           {tiers.map((t) => (
-            <li key={t.name} className={`flex flex-col p-7 ${t.featured ? "bg-surface" : "bg-paper"}`}>
+            <li key={t.name} className={`flex flex-col p-7 ${t.featured ? "bg-surface shadow-[inset_0_3px_0_0_var(--color-ink)]" : "bg-paper"}`}>
               <h3 className="text-[15px] font-semibold tracking-tight text-ink">{t.name}</h3>
               <p className="tnum font-display mt-4 text-2xl text-ink">{t.price}</p>
               <p className="mt-2 text-[13px] leading-snug text-slate">{t.for}</p>

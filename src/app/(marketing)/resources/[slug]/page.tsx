@@ -61,7 +61,7 @@ export default async function ResourceArticlePage({
           <div className="mx-auto max-w-2xl">
             <Link
               href="/resources"
-              className="mb-10 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.08em] text-slate uppercase hover:text-ink"
+              className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-slate hover:text-ink min-h-11"
             >
               <ArrowLeft className="size-4" strokeWidth={1.75} aria-hidden />
               All resources

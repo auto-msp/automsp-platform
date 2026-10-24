@@ -34,7 +34,7 @@ export default function ContactPage() {
               </p>
               <Link
                 href="/book-audit"
-                className="group mt-6 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.08em] text-ink uppercase underline-offset-4 hover:underline"
+                className="group mt-6 inline-flex items-center gap-2 text-sm font-medium text-ink underline-offset-4 hover:underline min-h-11 underline"
               >
                 Book an audit
                 <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.75} aria-hidden />
@@ -48,7 +48,7 @@ export default function ContactPage() {
               </p>
               <a
                 href={`mailto:${site.email}`}
-                className="mt-6 inline-block text-[13px] font-medium tracking-[0.08em] text-ink uppercase underline-offset-4 hover:underline"
+                className="mt-6 inline-flex text-sm font-medium text-ink underline-offset-4 hover:underline items-center min-h-11 underline"
               >
                 {site.email}
               </a>
@@ -60,7 +60,7 @@ export default function ContactPage() {
                 The client portal is provisioned per engagement. Contact your engagement lead for
                 access.
               </p>
-              <span className="mt-6 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.08em] text-mute uppercase">
+              <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-mute min-h-11">
                 Available with engagements
               </span>
             </div>

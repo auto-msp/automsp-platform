@@ -92,7 +92,7 @@ export default function SecurityPage() {
             </p>
             <a
               href={`mailto:${site.email}?subject=Security%20review%20request`}
-              className="mt-5 inline-block text-[13px] font-medium tracking-[0.08em] text-ink uppercase underline-offset-4 hover:underline"
+              className="mt-5 inline-flex text-sm font-medium text-ink underline-offset-4 hover:underline items-center min-h-11 underline"
             >
               Request security documentation
             </a>

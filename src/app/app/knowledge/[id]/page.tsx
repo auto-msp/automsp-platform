@@ -52,30 +52,30 @@ export default async function KnowledgeSourcePage({ params }: { params: Promise<
               }
             />
           ) : (
-            <div className="border border-fog">
-              <table className="w-full text-left text-sm">
+            <div className="table-wrap" tabIndex={0}>
+              <table className="data-table">
                 <thead>
-                  <tr className="border-b border-fog text-[11px] tracking-[0.1em] text-mute uppercase">
-                    <th className="px-4 py-2.5 font-medium">Document</th>
-                    <th className="px-4 py-2.5 font-medium">Status</th>
-                    <th className="px-4 py-2.5 font-medium">Chunks</th>
-                    <th className="px-4 py-2.5 font-medium">Added</th>
-                    <th className="px-4 py-2.5" />
+                  <tr>
+                    <th>Document</th>
+                    <th>Status</th>
+                    <th>Chunks</th>
+                    <th>Added</th>
+                    <th><span className="sr-only">Actions</span></th>
                   </tr>
                 </thead>
                 <tbody>
                   {documents.map((doc) => (
                     <tr key={doc.id} className="border-b border-fog last:border-0">
-                      <td className="px-4 py-3">
+                      <td>
                         <span className="font-medium text-ink">{doc.filename}</span>
-                        <span className="ml-2 text-[11px] text-mute">{doc.mimeType}</span>
+                        <span className="ml-2 text-xs text-mute">{doc.mimeType}</span>
                       </td>
-                      <td className="px-4 py-3">
+                      <td>
                         <StatusPill status={doc.status} />
                       </td>
-                      <td className="tnum px-4 py-3 text-slate">{doc.chunkCount}</td>
-                      <td className="tnum px-4 py-3 text-slate">{formatDateTime(doc.createdAt)}</td>
-                      <td className="px-4 py-3 text-right">
+                      <td className="tnum text-slate">{doc.chunkCount}</td>
+                      <td className="tnum text-slate">{formatDateTime(doc.createdAt)}</td>
+                      <td className="num">
                         {canManage ? <DeleteDocumentButton sourceId={source.id} documentId={doc.id} name={doc.filename} /> : null}
                       </td>
                     </tr>
@@ -86,8 +86,8 @@ export default async function KnowledgeSourcePage({ params }: { params: Promise<
           )}
         </div>
 
-        <div className="border border-fog bg-paper p-5">
-          <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink uppercase">Test retrieval</h3>
+        <div className="border border-fog bg-paper p-5 rounded-lg">
+          <h3 className="mb-3 text-[13px] font-medium tracking-wide text-ink">Test retrieval</h3>
           <RetrievalTest sourceId={source.id} />
         </div>
       </div>
