@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Eyebrow, Section, Shell } from "@/components/ui/shell";
 
 const faqs = [
@@ -45,10 +46,7 @@ export function FaqSection() {
 
   return (
     <Section className="hairline-t">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={jsonLd} />
       <Shell>
         <div className="grid gap-10 lg:grid-cols-[1fr_2fr] lg:gap-20">
           <div>

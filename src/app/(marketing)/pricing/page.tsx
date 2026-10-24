@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { Check } from "lucide-react";
 import { PageHeader } from "@/components/marketing/page-header";
+import { JsonLd } from "@/components/seo/json-ld";
 import { ButtonLink } from "@/components/ui/button";
 import { Eyebrow, Section, Shell } from "@/components/ui/shell";
 import { cn } from "@/lib/utils";
@@ -129,10 +130,7 @@ export default function PricingPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={jsonLd} />
       <PageHeader
         eyebrow="Pricing"
         title="Start with a defined opportunity, then scale what works."
