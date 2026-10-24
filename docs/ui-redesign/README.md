@@ -6,12 +6,19 @@ Baseline findings: [`audit.md`](audit.md) and `before/_metrics.json`.
 
 ## Screenshots
 
-- `before/` — unmodified `main` (6c2c156). `after/` — this branch. Names are `<route>__<width>.webp`
-  (`1440` desktop, `390` phone). Every route (61) at both widths, plus `after/interaction_*` for the
-  open mobile drawer and a keyboard focus ring.
+The screenshot images are **not** on this branch (they would add ~18 MB to the repository history).
+They live on the separate branch
+[`claude/ui-redesign-automsp-platform-docs`](https://github.com/auto-msp/automsp-platform/tree/claude/ui-redesign-automsp-platform-docs/docs/ui-redesign):
+
+- [`before/`](https://github.com/auto-msp/automsp-platform/tree/claude/ui-redesign-automsp-platform-docs/docs/ui-redesign/before) — unmodified `main` (6c2c156)
+- [`after/`](https://github.com/auto-msp/automsp-platform/tree/claude/ui-redesign-automsp-platform-docs/docs/ui-redesign/after) — this redesign
+
+Names are `<route>__<width>.webp` (`1440` desktop, `390` phone): every route (61) at both widths, plus
+`after/interaction_*` for the open mobile drawer and a keyboard focus ring.
+
 - Demo data only: a fictional company ("Northwind Logistics (demo)"), `example.test` addresses and
   placeholder secrets. Full-page captures are cropped to 4000px tall and stored as WebP.
-- `before/_metrics.json` and `after/_metrics.json` hold the per-page measurements below.
+- `before/_metrics.json` and `after/_metrics.json` (kept on this branch) hold the per-page measurements below.
 
 ## Measured change (61 routes, Playwright + axe-core 4.10, WCAG 2.0/2.1/2.2 A+AA)
 
